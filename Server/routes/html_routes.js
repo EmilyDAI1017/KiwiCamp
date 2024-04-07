@@ -6,5 +6,6 @@ module.exports = (app, connection) => {
             (err)?res.send(err) : res.json({ activity: data });
     });
         });
+    
 };
     

@@ -49,3 +49,21 @@ body {
 .nav li:hover {
   background-color: #525050;
 }
+.form_wrapper{
+  display: flex;
+  justify-content: center;
+}
+.form_content{
+  display: flex;
+  flex-direction: column;
+  max-width: 648px;
+  
+}
+.form_unit input{
+  display: block;
+}
+.form_unit label{
+  display: block;
+  text-align: left;
+  font-size: 14px;
+}

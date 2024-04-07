@@ -15,8 +15,12 @@ CREATE TABLE youth (
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone_num VARCHAR(255) NOT NULL,
-    gender ENUM('Female', 'Male') NOT NULL,
+    gender ENUM('Female', 'Male','Other') NOT NULL,
     dob DATE NOT NULL,
+    parent_guardian_name  VARCHAR(255) NOT NULL,
+    parent_guardian_phone VARCHAR(255) NOT NULL,
+    parent_guardian_email VARCHAR(255) NOT NULL,
+    activity_preferences VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
@@ -28,8 +32,10 @@ CREATE TABLE adult_leader (
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone_num VARCHAR(255),
-    gender ENUM('Female', 'Male') NOT NULL,
+    gender ENUM('Female', 'Male','Other') NOT NULL,
     dob DATE NOT NULL,
+    emergency_contacts_name  VARCHAR(255),
+    emergency_contacts_phone VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
@@ -41,8 +47,10 @@ CREATE TABLE group_leader (
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone_num VARCHAR(255),
-    gender ENUM('Female', 'Male') NOT NULL,
+    gender ENUM('Female', 'Male','Other') NOT NULL,
     dob DATE NOT NULL,
+    emergency_contacts_name  VARCHAR(255),
+    emergency_contacts_phone VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
@@ -52,6 +60,7 @@ CREATE TABLE manager (
     user_id INT NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
+    gender ENUM('Female', 'Male','Other') NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone_num VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
@@ -63,8 +72,11 @@ CREATE TABLE staff (
     user_id INT NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
+    gender ENUM('Female', 'Male','Other') NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone_num VARCHAR(255),
+    emergency_contacts_name  VARCHAR(255),
+    emergency_contacts_phone VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
@@ -74,6 +86,7 @@ CREATE TABLE admin (
     user_id INT NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
+    gender ENUM('Female', 'Male','Other') NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone_num VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
@@ -161,70 +174,8 @@ CREATE TABLE health_record (
     health_record_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
     medical_condition VARCHAR(255),
-    emergency_contacts VARCHAR(255),
-    allergies VARCHAR(255),
-    dietary_requirement VARCHAR(255),
+    allergies_information VARCHAR(255),
     last_updated_date DATE,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-INSERT INTO users (username, password_hash, role, salt) VALUES
-('john_doe', 'passwordhash1', 'Youth', 'salt1'),
-('jane_doe', 'passwordhash2', 'Group Leader', 'salt2'),
-('mark_smith', 'passwordhash3', 'Manager', 'salt3'),
-('sarah_jones', 'passwordhash4', 'Staff', 'salt4'),
-('admin_user', 'passwordhash5', 'Admin', 'salt5');
-
-INSERT INTO youth (user_id, first_name, last_name, email, phone_num, gender, dob) VALUES
-(1, 'John', 'Doe', 'john@example.com', '+64-123-456-7890', 'Male', '10-05-2005'),
-(2, 'Emma', 'Johnson', 'emma@example.com', '+64-987-654-3210', 'Female', '15-08-2006');
-
-
-INSERT INTO group_leader (user_id, first_name, last_name, email, phone_num, gender, dob) VALUES
-(2, 'Jane', 'Doe', 'jane@example.com', '+64-456-789-0123', 'Female', '20-03-1980');
-
-INSERT INTO manager (user_id, first_name, last_name, email, phone_num) VALUES
-(3, 'Mark', 'Smith', 'mark@example.com', '+64-789-012-3456');
-
-INSERT INTO staff (user_id, first_name, last_name, email, phone_num) VALUES
-(4, 'Sarah', 'Jones', 'sarah@example.com', '+64-345-678-9012');
-
-INSERT INTO admin (user_id, first_name, last_name, email, phone_num) VALUES
-(5, 'Admin', 'User', 'admin@example.com', '+64-111-222-3333');
-
-INSERT INTO camp (location, start_date, end_date, capacity, description, status) VALUES
-('Campsite A', '15-07-2024', '20-07-2024', 100, 'Summer Camp', 'Registration'),
-('Campsite B', '05-08-2024', '10-08-2024', 120, 'Adventure Camp', 'In Progress');
-
-INSERT INTO participant_group (group_leader_id, camp_id, number_of_attendees, account_status) VALUES
-(2, 1, 20, 'Approved'),
-(2, 2, 25, 'Pending');
-
-INSERT INTO activity (name, duration, description, cost, capacity) VALUES
-('Hiking', '2 hours', 'Explore the trails', 10.00, 30),
-('Canoeing', '1.5 hours', 'Paddle along the river', 15.00, 20);
-
-INSERT INTO cabin (cabin_name, capacity, location) VALUES
-('Cabin A', 10, 'Woodland Area'),
-('Cabin B', 15, 'Lakefront');
-
-INSERT INTO payment (user_id, amount, payment_date, camp_id) VALUES
-(1, 250.00, '01-06-2024', 1),
-(2, 300.00, '15-06-2024', 1);
-
-INSERT INTO waitlist (user_id, camp_id) VALUES
-(3, 2),
-(4, 2);
- 
- INSERT INTO discount (camp_id, discount_type, discount_amount) VALUES
-(1, 'Percentage', 10.00),
-(2, 'Fixed', 50.00);
-
-INSERT INTO news (title, content, publish_date) VALUES
-('Welcome to Summer Camp!', 'Exciting adventures await!', '01-06-2024'),
-('Important Announcement', 'Campsite B is at full capacity.', '25-07-2024');
-
-
-INSERT INTO health_record (user_id, medical_condition, emergency_contacts, allergies, dietary_requirement, last_updated_date) VALUES
-(1, 'None', 'John Doe (Parent) - +64-123-456-7890', 'None', 'None', '01-06-2024'),
-(2, 'Asthma', 'Jane Doe (Parent) - +64-456-789-0123', 'Peanuts', 'Vegetarian', '15-06-2024');
