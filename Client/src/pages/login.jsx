@@ -29,7 +29,7 @@ export default function Login(){
                     // Redirect to the corresponding user's dashboard with user ID
                     // /${data.user_id}
                     if (data.role === 'Youth') {
-                        navigateTo(`/youth_camper_dashboard?id=${data.user_id}`);
+                        navigateTo(`/youth_camper_dashboard/${data.user_id}`);
                     } else if (data.role === 'Adult Leader') {
                         navigateTo(`/adult_leader_dashboard/${data.user_id}`);
                     } else if (data.role === 'Group Leader') {
@@ -55,8 +55,6 @@ export default function Login(){
     const handleFormChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value})
     };
-
-
 
 
     return (

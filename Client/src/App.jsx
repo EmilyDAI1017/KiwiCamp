@@ -35,9 +35,9 @@ function App() {
           <Route path="/register/youth_camper" element={<Youth />} />
           <Route path="/register/adult_leader" element={<Adult_Leader />} />
           <Route path="/register/group_leader" element={<Group_Leader />} />
-          <Route path="/youth_camper_dashboard" element={<Youth_Dashboard />} />
-          <Route path="/adult_leader_dashboard" element={<Adult_Leader_Dashboard />} />
-          <Route path="/group_leader_dashboard" element={<Group_Leader_Dashboard />} />
+          <Route path="/youth_camper_dashboard/:id" element={<Youth_Dashboard />} />
+          <Route path="/adult_leader_dashboard/:id" element={<Adult_Leader_Dashboard />} />
+          <Route path="/group_leader_dashboard/:id" element={<Group_Leader_Dashboard />} />
           <Route path="/admin_dashboard" element={<Admin_Dashboard />} />
           <Route path="/staff_dashboard" element={<Staff_Dashboard />} />
           <Route path="/manager_dashboard" element={<Manager_Dashboard />} />

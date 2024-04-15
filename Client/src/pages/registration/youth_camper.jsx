@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Youth() {
     const [formData, setFormData] = useState({
@@ -16,9 +18,9 @@ export default function Youth() {
         parent_guardian_name:'',
         parent_guardian_phone:'',
         parent_guardian_email:'',
-        activitiy_preferences:'',
+        activity_preferences:'',
         medical_condition:'',
-        allegies_information:''
+        allergies_information:''
     });
 
 
@@ -31,6 +33,8 @@ export default function Youth() {
     const handleFormChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    const navigateTo = useNavigate();
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -83,12 +87,34 @@ export default function Youth() {
             return
         }
         
+            // Validate phone number format
+        const phoneRegex = /^[0-9]{10}$/; // assuming 10-digit phone number
+        if (!phoneRegex.test(formData.phone_num)) {
+            alert('Please enter a valid phone number');
+            return;
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            alert('Please enter a valid email address');
+            return;
+        }
+
+        // Validate birthday not beyond today's date
+        const today = new Date();
+        const dob = new Date(formData.dob);
+        if (dob > today) {
+            alert('Please enter a valid date of birth');
+            return;
+        }
+
 
         console.log(formData)
-        axios.post('http://localhost:3000/register', formData).then(({data}) => {
-            console.log(data)
+        axios.post('http://localhost:3000/register/youth_camper', formData).then(({data}) => {
             if(data.status){
-                alert('Registration successful')
+                alert('Registration successful, please login')
+                navigateTo('/login');
             } else {
                 alert('Registration failed')
             } 
@@ -241,11 +267,11 @@ export default function Youth() {
                         required></input>
                 </div>
                 <div className="form_unit">
-                    <label>Activtity Preferences:</label>
+                    <label>Activity Preferences:</label>
                     <input
                         type="text"
-                        name="activitiy_preferences"
-                        value={formData.emergency_contact_name}
+                        name="activity_preferences"
+                        value={formData.activity_preferences}
                         onChange={handleFormChange}
                         placeholder="Camper's activity preferences?">
                     </input>
@@ -263,11 +289,11 @@ export default function Youth() {
                     </input>
                 </div>
                 <div className="form_unit">
-                    <label>Allegy information:</label>
+                    <label>Allergy information:</label>
                     <input
                         type="text"
-                        name="allegies_information"
-                        value={formData.emergency_contact_name}
+                        name="allergies_information"
+                        value={formData.allergies_information}
                         onChange={handleFormChange}
                         placeholder="Any allegy informagtion?">
 
