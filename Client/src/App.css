@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
 }
@@ -66,4 +70,65 @@ body {
   display: block;
   text-align: left;
   font-size: 14px;
+  display: inline;
+}
+
+.logout{
+  background-color: #333;
+  color: white;
+  padding: 15px;
+  text-align: center;
+
+}
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Playfair+Display:wght@700&display=swap');
+
+/* Apply font families */
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+}
+
+@layer utilities {
+
+.input-field {
+  @apply border-2 border-gray-300 p-3 rounded outline-none focus:border-sky;
+}
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 20px;
+}
+
+.grid-item-large {
+  grid-column-end: span 2; /* This block takes up 2 columns */
+}
+
+.grid-item-medium {
+  grid-column-end: span 1; /* This block takes up 1 column */
+}
+
+/* Additional styling for other sections */
+.header, .footer {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+}
+
+/* Style individual sections as needed */
+.trends-section, .categories-section, .brands-section, .featured-products-section {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
