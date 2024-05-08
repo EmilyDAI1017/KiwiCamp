@@ -20,7 +20,8 @@ export default function Youth() {
         parent_guardian_email:'',
         activity_preferences:'',
         medical_condition:'',
-        allergies_information:''
+        allergies_information:'',
+        dietary_requirement:'',
     });
 
 
@@ -296,6 +297,17 @@ export default function Youth() {
                         value={formData.allergies_information}
                         onChange={handleFormChange}
                         placeholder="Any allegy informagtion?">
+
+                        </input>
+                </div>
+                <div className="form_unit">
+                    <label>Dietary requirement:</label>
+                    <input
+                        type="text"
+                        name="dietary_requirement"
+                        value={formData.dietary_requirement}
+                        onChange={handleFormChange}
+                        placeholder="Any dietary requirement?">
 
                         </input>
                 </div>

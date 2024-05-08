@@ -19,26 +19,3 @@ export default {
   ],
 }
 
-
-module.exports = {
-  daisyui: {
-    themes: [
-      {
-        mytheme: {
-          "primary": "#a7f3d0",
-          "secondary": "#a7f3d0",
-          "accent": "#00ffff",
-          "neutral": "#99f6e4",
-          "base-100": "#ffffff",
-          "info": "#22d3ee",
-          "success": "#4ade80",
-          "warning": "#fde68a",
-          "error": "#fb7185",
-        },
-      },
-    ],
-  },
-  plugins: [
-    require('daisyui'),
-  ],
-}

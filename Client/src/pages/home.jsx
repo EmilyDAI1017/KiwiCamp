@@ -6,7 +6,6 @@ export default function Home(){
         <div>
             <h1 className="text-3xl font-bold underline">Welcome to Kiwi Camp</h1>
             <p>Our mission is to provide a platform for youth people camping management.</p>
-            <Button className='btn-primary'>lalal</Button>
         </div>
     )
 }

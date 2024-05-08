@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Playfair+Display:wght@700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 * {
   box-sizing: border-box;
@@ -80,7 +83,6 @@ body {
   text-align: center;
 
 }
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Playfair+Display:wght@700&display=swap');
 
 /* Apply font families */
 body {
@@ -131,4 +133,55 @@ h1, h2, h3 {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.card {
+  background-color: #fff; /* Light background for the card */
+  border-radius: 10px;    /* Rounded corners for the card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  padding: 20px;          /* Padding inside the card */
+  margin: 15px;           /* Margin around the card */
+  display: flex;          /* Using flexbox for layout */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center;    /* Center-align children horizontally */
+  text-align: center;     /* Center-align text */
+  transition: transform 0.3s ease-in-out; /* Smooth transform on hover */
+}
+
+.card-icon {
+  width: 50px;           /* Fixed width for icons */
+  height: 50px;          /* Fixed height for icons */
+  margin-bottom: 15px;   /* Space below the icon */
+  display: flex;         /* Using flexbox for layout */
+  flex-direction: column; /* Stack children vertically */
+}
+
+.card-icon:hover {
+  transform: scale(1.1); /* Makes the icon slightly larger when hovered */
+  
+}
+
+.card h3 {
+  color: #333;           /* Dark color for text for better readability */
+  margin: 10px 0 5px;    /* Spacing around the heading */
+  font-size: 1.2rem;     /* Slightly larger font size for heading */
+}
+
+.card p {
+  color: #666;           /* Lighter color for paragraph for subtlety */
+  font-size: 1rem;       /* Standard font size for paragraph */
+  margin: 0;             /* Remove default margin */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Slight raise effect on hover */
+  cursor: pointer;            /* Pointer cursor on hover */
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 90%;           /* Full width on smaller screens */
+    margin: 15px auto;    /* Center cards horizontally with margin */
+  }
 }

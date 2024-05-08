@@ -17,7 +17,8 @@ export default function Adult_Leader() {
         emergency_contacts_name:'',
         emergency_contacts_phone:'',
         medical_condition:'',
-        allergies_information:''
+        allergies_information:'',
+        dietary_requirement:'',
     });
 
 
@@ -263,6 +264,18 @@ export default function Adult_Leader() {
 
                         </input>
                 </div>
+                <div className="form_unit">
+                    <label>Dietary requirement:</label>
+                    <input
+                        type="text"
+                        name="dietary_requirement"
+                        value={formData.dietary_requirement}
+                        onChange={handleFormChange}
+                        placeholder="Any dietary requirement?">
+
+                        </input>
+                </div>
+
 
 
                 <button onClick={handleFormSubmit} type="submit">Register</button>

@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import '../../App.css';
+import Card from "../../components/card";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IoIosBonfire } from "react-icons/io";
+import { IoIosAnalytics } from "react-icons/io";
+import { RiProfileLine } from "react-icons/ri";
+import { FaUser } from "react-icons/fa";
+
+
+
 
 
 export default function YouthDashboard() {
@@ -39,7 +48,7 @@ export default function YouthDashboard() {
   // Assuming the API returns an object directly, not an array
   return (
     <div>
-        <div class="dashboard-container">
+        {/* <div class="dashboard-container">
           
         <h1>Welcome, {youthData.first_name} {youthData.last_name}!</h1>
    
@@ -57,8 +66,14 @@ export default function YouthDashboard() {
       
         <div class="brands-section grid-item-medium">
         <p>Your email is {youthData.email}.</p>
-        </div>
+        </div> */}
       
+        <div className="dashboard">
+      <Card title="Camp" icon={< FaUser />} description="View and select activities." />
+      <Card title="Activity" icon={< FaUser />}  description="View your recent activity." />
+      <Card title="Profile" icon={<RiProfileLine />} description="Edit your profile." />
+      // Add more cards as needed
+        </div>
     </div>
   );
 

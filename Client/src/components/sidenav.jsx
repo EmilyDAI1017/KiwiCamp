@@ -19,7 +19,9 @@ function Navbar() {
             {user.role === 'Admin' && <li><Link to={`/admin_dashboard/${user.id}`}>Dashboard</Link></li>}
             {user.role === 'Staff' && <li><Link to={`/staff_dashboard/${user.id}`}>Dashboard</Link></li>}
             {user.role === 'Manager' && <li><Link to={`/manager_dashboard/${user.id}`}>Dashboard</Link></li>}
-            <li><Link to={`/profile/${user.id}`}>Profile</Link></li>
+            
+            {user.role === 'Youth' && <li><Link to={`/youth_profile/${user.id}`}>Profile</Link></li>}
+            {user.role === 'Adult Leader' && <li><Link to={`/adult_leader_profile/${user.id}`}>Profile</Link></li>}
             <li><button className="logout" onClick={logout}><Link to="/login">Logout</Link></button></li>
         </ul>
             ) : (
