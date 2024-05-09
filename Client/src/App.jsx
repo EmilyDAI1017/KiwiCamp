@@ -24,6 +24,7 @@ import Staff_Dashboard from './pages/dashboards/staff_dashboard'
 import Manager_Dashboard from './pages/dashboards/manager_dashboard'
 import Youth_Profile from './pages/profiles/youth_profile'
 import Adult_Leader_Profile from './pages/profiles/adult_leader_profile'
+import Group_Leader_Profile from './pages/profiles/group_leader_profile'
 import Logout from './pages/logout'
 import NotFound from './components/notfound'
 
@@ -56,6 +57,7 @@ function App() {
 
         <Route path="/youth_profile/:id" element={<Youth_Profile/>} />
         <Route path="/adult_leader_profile/:id" element={<Adult_Leader_Profile/>} />
+        <Route path="/group_leader_profile/:id" element={<Group_Leader_Profile/>} />
         <Route path="/logout" element={<Logout />} /> 
         <Route path="*" element={<NotFound />} />
         

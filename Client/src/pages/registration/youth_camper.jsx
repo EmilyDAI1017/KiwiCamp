@@ -111,16 +111,18 @@ export default function Youth() {
         }
 
 
-        console.log(formData)
-        axios.post('http://localhost:3000/register/youth_camper', formData).then(({data}) => {
-            if(data.status){
-                alert('Registration successful, please login')
+        axios.post('http://localhost:3000/register/youth_camper', formData)
+            .then(response => {
+                alert('Registration successful, please login');
                 navigateTo('/login');
-            } else {
-                alert('Registration failed')
-            } 
-        })
-    }
+            }
+            )
+            .catch(error => {
+            if (error.response.status === 409)
+            alert('Username already exists, please choose another username');
+            });
+    };
+
 
 
     return (
