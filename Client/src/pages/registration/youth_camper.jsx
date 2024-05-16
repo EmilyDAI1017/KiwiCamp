@@ -18,6 +18,7 @@ export default function Youth() {
         parent_guardian_name:'',
         parent_guardian_phone:'',
         parent_guardian_email:'',
+        relationship_to_camper:'',
         activity_preferences:'',
         medical_condition:'',
         allergies_information:'',
@@ -270,6 +271,17 @@ export default function Youth() {
                         required></input>
                 </div>
                 <div className="form_unit">
+                    <label>Relationship to the camper:</label>
+                    <input
+                        type="text"
+                        name="relationship_to_camper"
+                        value={formData.relationship_to_camper}
+                        onChange={handleFormChange}
+                        placeholder="Relationship to the camper?">
+                    </input>
+                </div>
+
+                <div className="form_unit">
                     <label>Activity Preferences:</label>
                     <input
                         type="text"
@@ -280,7 +292,7 @@ export default function Youth() {
                     </input>
 
                 </div>
-
+                <p>Health information:</p>
                 <div className="form_unit">
                     <label>Medical Condition:</label>
                     <input

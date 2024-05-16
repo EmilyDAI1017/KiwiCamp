@@ -14,7 +14,7 @@ export default function Register() {
     };
 
     return (
-        <div>
+        <div class="main-content">
             <h1>Register for Kiwi Camp</h1>
             <p>I want to sign up as a:</p>
             <button onClick={() => handleRoleSelection("Youth Camper")}>Youth Camper</button>

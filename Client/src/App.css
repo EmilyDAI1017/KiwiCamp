@@ -4,32 +4,53 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+  margin: 0;
+}
 
 * {
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: auto;
+  overflow-x: hidden;
+
 }
 
+
+
 .container {
-  margin:auto;
   text-align: center;
 }
 
+/* Padding-top should match the navbar's total height */
+.main-content {
+  padding-top: 64px; /* Adjust based on your navbar's actual height */
+  width: 100vw;
+  box-sizing: border-box; /* Includes padding in the width calculation */
+}
+
+
 .nav {
-  background-color: #333;
-  color: rgb(255, 255, 255);
-  display:flex;
+  background-color: #2F855A; /* Deep forest green */
+  color: white;
+  display: flex;
   justify-content: space-between;
   align-items: stretch;
   gap: 2rem;
   padding: 0 1rem;
+  width: 100vw;
+
 }
 
 .site-title {
-  font-size: 2rem;
+  font-weight: bold;
+  font-size: 1.6em;
+  color: #EDF6F9; /* Off-white for the main title */
 }
 
 .nav ul {
@@ -40,26 +61,63 @@ body {
   gap: 1rem;
 }
 
-.nav a {
-  color: inherit;
+.nav ul li button {
+  padding: 0rem 0rem ;
+}
+
+.nav ul li a {
+  color: #EDF6F9; /* Off-white for links */
   text-decoration: none;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding: .25rem;
 }
 
-.nav li.active {
-  background-color: #555;
+.nav ul li a:hover, .nav ul li a:focus {
+  color: #F6E05E; /* Bright yellow for hover and focus */
 }
 
-.nav li:hover {
-  background-color: #525050;
+.logout {
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
+
+.logout a {
+  color: white;
+}
+
+
 .form_wrapper{
   display: flex;
   justify-content: center;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin: 2rem auto;
 }
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #cbd5e0;
+  margin-bottom: 1rem;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 1px #3182ce;
+}
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+  font-size: 1rem;
+}
+
 .form_content{
   display: flex;
   flex-direction: column;
@@ -76,13 +134,6 @@ body {
   display: inline;
 }
 
-.logout{
-  background-color: #333;
-  color: white;
-  padding: 15px;
-  text-align: center;
-
-}
 
 /* Apply font families */
 body {
@@ -100,25 +151,12 @@ h1, h2, h3 {
 }
 }
 
-.dashboard-container {
+/* .dashboard-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-}
+} */
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 20px;
-}
-
-.grid-item-large {
-  grid-column-end: span 2; /* This block takes up 2 columns */
-}
-
-.grid-item-medium {
-  grid-column-end: span 1; /* This block takes up 1 column */
-}
 
 /* Additional styling for other sections */
 .header, .footer {
@@ -137,25 +175,38 @@ h1, h2, h3 {
 
 
 .card {
-  background-color: #fff; /* Light background for the card */
-  border-radius: 10px;    /* Rounded corners for the card */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  padding: 20px;          /* Padding inside the card */
-  margin: 15px;           /* Margin around the card */
-  display: flex;          /* Using flexbox for layout */
-  flex-direction: column; /* Stack children vertically */
-  align-items: center;    /* Center-align children horizontally */
-  text-align: center;     /* Center-align text */
-  transition: transform 0.3s ease-in-out; /* Smooth transform on hover */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;        
+  margin: 10px 10px 5px 10px;       
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+  width: 300px;           /* Fixed width for cards */
+  max-height: 300px;      /* Maximum height with overflow management */
+  overflow: hidden;       /* Hide overflow */
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Takes the full height of the viewport */
 }
 
 .card-icon {
-  width: 50px;           /* Fixed width for icons */
-  height: 50px;          /* Fixed height for icons */
-  margin-bottom: 15px;   /* Space below the icon */
-  display: flex;         /* Using flexbox for layout */
-  flex-direction: column; /* Stack children vertically */
+  margin-bottom: 8px;    /* Adjusted spacing */
+  font-size: 100rem;        /* Larger icon size */
 }
+
 
 .card-icon:hover {
   transform: scale(1.1); /* Makes the icon slightly larger when hovered */

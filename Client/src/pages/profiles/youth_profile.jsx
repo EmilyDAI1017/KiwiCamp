@@ -105,6 +105,7 @@ export default function Youth_Profile() {
         .then(res => {
             setIsEditing(false);
             setError("");
+            alert('Your profile has been updated');
             setHealthData(updatedHealthData);
             setYouthData(updatedYouthData);
         })
@@ -144,56 +145,73 @@ const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYe
   return (
 
 
-    <div className="dashboard-container">
-      <h1>Welcome, {youthData.first_name} {youthData.last_name}!</h1>
-      <button className=" bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit Profile'}</button>
+    <div class="main-content">
+    <div className="max-w-4xl mx-auto p-6 bg-white-100 shadow-md rounded-lg">
+
+      <h1 className="text-xl font-semibold text-gray-800 mb-4">Welcome, {youthData.first_name} {youthData.last_name}!</h1>
       
       {isEditing ? (
-        <form onSubmit={handleSubmit}>
-          <p>First name: <input type="text" name="first_name" value={youthData.first_name} onChange={handleChange} /></p>
-          <p>Last name: <input type="text" name="last_name" value={youthData.last_name} onChange={handleChange} /></p>
-          <p>Email: <input type="email" name="email" value={youthData.email} onChange={handleChange} /></p>
-          <p>Phone Number: <input type="tel" name="phone_num" value={youthData.phone_num} onChange={handleChange} /></p>
+        <form onSubmit={handleSubmit} className="mt-4">
+          <p className="label">First name: <input className="input" type="text" name="first_name" value={youthData.first_name} onChange={handleChange} /></p>
+          <p className="label">Last name: <input className="input" type="text" name="last_name" value={youthData.last_name} onChange={handleChange} /></p>
+          <p>Email: <input className="input" type="email" name="email" value={youthData.email} onChange={handleChange} /></p>
+          <p>Phone Number: <input className="input" type="tel" name="phone_num" value={youthData.phone_num} onChange={handleChange} /></p>
           <p>
         Gender:
-        <select name="gender" value={youthData.gender} onChange={handleChange} disabled={!isEditing}>
+        <select className="input" name="gender" value={youthData.gender} onChange={handleChange} disabled={!isEditing}>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
-        </p>          <p>Date of Birth: {formattedDate} <input type="date" name="dob" value={formattedDate} onChange={handleChange} /></p>
-          <p>Parent/guardian's name: <input type="text" name="parent_guardian_name" value={youthData.parent_guardian_name} onChange={handleChange} /></p>
-          <p>Parent/guardian's phone number:<input type="tel" name="parent_guardian_phone" value={youthData.parent_guardian_phone} onChange={handleChange} /></p>
-          <p>Parent/guardian's email: <input type="email" name="parent_guardian_email" value={youthData.parent_guardian_email} onChange={handleChange} /></p>
-        	<p>Health Record:</p>
-          <p>Medical Condition: <input type="text" name="medical_condition" value={healthData.medical_condition} onChange={handleHealthChange} /></p>
-          <p>Allergies information: <input type="text" name="allergies_information" value={healthData.allergies_information} onChange={handleHealthChange} /></p>
-          <p>Dietary requirement: <input type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} /></p>
+        </p> 
+         <p>Date of Birth: {formattedDate} <input className="input" type="date" name="dob" value={formattedDate} onChange={handleChange} /></p>
+          <p>Parent/guardian's name: <input className="input" type="text" name="parent_guardian_name" value={youthData.parent_guardian_name} onChange={handleChange} /></p>
+          <p>Parent/guardian's phone number:<input className="input" type="tel" name="parent_guardian_phone" value={youthData.parent_guardian_phone} onChange={handleChange} /></p>
+          <p>Parent/guardian's email: <input className="input" type="email" name="parent_guardian_email" value={youthData.parent_guardian_email} onChange={handleChange} /></p>
+        	<p>Relationship to camper: <input className="input" type="text" name="relationship_to_camper" value= {youthData.relationship_to_camper} onChange={handleChange} /></p>
+          <p>Health Record:</p>
+          <p>Medical Condition: <input className="input" type="text" name="medical_condition" value={healthData.medical_condition} onChange={handleHealthChange} /></p>
+          <p>Allergies information: <input className="input" type="text" name="allergies_information" value={healthData.allergies_information} onChange={handleHealthChange} /></p>
+          <p>Dietary requirement: <input className="input" type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} /></p>
           <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="submit">Save Changes</button>
         </form>
       ) : (
+        
         <div>
-          <p>User ID: {youthData.user_id}</p>
-          <p>First name: {youthData.first_name}</p>
-          <p>Last name: {youthData.last_name}</p>
-          <p>Email: {youthData.email}</p>
-          <p>Phone number: {youthData.phone_num}</p>
-          <p>Gender: {youthData.gender}</p>
-          <p>Date of Birth: {formattedDate}</p>
-          <p>Parent/guardian's name : {youthData.parent_guardian_name}</p>
-          <p>Parent/guardian's phone number: {youthData.parent_guardian_phone}</p>
-          <p>Parent/guardian's email: {youthData.parent_guardian_email}</p>
-          <p>Health Record:</p>
-          {healthData && (
-            <div>
-              <p>Medical Condition: {healthData.medical_condition}</p>
-              <p>Allergies information: {healthData.allergies_information}</p>
-              <p>Dietary requirement: {healthData.dietary_requirement}</p>
-              <p>Updated date: {healthData.last_updated_date}</p>
-            </div> 
-          )}
+          <div className="mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
+        <p><strong>First name:</strong> {youthData.first_name}</p>
+        <p><strong>Last name:</strong> {youthData.last_name}</p>
+        <p><strong>Gender:</strong> {youthData.gender}</p>
+        <p><strong>Date of Birth:</strong> {formattedDate}</p>
+      </div>
+          <div className="mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
+        <p><strong>User ID:</strong> {youthData.user_id}</p>
+        <p><strong>Email:</strong> {youthData.email}</p>
+        <p><strong>Phone number:</strong> {youthData.phone_num}</p>
+           </div>
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">Guardian Information</h2>
+        <p><strong>Parent/guardian's name:</strong> {youthData.parent_guardian_name}</p>
+        <p><strong>Parent/guardian's phone:</strong> {youthData.parent_guardian_phone}</p>
+        <p><strong>Parent/guardian's email:</strong> {youthData.parent_guardian_email}</p>
+        <p><strong>Relationship to camper:</strong> {youthData.relationship_to_camper}</p>
+      </div>
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">Health Record</h2>
+        <p><strong>Medical Condition:</strong> {healthData.medical_condition}</p>
+        <p><strong>Allergies information:</strong> {healthData.allergies_information}</p>
+        <p><strong>Dietary requirement:</strong> {healthData.dietary_requirement}</p>
+        <p><strong>Updated date:</strong> {healthData.last_updated_date}</p>
+      </div>
+
         </div>
       )}
+            <button className=" bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit Profile'}</button>
+ 
+    </div>
+
     </div>
   );
 }

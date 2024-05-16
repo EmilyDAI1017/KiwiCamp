@@ -1,6 +1,13 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "git": "^0.1.5",
-    "react-router-dom": "^6.22.3"
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.7",
+    "react-icons": "^5.2.0",
+    "react-router-dom": "^6.23.0",
+    "switch": "^0.0.0"
   }
 }

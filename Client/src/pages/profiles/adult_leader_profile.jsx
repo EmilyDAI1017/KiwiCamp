@@ -100,6 +100,7 @@ export default function Adult_Leader_Profile() {
       .then(res => {
         setIsEditing(false);
         setError("");
+        alert('Your profile has been updated');
         setHealthData(updatedHealthData);
         setLeaderData(updatedLeaderData);
       })
@@ -135,28 +136,30 @@ export default function Adult_Leader_Profile() {
   const date = new Date(leaderData.dob);
   const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   return (
-    <div className="dashboard-container">
+    <div class="main-content">
+              <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+
       <h1>Welcome </h1>
       <button className=" bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit Profile'}</button>
       {isEditing ? (
       <form onSubmit={handleSubmit}>
-        <p>
+        <p className="block">
           First Name:
           <input type="text" name="first_name" value={leaderData.first_name} onChange={handleChange} disabled={!isEditing} />
         </p>
-        <p>
+        <p className="block"> 
           Last Name:
           <input type="text" name="last_name" value={leaderData.last_name} onChange={handleChange} disabled={!isEditing} />
         </p>
-        <p>
+        <p className="block">
           Email:
           <input type="email" name="email" value={leaderData.email} onChange={handleChange} disabled={!isEditing} />
         </p>
-        <p>
+        <p className="block">
           Phone Number:
           <input type="text" name="phone_num" value={leaderData.phone_num} onChange={handleChange} disabled={!isEditing} />
         </p>
-        <p>
+        <p className="block">
         Gender:
         <select name="gender" value={leaderData.gender} onChange={handleChange} disabled={!isEditing}>
           <option value="Male">Male</option>
@@ -164,28 +167,28 @@ export default function Adult_Leader_Profile() {
           <option value="Other">Other</option>
         </select>
         </p>
-        <p>
+        <p className="block">
           Date of Birth:  {formattedDate}
           <input type="date" name="dob" value={formattedDate} onChange={handleChange} disabled={!isEditing} />
         </p>
-        <p>Emergency Contact Name:
+        <p className="block">Emergency Contact Name:
           <input type="text" name="emergency_contacts_name" value={leaderData.emergency_contacts_name} onChange={handleChange} disabled={!isEditing} />
         </p>
 
-        <p>Emergency Contact Phone:
+        <p className="block">Emergency Contact Phone:
           <input type="text" name="emergency_contacts_phone" value={leaderData.emergency_contacts_phone} onChange={handleChange} disabled={!isEditing} />
         </p>
 
-        <p>Health Record:</p>
-        <p>
+        <p className="text-xl-3">Health Record:</p>
+        <p className="block">
           Medical Condition:
           <input type="text" name="medical_condition" value={healthData.medical_condition} onChange={handleHealthChange} disabled={!isEditing} />
         </p>
-        <p>
+        <p className="block">
           Allergies information:
           <input type="text" name="allergies_information" value={healthData.allergies_information} onChange={handleHealthChange} disabled={!isEditing} />
         </p>
-        <p>
+        <p className="block"> 
           Dietary requirement:
           <input type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} disabled={!isEditing} />
         </p>
@@ -214,5 +217,6 @@ export default function Adult_Leader_Profile() {
         </div>
       )}
     </div>
+  </div>
   );
 }

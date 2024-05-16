@@ -14,6 +14,7 @@ export default function Adult_Leader_Profile() {
     setIsLoading(true);
     axios.get(`http://localhost:3000/group_leader_dashboard/${id}`)
       .then(res => {
+        alert('Your profile has been updated');
         setLeaderData(res.data.leader);
         setHealthData(res.data.health);
         setIsLoading(false);
