@@ -499,7 +499,7 @@ function ManageYouth() {
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="form-input rounded-md shadow-sm mt-1 w-1/3"
+          className="form-input rounded-md shadow-sm mt-1 w-1/3 pointer-events-auto"
           placeholder="Search campers by their username/name/phone number..."
         />
         <button 
@@ -508,19 +508,20 @@ function ManageYouth() {
         >
           Search
         </button>
-        <br />
-      </div>
+        
+  
       <button
         className="bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
         onClick={() => window.history.back()}
       >
         Manage other accounts
       </button>
+      </div>
       <button
-        className="mt-2 px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 focus:outline-none"
+         className="mt-2 px-4 py-2 bg-yellow-500 text-white rounded shadow hover:bg-yellow-600 focus:outline-none"
         onClick={() => setShowAddForm(!showAddForm)}
       >
-        {showAddForm ? 'Hide Add Camper Form' : 'Show Add Camper Form'}
+        {showAddForm ? 'Add later' : 'Add a new youth camper'}
       </button>
       {showAddForm && (
         <div className="new-camper-form my-4">

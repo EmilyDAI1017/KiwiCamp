@@ -1,23 +1,24 @@
 import React from "react";
 import Card from "../../components/card";
+import "../../App.css";
 import { FaUsersGear } from "react-icons/fa6";
 import { SiStaffbase } from "react-icons/si";
 
 function ManageUsers() {
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
+        <div className="main-content p-8 bg-gradient-to-r from-green-50 to-green-70 min-h-screen flex flex-col items-center justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <Card
                     title="Manage Campers"
                     description="Edit and manage campers accounts"
                     navigateTo="/admin/manage_users/campers"
-                    icon={<FaUsersGear className="text-4xl text-blue-500" />}
+                    icon={<FaUsersGear className="text-8xl text-blue-500" />}
                 />
                 <Card
                     title="Manage Staff"
                     description="Edit and manage staff accounts"
                     navigateTo="/admin/manage_users/staff"
-                    icon={<SiStaffbase className="text-3xl text-green-600" />}
+                    icon={<SiStaffbase className="text-8xl text-green-600" />}
                 />
             </div>
             <div>

@@ -18,25 +18,21 @@ html, body {
   width: 100vw;
   height: auto;
   overflow-x: hidden;
-
 }
-
-
 
 .container {
   text-align: center;
 }
 
-/* Padding-top should match the navbar's total height */
 .main-content {
-  padding-top: 64px; /* Adjust based on your navbar's actual height */
   width: 100vw;
-  box-sizing: border-box; /* Includes padding in the width calculation */
+  box-sizing: border-box;
+  background-color: #f7fafc;
+  padding: 2rem;
 }
 
-
 .nav {
-  background-color: #2F855A; /* Deep forest green */
+  background-color: #2F855A;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -44,13 +40,12 @@ html, body {
   gap: 2rem;
   padding: 0 1rem;
   width: 100vw;
-
 }
 
 .site-title {
   font-weight: bold;
   font-size: 1.6em;
-  color: #EDF6F9; /* Off-white for the main title */
+  color: #EDF6F9;
 }
 
 .nav ul {
@@ -66,12 +61,12 @@ html, body {
 }
 
 .nav ul li a {
-  color: #EDF6F9; /* Off-white for links */
+  color: #EDF6F9;
   text-decoration: none;
 }
 
 .nav ul li a:hover, .nav ul li a:focus {
-  color: #F6E05E; /* Bright yellow for hover and focus */
+  color: #F6E05E;
 }
 
 .logout {
@@ -84,8 +79,7 @@ html, body {
   color: white;
 }
 
-
-.form_wrapper{
+.form_wrapper {
   display: flex;
   justify-content: center;
   background: white;
@@ -111,6 +105,7 @@ html, body {
   border-color: #3182ce;
   box-shadow: 0 0 0 1px #3182ce;
 }
+
 .label {
   display: block;
   margin-bottom: 0.5rem;
@@ -118,121 +113,83 @@ html, body {
   font-size: 1rem;
 }
 
-.form_content{
+.form_content {
   display: flex;
   flex-direction: column;
   max-width: 648px;
-  
 }
-.form_unit input{
+
+.form_unit input {
   display: block;
 }
-.form_unit label{
+
+.form_unit label {
   display: block;
   text-align: left;
   font-size: 14px;
   display: inline;
 }
 
-
-/* Apply font families */
 body {
   font-family: 'Nunito', sans-serif;
+  background-color: #f7fafc;
 }
 
 h1, h2, h3 {
   font-family: 'Playfair Display', serif;
 }
 
-@layer utilities {
-
-.input-field {
-  @apply border-2 border-gray-300 p-3 rounded outline-none focus:border-sky;
-}
-}
-
-/* .dashboard-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-} */
-
-
-/* Additional styling for other sections */
-.header, .footer {
-  background-color: #333;
-  color: white;
-  padding: 10px;
-}
-
-/* Style individual sections as needed */
-.trends-section, .categories-section, .brands-section, .featured-products-section {
-  background-color: #f4f4f4;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-
 .card {
-  background-color: #fff;
+  background-color: #fffdfd;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px;        
-  margin: 10px 10px 5px 10px;       
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  padding: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   cursor: pointer;
-  width: 300px;           /* Fixed width for cards */
-  max-height: 300px;      /* Maximum height with overflow management */
-  overflow: hidden;       /* Hide overflow */
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  margin: 16px; /* Added margin for spacing */
+  max-width: 300px; /* Set max width to control card size */
+  height: 350px; /* Fixed height for consistency */
 }
 
 .card:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+  margin-bottom: 8px; /* Reduced spacing for compactness */
+  font-size: 3rem; /* Adjusted icon size */
+  color: #1a202c; /* Dark icon color */
+}
+
+.card h3 {
+  color: #2d3748;
+  margin: 8px 0;
+  font-size: 1.25rem; /* Adjusted font size */
+}
+
+.card p {
+  color: #4a5568;
+  font-size: 0.875rem; /* Smaller font size */
+  margin: 0;
 }
 
 .flex {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Takes the full height of the viewport */
-}
-
-.card-icon {
-  margin-bottom: 8px;    /* Adjusted spacing */
-  font-size: 100rem;        /* Larger icon size */
-}
-
-
-.card-icon:hover {
-  transform: scale(1.1); /* Makes the icon slightly larger when hovered */
-  
-}
-
-.card h3 {
-  color: #333;           /* Dark color for text for better readability */
-  margin: 10px 0 5px;    /* Spacing around the heading */
-  font-size: 1.2rem;     /* Slightly larger font size for heading */
-}
-
-.card p {
-  color: #666;           /* Lighter color for paragraph for subtlety */
-  font-size: 1rem;       /* Standard font size for paragraph */
-  margin: 0;             /* Remove default margin */
-}
-
-.card:hover {
-  transform: translateY(-5px); /* Slight raise effect on hover */
-  cursor: pointer;            /* Pointer cursor on hover */
+  height: 100vh;
 }
 
 @media (max-width: 768px) {
   .card {
-    width: 90%;           /* Full width on smaller screens */
-    margin: 15px auto;    /* Center cards horizontally with margin */
+    width: 90%;
+    margin: 15px auto;
   }
 }
