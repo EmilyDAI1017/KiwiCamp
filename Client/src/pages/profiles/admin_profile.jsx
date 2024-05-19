@@ -101,21 +101,21 @@ export default function Admin_Profile() {
             <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Admin Profile</h2>
             <form onSubmit={handleSubmit}>
-                <label className="block"> 
+                <label className="label"> 
                     First Name:
-                    <input type="text" value={adminData.first_name} onChange={e => setAdminData({ ...adminData, first_name: e.target.value })} disabled={!isEditing} />
+                    <input className="input" type="text" value={adminData.first_name} onChange={e => setAdminData({ ...adminData, first_name: e.target.value })} disabled={!isEditing} />
                 </label>
                 <label className="block">
                     Last Name:
-                    <input type="text" value={adminData.last_name} onChange={e => setAdminData({ ...adminData, last_name: e.target.value })} disabled={!isEditing} />
+                    <input className="input" type="text" value={adminData.last_name} onChange={e => setAdminData({ ...adminData, last_name: e.target.value })} disabled={!isEditing} />
                 </label>
                 <label className="block"> 
                     Email:
-                    <input type="email" value={adminData.email} onChange={e => setAdminData({ ...adminData, email: e.target.value })} disabled={!isEditing} />
+                    <input className="input" type="email" value={adminData.email} onChange={e => setAdminData({ ...adminData, email: e.target.value })} disabled={!isEditing} />
                 </label>
                 <label className="block">
                     Contact Number:
-                    <input type="tel" value={adminData.phone_num} onChange={e => setAdminData({ ...adminData, phone_num: e.target.value })} disabled={!isEditing} />
+                    <input className="input" type="tel" value={adminData.phone_num} onChange={e => setAdminData({ ...adminData, phone_num: e.target.value })} disabled={!isEditing} />
                 </label>
 
                 <label className="block">
@@ -124,6 +124,7 @@ export default function Admin_Profile() {
                         value={adminData.gender || ''}
                         onChange={e => setAdminData({...adminData, gender: e.target.value})}
                         disabled={!isEditing}
+                        className="input"
                     >
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>

@@ -15,9 +15,9 @@ function ManageUsers() {
                     icon={<FaUsersGear className="text-8xl text-blue-500" />}
                 />
                 <Card
-                    title="Manage Staff"
-                    description="Edit and manage staff accounts"
-                    navigateTo="/admin/manage_users/staff"
+                    title="Manage Team"
+                    description="Edit and manage manager/staff accounts"
+                    navigateTo="/admin/manage_users/manage_teams"
                     icon={<SiStaffbase className="text-8xl text-green-600" />}
                 />
             </div>

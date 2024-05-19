@@ -160,7 +160,8 @@ function ManageLeaders() {
     (leader.first_name.toLowerCase().includes(searchTerm) ||
      leader.last_name.toLowerCase().includes(searchTerm) ||
      leader.username.toLowerCase().includes(searchTerm) ||
-     leader.phone_num.includes(searchTerm))
+     leader.phone_num.includes(searchTerm))||
+     leader.role.toLowerCase().includes(searchTerm)
   );
 
   const toggleEdit = (id) => {
@@ -181,11 +182,11 @@ function ManageLeaders() {
 
   return (
     <div className="main-content">
-      <h1 className="text-xl font-bold mb-4">Manage Youth Leaders</h1>
+      <h1 className="text-xl font-bold mb-4">Manage Leaders</h1>
       <div className="search-container my-4">
         <input
           type="text"
-          placeholder="Search by name, username, or phone..."
+          placeholder="Search users by name, leader, username, or phone number..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           className='form-input rounded-md shadow-sm mt-1 w-1/3 '
@@ -196,8 +197,10 @@ function ManageLeaders() {
         >
           Search
         </button>
+        </div>
+        <div>
         <button className="bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out" onClick={() => window.history.back()}>
-                    Manage other accounts
+                    Go Back to manage other accounts
                 </button>
       </div>
       <button
@@ -312,6 +315,7 @@ function ManageLeaders() {
         <thead>
           <tr className="text-sm font-semibold text-gray-700 bg-gray-100">
             <th className="px-4 py-3">User Name</th>
+            <th className="px-4 py-3">Leader Type</th>
             <th className="px-4 py-3">First Name</th>
             <th className="px-4 py-3">Last Name</th>
             <th className="px-4 py-3">Email</th>
@@ -328,6 +332,7 @@ function ManageLeaders() {
           {filteredLeaders.map(leader => (
             <tr key={leader.user_id} className="bg-white border-b hover:bg-gray-50">
               <td className="px-4 py-3">{leader.username}</td>
+              <td className="px-4 py-3">{leader.role}</td>
               {isEditing === leader.user_id ? (
                 <>
                   <EditableField type="text" name="first_name" value={leader.first_name} onChange={(name, value) => handleChange(leader.user_id, name, value)} setCurrentField={setCurrentField} currentField={currentField} />
@@ -350,19 +355,9 @@ function ManageLeaders() {
                   <EditableField type="date" name="dob" value={formatDateForInput(leader.dob)} onChange={(name, value) => handleChange(leader.user_id, name, value)} setCurrentField={setCurrentField} currentField={currentField} />
                   <EditableField type="text" name="emergency_contacts_name" value={leader.emergency_contacts_name} onChange={(name, value) => handleChange(leader.user_id, name, value)} setCurrentField={setCurrentField} currentField={currentField} />
                   <EditableField type="text" name="emergency_contacts_phone" value={leader.emergency_contacts_phone} onChange={(name, value) => handleChange(leader.user_id, name, value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField
-                    type="select"
-                    name="role"
-                    value={leader.role}
-                    onChange={(name, value) => handleChange(leader.user_id, name, value)}
-                    setCurrentField={setCurrentField}
-                    currentField={currentField}
-                    options={[
-                      { value: "Adult Leader", label: "Adult Leader" },
-                      { value: "Group Leader", label: "Group Leader" }
-                    ]}
-                  />
+
                 </>
+                 
               ) : (
                 <>
                   <td>{leader.first_name}</td>
@@ -373,7 +368,7 @@ function ManageLeaders() {
                   <td>{formatDateDisplay(leader.dob)}</td>
                   <td>{leader.emergency_contacts_name}</td>
                   <td>{leader.emergency_contacts_phone}</td>
-                  <td>{leader.role}</td>
+                  
                 </>
               )}
               <td className="px-4 py-3">
@@ -385,16 +380,16 @@ function ManageLeaders() {
                         setIsEditing(null);
                       }
                     }}
-                      className="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Save</button>
+                      className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Save</button>
                     <button onClick={() => { setIsEditing(null); window.location.reload(); }}
-                      className="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Cancel</button>
+                      className="bg-gray-500 text-white px-2 py-1 rounded">Cancel</button>
                   </div>
                 ) : (
                   <div>
                     <button onClick={() => toggleEdit(leader.user_id)}
-                      className="text-sm bg-gray-500 hover:bg-gray-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
+                      className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">Edit</button>
                     <button onClick={() => handleDeleteLeader(leader.user_id)}
-                      className="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button>
+                      className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                   </div>
                 )}
               </td>

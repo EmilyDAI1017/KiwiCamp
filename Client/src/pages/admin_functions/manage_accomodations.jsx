@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ManageAccomodations = () => {
+const ManageAccommodations = () => {
   return (
     <div>
       <h2>Manage Users</h2>
@@ -9,4 +9,4 @@ const ManageAccomodations = () => {
   );
     }
 
-export default ManageAccomodations;
+export default ManageAccommodations;

@@ -38,7 +38,7 @@ import NotFound from './components/notfound'
 
 //Admin Functions
 import DiscountManagement from './pages/admin_functions/discount_management';
-import ManageAccomodations from './pages/admin_functions/manage_accomodations';
+import ManageAccommodations from './pages/admin_functions/manage_accomodations';
 import ManageActivities from './pages/admin_functions/manage_activities';
 import ManageCamps from './pages/admin_functions/manage_camps';
 import ManageUsers from "./pages/admin_functions/manage_users";
@@ -48,10 +48,11 @@ import ManageGrounds from "./pages/admin_functions/manage_grounds";
 
 //Manager Users Accounts
 import ManageCampers from "./pages/admin_functions/manage_users/manage_users_campers";
-import ManageStaff from "./pages/admin_functions/manage_users/manage_users_staff";
 import ManageYouth from "./pages/admin_functions/manage_users/manage_youth";
 import ManageLeaders from "./pages/admin_functions/manage_users/manage_leaders";
-
+import ManageTeams from "./pages/admin_functions/manage_users/manage_teams";
+import ManageManagers from "./pages/admin_functions/manage_users/manage_managers";
+import ManageStaff from "./pages/admin_functions/manage_users/manage_staff";
 
 function App() {
 
@@ -92,15 +93,17 @@ function App() {
       {/* Admin Functions */}
       <Route path="/admin/manage_users" element={<ManageUsers />} />
             {/* Admin manage users */}
-            <Route path="/admin/manage_users/staff" element={<ManageStaff />} />
             <Route path="/admin/manage_users/campers" element={<ManageCampers />} />  
             <Route path="/admin/manage_users/manage_youth" element={<ManageYouth/>} />
             <Route path="/admin/manage_users/manage_leaders" element={<ManageLeaders />} />
+            <Route path="/admin/manage_users/manage_teams" element={<ManageTeams />} />
+            <Route path="/admin/manage_users/manage_managers" element={<ManageManagers />} />
+            <Route path="/admin/manage_users/manage_staff" element={<ManageStaff />} />
 
       <Route path="/admin/manage_grounds" element={<ManageGrounds />} />
       <Route path="/admin/manage_camps" element={<ManageCamps />} />
       <Route path="/admin/manage_activities" element={<ManageActivities />} />
-      <Route path="/admin/manage_accommodations" element={<ManageAccomodations />} />
+      <Route path="/admin/manage_accommodations" element={<ManageAccommodations />} />
       <Route path="/admin/discount_management" element={<DiscountManagement />} />
       <Route path="/admin/news_edit" element={<NewsEdit />} />
       <Route path="/admin/report_generate" element={<ReportGenerate />} />      
