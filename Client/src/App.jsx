@@ -10,6 +10,8 @@ import About from './pages/about'
 import Contact from './pages/contact'
 import Login from './pages/login'
 import Register from './pages/register'
+import ResetPassword from './pages/reset_password'
+import ResetForm from './pages/reset_form';
 import { Routes, Route } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
 
@@ -38,7 +40,7 @@ import NotFound from './components/notfound'
 
 //Admin Functions
 import DiscountManagement from './pages/admin_functions/discount_management';
-import ManageAccommodations from './pages/admin_functions/manage_accomodations';
+import ManageAccommodations from './pages/admin_functions/manage_accommodations';
 import ManageActivities from './pages/admin_functions/manage_activities';
 import ManageCamps from './pages/admin_functions/manage_camps';
 import ManageUsers from "./pages/admin_functions/manage_users";
@@ -53,6 +55,12 @@ import ManageLeaders from "./pages/admin_functions/manage_users/manage_leaders";
 import ManageTeams from "./pages/admin_functions/manage_users/manage_teams";
 import ManageManagers from "./pages/admin_functions/manage_users/manage_managers";
 import ManageStaff from "./pages/admin_functions/manage_users/manage_staff";
+
+//Manage Camps
+import ManageApplications from "./pages/admin_functions/manage_camps/manage_applications";
+import ManagerCampsInfo from './pages/admin_functions/manage_camps/manager_camps_info'
+import ManageGroups from "./pages/admin_functions/manage_camps/manage_groups";
+
 
 function App() {
 
@@ -69,6 +77,10 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/reset_password" element={<ResetPassword />} />
+        <Route path="/reset/:token" element={<ResetForm />} />
+
+        {/* Registration */}
         <Route path="/register/youth_camper" element={<Youth />} />
         <Route path="/register/adult_leader" element={<Adult_Leader />} />
         <Route path="/register/group_leader" element={<Group_Leader />} />
@@ -102,6 +114,11 @@ function App() {
 
       <Route path="/admin/manage_grounds" element={<ManageGrounds />} />
       <Route path="/admin/manage_camps" element={<ManageCamps />} />
+      {/* Admin manage camps */}
+          <Route path="/admin/manage_camps/manage_applications" element={<ManageApplications />} />
+          <Route path="/admin/manage_camps/manager_camps_info" element={<ManagerCampsInfo />} />
+          <Route path="/admin/manage_camps/manage_groups" element={<ManageGroups />} />
+
       <Route path="/admin/manage_activities" element={<ManageActivities />} />
       <Route path="/admin/manage_accommodations" element={<ManageAccommodations />} />
       <Route path="/admin/discount_management" element={<DiscountManagement />} />

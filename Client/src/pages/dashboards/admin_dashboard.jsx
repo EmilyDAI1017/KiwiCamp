@@ -23,8 +23,8 @@ function Admin_Dashboard() {
           icon={<FaMapMarkedAlt className="text-8xl text-red-500"/>}
         />
         <Card 
-          title="Manage Camps" 
-          description="Edit and manage camp details and manage camp applications" 
+          title="Manage Camps and Applications " 
+          description="Edit and manage camp details and decline/approve camps and groups applications" 
           navigateTo="/admin/manage_camps"
           icon={<FaCampground className="text-8xl text-green-600"/>}
         />

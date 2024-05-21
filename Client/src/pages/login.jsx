@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../App.css';
 import { Button } from "@material-tailwind/react";
 import { useUser } from '../contexts/UserContext';
@@ -48,16 +48,57 @@ export default function Login(){
 
     return (
         <div class="main-content">
-            <h1>Welcome to Kiwi Camp</h1>
-            <form onSubmit={handleSubmit}>
-                <label>Username:</label>
-                <input type="text" name="username" value={formData.username} onChange={handleFormChange} placeholder="Enter your username" required />
-                <label>Password:</label>
-                <input type={pwdHidden} value={formData.password} onChange={handleFormChange} name="password" placeholder="Enter password" required />
-                <Button onClick={togglePwdShow}>Show Password</Button>
-                <Button type="submit">Login</Button>
-                {error && <p className="error-message">{error}</p>}
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="max-w-md w-full bg-white/20 shadow-lg rounded-lg p-8">
+                <h1 className="text-2xl font-semibold text-center text-gray-700 mb-6">Welcome to Kiwi Camp</h1>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <label              
+                 class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
+                >               
+                Username:</label>
+                <input type="text" 
+                name="username" 
+                value={formData.username} 
+                onChange={handleFormChange} 
+                placeholder="Enter your username" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required 
+                />
+                <label 
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                Password:</label>
+                <input 
+                type={pwdHidden} 
+                value={formData.password} 
+                onChange={handleFormChange} 
+                name="password" 
+                placeholder="Enter password" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"                
+                required />
+               
+                {/* <Button 
+                onClick={togglePwdShow} 
+                className=" bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                >
+            Show Password</Button> */}
+
+
+<p className="text-sm font-light text-gray-500 dark:text-gray-400">
+          Don’t have an account yet? 
+          <Link to="/register" className="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign up</Link>
+        </p>
+                <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Login</Button>
+                <br />
+               
+               <Link to="/reset_password" className="font-medium text-blue-600 hover:underline dark:text-blue-500">Forgot password?</Link>
+
+
+                {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
             </form>   
+        </div>
+        </div>
         </div>
     );
 }

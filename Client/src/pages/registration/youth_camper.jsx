@@ -310,7 +310,7 @@ export default function Youth() {
                         name="allergies_information"
                         value={formData.allergies_information}
                         onChange={handleFormChange}
-                        placeholder="Any allegy informagtion?">
+                        placeholder="Any allergy information?">
 
                         </input>
                 </div>

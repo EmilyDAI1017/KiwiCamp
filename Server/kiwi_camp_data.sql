@@ -4,7 +4,10 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     role ENUM('Youth', 'Adult Leader', 'Group Leader', 'Manager', 'Staff', 'Admin') NOT NULL,
-    salt VARCHAR(255) NOT NULL
+    salt VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    reset_password_token VARCHAR(255),
+    reset_password_expires BIGINT
 );
 
 -- Create Youth Table

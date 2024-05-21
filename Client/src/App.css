@@ -29,6 +29,7 @@ html, body {
   box-sizing: border-box;
   background-color: #f7fafc;
   padding: 2rem;
+  background-image: url("./registration.jpg");
 }
 
 .nav {
@@ -106,12 +107,12 @@ html, body {
   box-shadow: 0 0 0 1px #3182ce;
 }
 
-.label {
+/* .label {
   display: block;
   margin-bottom: 0.5rem;
   color: #4a5568;
   font-size: 1rem;
-}
+} */
 
 .form_content {
   display: flex;
@@ -186,6 +187,47 @@ h1, h2, h3 {
   align-items: center;
   height: 100vh;
 }
+
+.reset-password-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.reset-password-container h2 {
+  margin-bottom: 20px;
+}
+
+.reset-password-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.reset-password-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reset-password-container button:hover {
+  background-color: #0056b3;
+}
+
+.reset-password-container p {
+  margin-top: 20px;
+  color: green;
+}
+
 
 @media (max-width: 768px) {
   .card {
