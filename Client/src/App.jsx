@@ -124,7 +124,9 @@ function App() {
       <Route path="/admin/discount_management" element={<DiscountManagement />} />
       <Route path="/admin/news_edit" element={<NewsEdit />} />
       <Route path="/admin/report_generate" element={<ReportGenerate />} />      
-
+      
+      {/* Group Leader Functions */}
+      
     
           </Routes>
           </UserProvider>

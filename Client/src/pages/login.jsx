@@ -47,9 +47,9 @@ export default function Login(){
     };
 
     return (
-        <div class="main-content">
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="max-w-md w-full bg-white/20 shadow-lg rounded-lg p-8">
+        <div class="main-content mt-11 bg-cover dark:bg-neutral-700" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
+        <div className="min-h-screen flex items-center justify-center" >
+            <div className="max-w-md w-full bg-white/70 shadow-lg rounded-lg p-8" >
                 <h1 className="text-2xl font-semibold text-center text-gray-700 mb-6">Welcome to Kiwi Camp</h1>
 
             <form onSubmit={handleSubmit} className="space-y-6">

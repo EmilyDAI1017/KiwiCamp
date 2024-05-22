@@ -133,8 +133,9 @@ function ManageLeaders() {
         setShowAddForm(false); // Hide the form after adding the leader
       })
       .catch(error => {
+
         console.error('Error adding leader:', error);
-        alert('Failed to add leader');
+        alert("The username has already been taken");
       });
   };
 
@@ -214,11 +215,11 @@ function ManageLeaders() {
           <h2 className="text-lg font-bold mb-2">Add New Leader</h2>
           <input
             type="text"
-            // name="username"
+            name="username"
             placeholder="Username"
             value={newLeader.username}
             onChange={handleNewLeaderChange}
-            className="form-input rounded-md shadow-sm mt-1 block w-50"
+            className="form-input rounded-md shadow-sm mt-1 block w-full"
           />
           <input
             type="password"
@@ -360,6 +361,7 @@ function ManageLeaders() {
                  
               ) : (
                 <>
+                <td>{leader.username}</td>
                   <td>{leader.first_name}</td>
                   <td>{leader.last_name}</td>
                   <td>{leader.email}</td>

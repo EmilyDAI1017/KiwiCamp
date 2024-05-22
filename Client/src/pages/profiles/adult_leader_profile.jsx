@@ -136,10 +136,10 @@ export default function Adult_Leader_Profile() {
   const date = new Date(leaderData.dob);
   const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   return (
-    <div class="main-content">
+        <div className="main-content mt-5 bg-contain p-8 min-h-screen flex flex-col items-center justify-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y2FtcHxlbnwwfHwwfHx8MA%3D%3D')" }} >
               <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
 
-      <h1>Welcome </h1>
+      <h1 className="text-4xl font-serif">Welcome {leaderData.first_name} {leaderData.last_name}!</h1>
       <button className=" bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit Profile'}</button>
       {isEditing ? (
       <form onSubmit={handleSubmit}>
@@ -197,21 +197,21 @@ export default function Adult_Leader_Profile() {
       </form> 
       ):(
       <div>
-        <p>First Name: {leaderData.first_name}</p>
-        <p>Last Name: {leaderData.last_name}</p>
-        <p>Email: {leaderData.email}</p>
-        <p>Phone Number: {leaderData.phone_num}</p>
-        <p>Gender:{leaderData.gender}</p>
-        <p>Date of Birth: {formattedDate}</p>
-        <p>Emergency Contact Name: {leaderData.emergency_contacts_name}</p>
-        <p>Emergency Contact Phone: {leaderData.emergency_contacts_phone}</p>
+       First Name:  <p className="input" >{leaderData.first_name}</p>
+       Last Name:  <p className="input" >{leaderData.last_name}</p>
+       Email:  <p className="input" >{leaderData.email}</p>
+       Phone Number:  <p className="input" >{leaderData.phone_num}</p>
+        Gender:  <p className="input" >{leaderData.gender}</p>
+        Date of Birth:  <p className="input" >{formattedDate}</p>
+        Emergency Contact Name:  <p className="input" >{leaderData.emergency_contacts_name}</p>
+        Emergency Contact Phone:  <p className="input" >{leaderData.emergency_contacts_phone}</p>
         {healthData && (
           <div>
-        <p>Health Record:</p>
-        <p>Medical Condition: {healthData.medical_condition}</p>
-        <p>Allergies information: {healthData.allergies_information}</p>
-        <p>Dietary requirement: {healthData.dietary_requirement}</p>
-        <p>Updated date: {healthData.last_updated_date}</p>
+        <p className="text-3xl font-serif text-gray-800">Health Record:</p>
+        Medical Condition:  <p className="input" >{healthData.medical_condition}</p>
+        Allergies information:  <p className="input" >{healthData.allergies_information}</p>
+        Dietary requirement:  <p className="input" >{healthData.dietary_requirement}</p>
+        Updated date:  <p className="input" >{healthData.last_updated_date}</p>
         </div> 
           )}
         </div>

@@ -35,7 +35,7 @@ function ManageYouth() {
     debounce((id, name, value) => {
       setCampers(previousCampers =>
         previousCampers.map(camper =>
-          camper.camper_id === id ? { ...camper, [name]: value } : camper
+          camper.user_id === id ? { ...camper, [name]: value } : camper
         )
       );
     }, 300),
@@ -45,7 +45,7 @@ function ManageYouth() {
   const handleChange = (id, name, value) => {
     setCampers(previousCampers =>
       previousCampers.map(camper =>
-        camper.camper_id === id ? { ...camper, [name]: value } : camper
+        camper.user_id === id ? { ...camper, [name]: value } : camper
       )
     );
     handleInputChange(id, name, value);
@@ -89,7 +89,7 @@ function ManageYouth() {
 
   const handleSave = (id) => {
     setIsLoading(true);
-    const camper = campers.find(camper => camper.camper_id === id);
+    const camper = campers.find(camper => camper.user_id === id);
     const updatedCamper = {
       ...camper,
       dob: formatDateForBackend(camper.dob)
@@ -353,19 +353,19 @@ function ManageYouth() {
         </thead>
         <tbody>
           {filteredCampers.map(camper => (
-            <tr key={camper.camper_id} className="bg-white border-b hover:bg-gray-50">
+            <tr key={camper.user_id} className="bg-white border-b hover:bg-gray-50">
               <td className="px-4 py-3">{camper.username}</td>
-              {isEditing === camper.camper_id ? (
+              {isEditing === camper.user_id ? (
                 <>
-                  <EditableField type="text" name="first_name" value={camper.first_name} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField type="text" name="last_name" value={camper.last_name} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField type="email" name="email" value={camper.email} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField type="text" name="phone_num" value={camper.phone_num} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="text" name="first_name" value={camper.first_name} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="text" name="last_name" value={camper.last_name} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="email" name="email" value={camper.email} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="text" name="phone_num" value={camper.phone_num} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                   <EditableField
                     type="select"
                     name="gender"
                     value={camper.gender}
-                    onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)}
+                    onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)}
                     setCurrentField={setCurrentField}
                     currentField={currentField}
                     options={[
@@ -374,12 +374,12 @@ function ManageYouth() {
                       { value: "Other", label: "Other" }
                     ]}
                   />
-                  <EditableField type="date" name="dob" value={formatDateForInput(camper.dob)} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField type="text" name="parent_guardian_name" value={camper.parent_guardian_name} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField type="text" name="parent_guardian_phone" value={camper.parent_guardian_phone} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField type="email" name="parent_guardian_email" value={camper.parent_guardian_email} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField type="text" name="relationship_to_camper" value={camper.relationship_to_camper} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                  <EditableField type="text" name="activity_preferences" value={camper.activity_preferences} onChange={(e) => handleChange(camper.camper_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="date" name="dob" value={formatDateForInput(camper.dob)} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="text" name="parent_guardian_name" value={camper.parent_guardian_name} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="text" name="parent_guardian_phone" value={camper.parent_guardian_phone} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="email" name="parent_guardian_email" value={camper.parent_guardian_email} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="text" name="relationship_to_camper" value={camper.relationship_to_camper} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                  <EditableField type="text" name="activity_preferences" value={camper.activity_preferences} onChange={(e) => handleChange(camper.user_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                 </>
               ) : (
                 <>
@@ -397,11 +397,11 @@ function ManageYouth() {
                 </>
               )}
               <td className="px-4 py-3">
-                {isEditing === camper.camper_id ? (
+                {isEditing === camper.user_id ? (
                   <div>
                     <button onClick={() => {
                       if (validateCamper(camper)) {
-                        handleSave(camper.camper_id);
+                        handleSave(camper.user_id);
                         setIsEditing(null);
                       }
                     }}
@@ -411,9 +411,9 @@ function ManageYouth() {
                   </div>
                 ) : (
                   <div>
-                  <button onClick={() => toggleEdit(camper.camper_id)}
+                  <button onClick={() => toggleEdit(camper.user_id)}
                     className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">Edit</button>
-                    <button onClick={() => handleDeleteCamper(camper.camper_id)}
+                    <button onClick={() => handleDeleteCamper(camper.user_id)}
                     className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                   </div>
                 )}

@@ -3,6 +3,8 @@ import React, {useState}from 'react';
 import { Link } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import '../App.css';
+import { GiForestCamp } from "react-icons/gi";
+
 
 function Navbar() {
     const { user, logout } = useUser();
@@ -10,7 +12,7 @@ function Navbar() {
     console.log(user.role)	// Debugging
     return (
         <nav  className="nav">
-           <a href="/" className="site-title">Kiwi Camp</a>
+           <a href="/" className="site-title" ><GiForestCamp/>  Kiwi Camp</a>
             {/* Navigation links */}
             <button onClick={() => setIsOpen(!isOpen)} className="text-white md:hidden">
                 <span>☰</span>

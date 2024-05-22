@@ -144,66 +144,89 @@ const date = new Date(youthData.dob);
 const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   return (
 
-
-    <div class="main-content">
-    <div className="max-w-4xl mx-auto p-6 bg-white-100 shadow-md rounded-lg">
-
-      <h1 className="text-xl font-semibold text-gray-800 mb-4">Welcome, {youthData.first_name} {youthData.last_name}!</h1>
+    <div className="main-content mt-10 bg-cover p-8 min-h-screen flex flex-col items-center justify-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1618526640189-81726d5dd707?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }} >
+    <div className="max-w-5xl w-full bg-white/90 shadow-lg rounded-lg p-8 space-y-6">        
+    
+      <h1 className="text-4xl font-serif">Welcome, {youthData.first_name} {youthData.last_name}!</h1>
       
       {isEditing ? (
-        <form onSubmit={handleSubmit} className="mt-4">
+        <div >
+        <form onSubmit={handleSubmit} >
+          <div className="grid grid-cols-2 gap-4">
+          <div className="mb-4">
+          <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
           <p className="label">First name: <input className="input" type="text" name="first_name" value={youthData.first_name} onChange={handleChange} /></p>
           <p className="label">Last name: <input className="input" type="text" name="last_name" value={youthData.last_name} onChange={handleChange} /></p>
-          <p>Email: <input className="input" type="email" name="email" value={youthData.email} onChange={handleChange} /></p>
-          <p>Phone Number: <input className="input" type="tel" name="phone_num" value={youthData.phone_num} onChange={handleChange} /></p>
-          <p>
-        Gender:
+          Gender:
         <select className="input" name="gender" value={youthData.gender} onChange={handleChange} disabled={!isEditing}>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
-        </p> 
-         <p>Date of Birth: {formattedDate} <input className="input" type="date" name="dob" value={formattedDate} onChange={handleChange} /></p>
+        <p>Date of Birth: {formattedDate} <input className="input" type="date" name="dob" value={formattedDate} onChange={handleChange} /></p>
+          </div>
+
+          <div className="mb-4">
+          <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
+          <strong>User ID:</strong><p className="input" > {youthData.user_id}</p>
+          <p>Email: <input className="input" type="email" name="email" value={youthData.email} onChange={handleChange} /></p>
+          <p>Phone Number: <input className="input" type="tel" name="phone_num" value={youthData.phone_num} onChange={handleChange} /></p>
+          </div>
+        
+          <div className="mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">Guardian Information</h2>
           <p>Parent/guardian's name: <input className="input" type="text" name="parent_guardian_name" value={youthData.parent_guardian_name} onChange={handleChange} /></p>
           <p>Parent/guardian's phone number:<input className="input" type="tel" name="parent_guardian_phone" value={youthData.parent_guardian_phone} onChange={handleChange} /></p>
           <p>Parent/guardian's email: <input className="input" type="email" name="parent_guardian_email" value={youthData.parent_guardian_email} onChange={handleChange} /></p>
         	<p>Relationship to camper: <input className="input" type="text" name="relationship_to_camper" value= {youthData.relationship_to_camper} onChange={handleChange} /></p>
-          <p>Health Record:</p>
+          </div>
+
+          <div className="mb-4">
+           <h2 className="text-lg font-semibold text-gray-800">Health Record</h2>
           <p>Medical Condition: <input className="input" type="text" name="medical_condition" value={healthData.medical_condition} onChange={handleHealthChange} /></p>
           <p>Allergies information: <input className="input" type="text" name="allergies_information" value={healthData.allergies_information} onChange={handleHealthChange} /></p>
           <p>Dietary requirement: <input className="input" type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} /></p>
-          <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="submit">Save Changes</button>
-        </form>
+          </div>
+          
+       </div>
+
+         <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="submit">Save Changes</button>  
+        </form>        
+           
+         </div>
+     
+
+  
+  
       ) : (
         
-        <div>
+        <div className="grid grid-cols-2 gap-4">
           <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
-        <p><strong>First name:</strong> {youthData.first_name}</p>
-        <p><strong>Last name:</strong> {youthData.last_name}</p>
-        <p><strong>Gender:</strong> {youthData.gender}</p>
-        <p><strong>Date of Birth:</strong> {formattedDate}</p>
+        <strong>First name:</strong> <p className="input" > {youthData.first_name}</p>
+        <strong>Last name:</strong> <p className="input" > {youthData.last_name}</p>
+        <strong>Gender:</strong> <p className="input" > {youthData.gender}</p>
+        <strong>Date of Birth:</strong> <p className="input" >{formattedDate}</p>
       </div>
           <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
-        <p><strong>User ID:</strong> {youthData.user_id}</p>
-        <p><strong>Email:</strong> {youthData.email}</p>
-        <p><strong>Phone number:</strong> {youthData.phone_num}</p>
+        <strong>User ID:</strong><p className="input" > {youthData.user_id}</p>
+        <strong>Email:</strong> <p className="input" > {youthData.email}</p>
+        <strong>Phone number:</strong> <p className="input" > {youthData.phone_num}</p>
            </div>
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Guardian Information</h2>
-        <p><strong>Parent/guardian's name:</strong> {youthData.parent_guardian_name}</p>
-        <p><strong>Parent/guardian's phone:</strong> {youthData.parent_guardian_phone}</p>
-        <p><strong>Parent/guardian's email:</strong> {youthData.parent_guardian_email}</p>
-        <p><strong>Relationship to camper:</strong> {youthData.relationship_to_camper}</p>
+        <strong>Parent/guardian's name:</strong> <p className="input" >{youthData.parent_guardian_name}</p>
+        <strong>Parent/guardian's phone:</strong> <p className="input" >{youthData.parent_guardian_phone}</p>
+        <strong>Parent/guardian's email:</strong> <p className="input" >{youthData.parent_guardian_email}</p>
+        <strong>Relationship to camper:</strong> <p className="input" >{youthData.relationship_to_camper}</p>
       </div>
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Health Record</h2>
-        <p><strong>Medical Condition:</strong> {healthData.medical_condition}</p>
-        <p><strong>Allergies information:</strong> {healthData.allergies_information}</p>
-        <p><strong>Dietary requirement:</strong> {healthData.dietary_requirement}</p>
-        <p><strong>Updated date:</strong> {healthData.last_updated_date}</p>
+        <strong>Medical Condition:</strong> <p className="input" >  {healthData.medical_condition}</p>
+        <strong>Allergies information:</strong> <p className="input" > {healthData.allergies_information}</p>
+        <strong>Dietary requirement:</strong> <p className="input" > {healthData.dietary_requirement}</p>
+        <strong>Updated date:</strong> <p className="input" > {healthData.last_updated_date}</p>
       </div>
 
         </div>

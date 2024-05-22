@@ -11,7 +11,7 @@ export default function Card({ title, icon, description, navigateTo, bgColor }) 
 
   return (
     <div
-      className={`card p-6 m-4 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out overflow-hidden max-w-xs ${bgColor}`}
+      className={`card p-6 m-4 rounded-lg shadow-lg my-3 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out overflow-hidden max-w-xs ${bgColor}`}
       onClick={handleClick}
     >
       <div className="card-icon mb-4 flex justify-center">

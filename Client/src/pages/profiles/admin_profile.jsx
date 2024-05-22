@@ -99,7 +99,7 @@ export default function Admin_Profile() {
     return (
         <div class="main-content">
             <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Admin Profile</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Welcome {adminData.first_name} {adminData.last_name} ! </h2>
             <form onSubmit={handleSubmit}>
                 <label className="label"> 
                     First Name:

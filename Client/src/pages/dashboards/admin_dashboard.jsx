@@ -6,9 +6,10 @@ import { MdHotel, MdLocalOffer, MdAssessment } from 'react-icons/md';
 
 function Admin_Dashboard() {
   return (
-    <div className="main-content p-8 bg-gradient-to-r from-green-50 to-green-70 min-h-screen columns-8xs">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-4 gap-6">
+    
+    <div className="main-content mp-3  bg-gradient-to-r from-green-70 to-green-90 min-h-screen flex flex-col items-center justify-start columns-8xs">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-4 gap-12">
         <Card 
           title="Manage Users" 
           description="Edit and manage user accounts" 
