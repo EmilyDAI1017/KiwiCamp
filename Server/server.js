@@ -66,9 +66,9 @@ async function createAccounts() {
 
     // Array of user accounts
     const accounts = [
-        { username: 'manager1', role: 'Manager', firstName: 'John', lastName: 'Doe', gender: 'Male', email: 'manager1@example.com', phone: '1234567890' },
+        { username: 'manager1', role: 'Manager', firstName: 'John', lastName: 'Doe', gender: 'Male', email: 'manager1@example.com', phone: '1234567890'},
         { username: 'staff1', role: 'Staff', firstName: 'Jane', lastName: 'Doe', gender: 'Female', email: 'staff1@example.com', phone: '0987654321', emergencyName: 'Emergency', emergencyPhone: '1122334455' },
-        { username: 'admin1', role: 'Admin', firstName: 'Jim', lastName: 'Beam', gender: 'Male', email: 'admin1@example.com', phone: '1231231234' }
+        { username: 'admin1', role: 'Admin', firstName: 'Jim', lastName: 'Beam', gender: 'Male', email: 'admin1@example.com', phone: '1231231234'}
     ];
 
     accounts.forEach(account => {
@@ -77,7 +77,8 @@ async function createAccounts() {
             username: account.username,
             password_hash: hashedPassword,
             role: account.role,
-            salt: saltRounds.toString()  // Store salt rounds as salt for simplicity
+            salt: saltRounds.toString(), // Store salt rounds as salt for simplicity
+            email: account.email
         }, (err, results) => {
             if (err) throw err;
             const userId = results.insertId;
@@ -123,8 +124,9 @@ const usersToCreate = [
     { username: 'admin1', role: 'Admin', firstName: 'Jim', lastName: 'Beam', gender: 'Male', email: 'admin1@example.com', phone: '1231231234' }
 ];
 
-// Assuming you want to create these accounts on server start
-// createAccounts(usersToCreate);
+// Only use when creating team members initial accounts
+
+    // createAccounts(usersToCreate);
 
   // Login route
   app.post('/login', async (req, res) => {
@@ -723,11 +725,11 @@ app.put('/api/users/:id', (req, res) => {
     );
   });
 
-
+//Get youth campers information
 app.get('/admin/manage_youth',(req,res) => {
     const sqlQuery = `
         SELECT 
-            youth.camper_id, youth.first_name, youth.last_name, youth.email, 
+            youth.user_id, youth.first_name, youth.last_name, youth.email, 
             youth.phone_num, youth.gender, youth.dob, youth.parent_guardian_name,
             youth.parent_guardian_phone, youth.parent_guardian_email, youth.relationship_to_camper,
             youth.activity_preferences, users.username
@@ -744,6 +746,7 @@ app.get('/admin/manage_youth',(req,res) => {
     });
 });
 
+// Update a camper
 app.put('/admin/manage_youth/:id', (req, res) => {
     const id = req.params.id;
     const {
@@ -758,7 +761,7 @@ app.put('/admin/manage_youth/:id', (req, res) => {
         relationship_to_camper, activity_preferences
     };
 
-    const youthQuery = 'UPDATE youth SET ? WHERE camper_id = ?';
+    const youthQuery = 'UPDATE youth SET ? WHERE user_id = ?';
     connection.query(youthQuery, [youthUpdate, id], (error) => {
         if (error) {
             console.error('Error updating youth:', error);
@@ -781,7 +784,7 @@ app.post('/admin/manage_youth', async (req, res) => {
       const password_hash = await bcrypt.hash(password, salt);
   
       // Insert into users table
-      const userInsert = { username, password_hash, role:"Youth", salt };
+      const userInsert = { username, password_hash, role: "Youth", salt, email };
       console.log(userInsert);
       connection.query('INSERT INTO users SET ?', userInsert, (userError, userResults) => {
         if (userError) {
@@ -803,34 +806,70 @@ app.post('/admin/manage_youth', async (req, res) => {
             connection.query('DELETE FROM users WHERE user_id = ?', [userResults.insertId]);
             return res.status(500).json({ error: 'Failed to add camper' });
           }
-          res.status(201).json({ message: 'Camper added successfully', camper_id: camperResults.insertId });
+  
+          // Insert null for health records
+          const healthRecordInsert = {
+            user_id: userResults.insertId,
+            medical_condition: null,
+            allergies_information: null,
+            dietary_requirement: null,
+            last_updated_date: null
+          };
+          connection.query('INSERT INTO health_record SET ?', healthRecordInsert, (healthError, healthResults) => {
+            if (healthError) {
+              console.error('Error adding health record:', healthError);
+              // Rollback the camper creation if health record creation fails
+              connection.query('DELETE FROM youth WHERE user_id = ?', [userResults.insertId]);
+              connection.query('DELETE FROM users WHERE user_id = ?', [userResults.insertId]);
+              return res.status(500).json({ error: 'Failed to add health record' });
+            }
+            res.status(201).json({ message: 'Camper added successfully', camper_id: camperResults.insertId });
+          });
         });
       });
+  
     } catch (error) {
       console.error('Error:', error);
-      return res.status(500).json({ error: 'Failed to add camper' });
+      res.status(500).json({ error: 'Internal server error' });
     }
   });
   
-  // Delete a camper
-  app.delete('/admin/manage_youth/:id', (req, res) => {
-    const { id } = req.params;
-  
-    const sqlQuery = 'DELETE FROM youth WHERE camper_id = ?';
-  
-    connection.query(sqlQuery, [id], (error, results) => {
-      if (error) {
-        console.error('Error deleting camper:', error);
-        return res.status(500).json({ error: 'Failed to delete camper' });
-      }
-      if (results.affectedRows === 0) {
-        return res.status(404).json({ error: 'Camper not found' });
-      }
-      res.json({ message: 'Camper deleted successfully' });
-    });
-  });
-  
+ // Delete a camper
+app.delete('/admin/manage_youth/:id', (req, res) => {
+   const { id } = req.params;
+ 
+   // Delete the associated health records first
+   connection.query('DELETE FROM health_records WHERE user_id = ?', [id], (healthError, healthResults) => {
+     if (healthError) {
+       console.error('Error deleting health records:', healthError);
+       return res.status(500).json({ error: 'Failed to delete health records' });
+     }
+ 
+     // Delete the camper entry
+     connection.query('DELETE FROM youth WHERE user_id = ?', [id], (camperError, camperResults) => {
+       if (camperError) {
+         console.error('Error deleting camper:', camperError);
+         return res.status(500).json({ error: 'Failed to delete camper' });
+       }
+ 
+       if (camperResults.affectedRows === 0) {
+         return res.status(404).json({ error: 'Camper not found' });
+       }
+ 
+       // Delete the user entry
+       connection.query('DELETE FROM users WHERE user_id = ?', [id], (userError, userResults) => {
+         if (userError) {
+           console.error('Error deleting user:', userError);
+           return res.status(500).json({ error: 'Failed to delete user' });
+         }
+ 
+         res.json({ message: 'Camper and user deleted successfully' });
+       });
+     });
+   });
+ });
 
+//Get leader's information
 app.get('/admin/manage_leaders', (req, res) => {
     const sqlQuery = `
         SELECT 
@@ -875,7 +914,7 @@ app.get('/admin/manage_leaders', (req, res) => {
     });
 });
 
-
+//Update leader's information
 app.put('/admin/manage_leaders/:id', (req, res) => {
     const { id } = req.params;
     const {
@@ -911,47 +950,86 @@ app.put('/admin/manage_leaders/:id', (req, res) => {
     });
 });
 
+//Add a new leader
 app.post('/admin/manage_leaders', async (req, res) => {
-    const {
-        username, password, first_name, last_name, email, phone_num,
-        gender, dob, emergency_contacts_name, emergency_contacts_phone, role
-    } = req.body;
+  const {
+    username, password, first_name, last_name, email, phone_num,
+    gender, dob, emergency_contacts_name, emergency_contacts_phone, role
+  } = req.body;
 
+  try {
     // Determine the table to insert based on role
     const leaderTable = role === 'Adult Leader' ? 'adult_leader' : 'group_leader';
 
-    // Generate salt and hash the password
-    const salt = await bcrypt.genSalt(10);
-    const password_hash = await bcrypt.hash(password, salt);
+    // Check if the username already exists
+    connection.query('SELECT * FROM users WHERE username = ?', [username], async (error, results) => {
+      if (error) {
+        console.error('Error checking username:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+      
+      if (results.length > 0) {
+        return res.status(400).json({ error: 'Username already exists' });
+      }
 
-    const userInsert = {
-        username, password_hash, role, salt
-    };
+      // Generate salt and hash the password
+      const salt = await bcrypt.genSalt(10);
+      const password_hash = await bcrypt.hash(password, salt);
 
-    connection.query('INSERT INTO users SET ?', userInsert, (userError, userResults) => {
+      const userInsert = {
+        username, password_hash, role, salt, email
+      };
+
+      connection.query('INSERT INTO users SET ?', userInsert, (userError, userResults) => {
         if (userError) {
-            console.error('Error creating user:', userError);
-            return res.status(500).json({ error: "Failed to create user" });
+          console.error('Error creating user:', userError);
+          return res.status(500).json({ error: "Failed to create user" });
         }
 
         const leaderInsert = {
-            user_id: userResults.insertId, first_name, last_name, email, phone_num, gender, dob,
-            emergency_contacts_name, emergency_contacts_phone
+          user_id: userResults.insertId, first_name, last_name, email, phone_num, gender, dob,
+          emergency_contacts_name, emergency_contacts_phone
         };
 
         connection.query(`INSERT INTO ${leaderTable} SET ?`, leaderInsert, (leaderError, leaderResults) => {
-            if (leaderError) {
-                console.error('Error creating leader:', leaderError);
-                // Rollback the user creation if leader creation fails
-                connection.query('DELETE FROM users WHERE user_id = ?', [userResults.insertId]);
-                return res.status(500).json({ error: "Failed to create leader" });
+          if (leaderError) {
+            console.error('Error creating leader:', leaderError);
+            // Rollback the user creation if leader creation fails
+            connection.query('DELETE FROM users WHERE user_id = ?', [userResults.insertId]);
+            return res.status(500).json({ error: "Failed to create leader" });
+          }
+
+          // Insert null for health records
+          const healthRecordInsert = {
+            user_id: userResults.insertId,
+            medical_condition: null,
+            allergies_information: null,
+            dietary_requirement: null,
+            last_updated_date: null
+          };
+
+          connection.query('INSERT INTO health_record SET ?', healthRecordInsert, (healthError, healthResults) => {
+            if (healthError) {
+              console.error('Error adding health record:', healthError);
+              // Rollback the leader creation if health record creation fails
+              connection.query(`DELETE FROM ${leaderTable} WHERE user_id = ?`, [userResults.insertId]);
+              connection.query('DELETE FROM users WHERE user_id = ?', [userResults.insertId]);
+              return res.status(500).json({ error: 'Failed to add health record' });
             }
 
-            res.json({ message: "Leader created successfully" });
+            res.status(201).json({ message: 'Leader added successfully', user_id: userResults.insertId });
+          });
         });
+      });
     });
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
+//Delete a leader
 app.delete('/admin/manage_leaders/:id', (req, res) => {
     const { id } = req.params;
 
@@ -963,6 +1041,14 @@ app.delete('/admin/manage_leaders/:id', (req, res) => {
 
         const role = userResults[0].role;
         const leaderTable = role === 'Adult Leader' ? 'adult_leader' : 'group_leader';
+
+        // Delete the associated health records first
+        connection.query('DELETE FROM health_record WHERE user_id = ?', [id], (healthError, healthResults) => {
+        if (healthError) {
+          console.error('Error deleting health records:', healthError);
+          return res.status(500).json({ error: "Failed to delete health records" });
+        }
+  
 
         connection.query(`DELETE FROM ${leaderTable} WHERE user_id = ?`, [id], (leaderError, leaderResults) => {
             if (leaderError) {
@@ -980,6 +1066,7 @@ app.delete('/admin/manage_leaders/:id', (req, res) => {
             });
         });
     });
+});
 });
 
 // Manage staff account information
@@ -1233,6 +1320,268 @@ app.delete('/admin/manage_grounds/:id', (req, res) => {
     });
 
 }); 
+
+// Fetch all groups
+app.get('/admin/manage_groups', (req, res) => {
+  connection.query('SELECT * FROM camp_groups', (err, results) => {
+      if (err) {
+          console.error('Error fetching groups:', err);
+          res.status(500).send('Error fetching groups');
+      } else {
+          res.json(results);
+      }
+  });
+});
+
+// Fetch all group leaders
+app.get('/admin/group_leaders', (req, res) => {
+  connection.query('SELECT * FROM group_leader', (err, results) => {
+      if (err) {
+          console.error('Error fetching group leaders:', err);
+          res.status(500).send('Error fetching group leaders');
+      } else {
+          res.json(results);
+      }
+  });
+});
+
+// Fetch all camps
+app.get('/admin/camps', (req, res) => {
+  connection.query('SELECT * FROM camps', (err, results) => {
+      if (err) {
+          console.error('Error fetching camps:', err);
+          res.status(500).send('Error fetching camps');
+      } else {
+          res.json(results);
+      }
+  });
+});
+
+// Add a new group
+app.post('/admin/manage_groups', (req, res) => {
+  const { group_leader_id, camp_id, number_of_attendees, group_name, description, group_status } = req.body;
+  const query = 'INSERT INTO camp_groups (group_leader_id, camp_id, number_of_attendees, group_name, description, group_status) VALUES (?, ?, ?, ?, ?, ?)';
+  connection.query(query, [group_leader_id, camp_id, number_of_attendees, group_name, description, group_status], (err, results) => {
+      if (err) {
+          console.error('Error adding group:', err);
+          res.status(500).send('Error adding group');
+      } else {
+          res.status(201).send('Group added successfully');
+      }
+  });
+});
+
+// Update a group
+app.put('/admin/manage_groups/:id', (req, res) => {
+  const { id } = req.params;
+  const { group_leader_id, camp_id, number_of_attendees, group_name, description, payment_status, group_status } = req.body;
+  const query = 'UPDATE camp_groups SET group_leader_id = ?, camp_id = ?, number_of_attendees = ?, group_name = ?, description = ?, payment_status=?, group_status = ? WHERE group_id = ?';
+  connection.query(query, [group_leader_id, camp_id, number_of_attendees, group_name, description, payment_status, group_status, id], (err, results) => {
+      if (err) {
+          console.error('Error updating group:', err);
+          res.status(500).send('Error updating group');
+      } else {
+          res.send('Group updated successfully');
+      }
+  });
+});
+
+// Delete a group
+app.delete('/admin/manage_groups/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM camp_groups WHERE group_id = ?';
+  connection.query(query, [id], (err, results) => {
+      if (err) {
+          console.error('Error deleting group:', err);
+          res.status(500).send('Error deleting group');
+      } else {
+          res.send('Group deleted successfully');
+      }
+  });
+});
+
+
+// Fetch all camps
+app.get('/admin/manage_camps', (req, res) => {
+  connection.query('SELECT * FROM camps', (err, results) => {
+      if (err) {
+          console.error('Error fetching camps:', err);
+          res.status(500).send('Error fetching camps');
+      } else {
+          res.json(results);
+      }
+  });
+});
+
+// Fetch all camp grounds
+app.get('/admin/camp_grounds', (req, res) => {
+  connection.query('SELECT * FROM camp_grounds', (err, results) => {
+      if (err) {
+          console.error('Error fetching camp grounds:', err);
+          res.status(500).send('Error fetching camp grounds');
+      } else {
+          res.json(results);
+      }
+  });
+});
+
+// Add a new camp
+app.post('/admin/manage_camps', (req, res) => {
+  const { ground_id, location, start_date, end_date, capacity, schedule, description, status } = req.body;
+  const query = 'INSERT INTO camps (ground_id, location, start_date, end_date, capacity, schedule, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  connection.query(query, [ground_id, location, start_date, end_date, capacity, schedule, description, status], (err, results) => {
+      if (err) {
+          console.error('Error adding camp:', err);
+          res.status(500).send('Error adding camp');
+      } else {
+          res.status(201).send('Camp added successfully');
+      }
+  });
+});
+
+// Update a camp
+app.put('/admin/manage_camps/:id', (req, res) => {
+  const { id } = req.params;
+  const { ground_id, location, start_date, end_date, capacity, schedule, description, status } = req.body;
+  const query = 'UPDATE camps SET ground_id = ?, location = ?, start_date = ?, end_date = ?, capacity = ?, schedule = ?, description = ?, status = ? WHERE camp_id = ?';
+  connection.query(query, [ground_id, location, start_date, end_date, capacity, schedule, description, status, id], (err, results) => {
+      if (err) {
+          console.error('Error updating camp:', err);
+          res.status(500).send('Error updating camp');
+      } else {
+          res.send('Camp updated successfully');
+      }
+  });
+});
+
+// Delete a camp
+app.delete('/admin/manage_camps/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM camps WHERE camp_id = ?';
+  connection.query(query, [id], (err, results) => {
+      if (err) {
+          console.error('Error deleting camp:', err);
+          res.status(500).send('Error deleting camp');
+      } else {
+          res.send('Camp deleted successfully');
+      }
+  });
+});
+
+
+
+
+
+
+
+
+//Group Leader Functions
+
+//Group Applications
+
+
+// Get all group applications for a specific group leader
+app.get('/group_leader/groups_applications/:user_id', (req, res) => {
+  const { user_id } = req.params;
+
+  // Retrieve the group_leader_id based on the user_id
+  connection.query("SELECT group_leader_id FROM group_leader WHERE user_id = ?", [user_id], (error, results) => {
+      if (error) {
+          console.error('Error fetching group leader:', error);
+          return res.status(500).json({ error: 'Failed to fetch group leader' });
+      }
+
+      if (results.length === 0) {
+          return res.status(404).json({ error: 'Group leader not found' });
+      }
+
+      const groupLeaderResult = results[0];
+      const group_leader_id = groupLeaderResult.group_leader_id;
+
+      // Fetch group applications by status
+      const queries = [
+          { status: 'Inactive', key: 'previous' },
+          { status: 'Pending', key: 'applied' },
+          { status: 'Active', key: 'approved' }
+      ];
+
+      const resultsObj = {};
+
+      let completedQueries = 0;
+
+      queries.forEach(query => {
+          connection.query("SELECT * FROM camp_groups WHERE group_status = ? AND group_leader_id = ?", [query.status, group_leader_id], (error, results) => {
+              if (error) {
+                  console.error(`Error fetching ${query.key} groups:`, error);
+                  resultsObj[query.key] = [];
+              } else {
+                  resultsObj[query.key] = results;
+              }
+
+              completedQueries += 1;
+              if (completedQueries === queries.length) {
+                  res.json(resultsObj);
+              }
+          });
+      });
+  });
+});
+
+
+//Apply new group
+app.post('/group_leader/groups_apply/:user_id', (req, res) => {
+  const { user_id } = req.params; // Get user_id from route params
+  console.log(user_id);
+  const { group_name, number_of_attendees, description } = req.body;
+
+  // Retrieve the group_leader_id based on the user_id
+  connection.query("SELECT group_leader_id FROM group_leader WHERE user_id = ?", [user_id], (error, results) => {
+      if (error) {
+          console.error('Error fetching group leader:', error);
+          return res.status(500).json({ error: 'Failed to fetch group leader' });
+      }
+
+      if (results.length === 0) {
+          return res.status(404).json({ error: 'Group leader not found' });
+      }
+
+      const group_leader_id = results[0].group_leader_id;
+
+      // Insert the new group application
+      connection.query("INSERT INTO camp_groups (group_name, group_leader_id, number_of_attendees, description, group_status) VALUES (?, ?, ?, ?, 'Pending')",
+          [group_name, group_leader_id, number_of_attendees, description], (error, results) => {
+              if (error) {
+                  console.error('Error applying for group:', error);
+                  return res.status(500).json({ error: 'Failed to apply for group' });
+              }
+
+              res.status(200).json({ message: 'Group application submitted successfully' });
+          });
+  });
+});
+
+
+// Cancel a group application
+app.put('/group_leader/groups/cancel/:id', (req, res) => {
+  const { id } = req.params;
+
+  // Update the group status to 'Inactive'
+  connection.query("UPDATE camp_groups SET group_status = 'Inactive' WHERE group_id = ?", [id], (error, results) => {
+      if (error) {
+          console.error('Error cancelling application:', error);
+          return res.status(500).json({ error: 'Failed to cancel application' });
+      }
+
+      res.status(200).json({ message: 'Application cancelled' });
+  });
+});
+
+
+
+
+
+
+
 
 
 

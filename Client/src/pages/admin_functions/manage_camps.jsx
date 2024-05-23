@@ -9,13 +9,7 @@ import { MdOutlineGroups2 } from "react-icons/md";
 const ManageCamps = () => {
     return (
         <div className="main-content p-8 bg-gradient-to-r from-green-50 to-green-70 min-h-screen flex flex-col items-center justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <Card
-                    title="Manage Applications"
-                    description="Approve or reject applications for camps or groups" 
-                    navigateTo="/admin/manage_camps/manage_applications"
-                    icon={<FcApproval className="text-8xl text-blue-500" />}
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <Card
                     title="Manage Camps"
                     description="Edit and manage camp information"

@@ -116,9 +116,10 @@ CREATE TABLE camps (
     start_date DATE,
     end_date DATE,
     capacity INT NOT NULL,
-    shedule VARCHAR(255),
+    schedule VARCHAR(255),
     description VARCHAR(255),
     status ENUM('Pending','Approved') NOT NULL,
+    
     FOREIGN KEY (ground_id) REFERENCES camp_grounds(ground_id)
 );
 
@@ -128,7 +129,10 @@ CREATE TABLE camp_groups (
     group_leader_id INT NOT NULL,
     camp_id INT,
     number_of_attendees INT,
+    group_name VARCHAR(255) NOT NULL,
+    description TEXT,
     group_status ENUM('Active', 'Inactive', 'Pending') NOT NULL,
+    payment_status ENUM('Unpaid', 'Paid') NOT NULL DEFAULT 'Unpaid'
     FOREIGN KEY (group_leader_id) REFERENCES group_leader(group_leader_id),
     FOREIGN KEY (camp_id) REFERENCES camps(camp_id)
 );
@@ -145,14 +149,13 @@ CREATE TABLE camp_teams (
     FOREIGN KEY (adult_leader_id ) REFERENCES adult_leader(adult_leader_id )
 );
 
--- Camper to Group Link Table
-CREATE TABLE group_members (
+-- Camper to Team Link Table
+CREATE TABLE team_members (
     member_id INT PRIMARY KEY AUTO_INCREMENT,
     camper_id INT NOT NULL,
-    group_id INT NOT NULL,
-    role ENUM('Camper', 'Leader') NOT NULL,
+    team_id INT NOT NULL,
     FOREIGN KEY (camper_id) REFERENCES youth(camper_id),
-    FOREIGN KEY (group_id) REFERENCES camp_groups(group_id)
+    FOREIGN KEY (team_id) REFERENCES camp_teams(team_id)
 );
 
 

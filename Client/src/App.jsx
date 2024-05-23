@@ -48,7 +48,7 @@ import NewsEdit from "./pages/admin_functions/news_edit";
 import ReportGenerate from "./pages/admin_functions/report_generation";
 import ManageGrounds from "./pages/admin_functions/manage_grounds";
 
-//Manager Users Accounts
+//Admin manager Users Accounts
 import ManageCampers from "./pages/admin_functions/manage_users/manage_users_campers";
 import ManageYouth from "./pages/admin_functions/manage_users/manage_youth";
 import ManageLeaders from "./pages/admin_functions/manage_users/manage_leaders";
@@ -56,11 +56,16 @@ import ManageTeams from "./pages/admin_functions/manage_users/manage_teams";
 import ManageManagers from "./pages/admin_functions/manage_users/manage_managers";
 import ManageStaff from "./pages/admin_functions/manage_users/manage_staff";
 
-//Manage Camps
+//Admin manage Camps
 import ManageApplications from "./pages/admin_functions/manage_camps/manage_applications";
 import ManagerCampsInfo from './pages/admin_functions/manage_camps/manager_camps_info'
 import ManageGroups from "./pages/admin_functions/manage_camps/manage_groups";
 
+//Group Leader Functions
+import Gl_Groups from "./pages/group_leader_functions/gl_groups";
+import CampApplication from "./pages/group_leader_functions/camps/camp_apply";
+import GroupApplication from "./pages/group_leader_functions/groups/group_apply";
+import GLManagerGroups from './pages/group_leader_functions/groups/manage_groups'
 
 function App() {
 
@@ -126,7 +131,11 @@ function App() {
       <Route path="/admin/report_generate" element={<ReportGenerate />} />      
       
       {/* Group Leader Functions */}
-      
+      <Route path='/group_leader_functions/gl_groups/:id' element={<Gl_Groups />} />
+      <Route path='/group_leader_functions/camps/camp_apply/:id' element={<CampApplication />} />
+      <Route path='/group_leader_functions/groups/group_apply/:id' element={<GroupApplication />} />
+      <Route path='/group_leader_functions/groups/manage_groups/:id' element={<GLManagerGroups />} />
+  
     
           </Routes>
           </UserProvider>

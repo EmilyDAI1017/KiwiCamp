@@ -3,7 +3,7 @@ import React from "react";
 const Staff_Dashboard = () => {  
   return (
     <div>
-      <h1>Satff Dashboard</h1>
+      <h1>Staff Dashboard</h1>
       {/* Add your dashboard content here */}
     </div>
   );

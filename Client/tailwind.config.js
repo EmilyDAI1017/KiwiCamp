@@ -12,6 +12,8 @@ export default {
         'sky': '#87CEEB',     // Sky blue
         'cream': '#F5F5F5'    // Off-white, creamy background
       }
+
+      
     },
   },
   plugins: [

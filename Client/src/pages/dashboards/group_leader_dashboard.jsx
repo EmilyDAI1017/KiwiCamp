@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom';
 import { useUser } from '../../contexts/UserContext';
 import { FaUser, FaUsers, FaCampground, FaTasks, FaNewspaper, FaMapMarkedAlt } from 'react-icons/fa';
 import { MdHotel, MdLocalOffer, MdAssessment } from 'react-icons/md';
+import Sidebar from '../../components/navbar_dash'; 
 
 
 function Group_Leader_Dashboard() {
   const { user, logout } = useUser();
   return (
     
-    // <div className="main-content mp-3  bg-gradient-to-r from-green-70 to-green-90 min-h-screen flex flex-col items-center justify-start columns-8xs">
-    <div className="main-content bg-cover p-6 min-h-screen flex flex-col items-center justify-start columns-8xs" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1444210971048-6130cf0c46cf?q=80&w=1746&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
+    <div className="main-content bg-cover p-6 min-h-screen flex flex-col items-center justify-start columns-8xs" style={{ backgroundImage: "url('/src/images/group_leader.png')" }}>
 
 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
         <Card 
@@ -27,7 +27,7 @@ function Group_Leader_Dashboard() {
          <Card 
           title="My Groups" 
           description="Manage your groups" 
-          navigateTo="/group_leader_groups"
+          navigateTo={`/group_leader_functions/gl_groups/${user.id}`}
           icon={<FaUsers className="text-8xl text-green-500"/>}
           className="col-span-1"
         />
@@ -78,5 +78,8 @@ function Group_Leader_Dashboard() {
     </div>
   );
 }
+
+
+
 
 export default Group_Leader_Dashboard;
