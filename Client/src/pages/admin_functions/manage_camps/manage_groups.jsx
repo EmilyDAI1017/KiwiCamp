@@ -86,7 +86,7 @@ const ManageGroups = () => {
         return true;
     };
 
-    const handleSave = (id) => {
+    const handleSave = async (id) => {
         setIsLoading(true);
         const group = groups.find(group => group.group_id === id);
         const updatedGroup = { ...group };
@@ -96,18 +96,43 @@ const ManageGroups = () => {
             return;
         }
 
-        axios.put(`http://localhost:3000/admin/manage_groups/${id}`, updatedGroup)
+        try {
+            await axios.put(`http://localhost:3000/admin/manage_groups/${id}`, updatedGroup);
+            setIsEditing(null);
+            alert('Group profile updated successfully');
+            fetchGroups();
+
+            if (updatedGroup.group_status === 'Active') {
+                const leader = groupLeaders.find(leader => leader.group_leader_id === updatedGroup.group_leader_id);
+                if (leader) {
+                    sendNewsToGroupLeader(leader.user_id, 'Group Application Approved', `Your group "${updatedGroup.group_name}" has been approved and is now active.`);
+                }
+                console.log(updatedGroup.camp_id)
+                await axios.put(axios.put(`http://localhost:3000/admin/camps/${updatedGroup.camp_id}`, { camp_status: 'Pending' }))
+                fetchCamps(); // Fetch updated camp data
+            }
+
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const sendNewsToGroupLeader = (receiverId, title, content) => {
+        const news = {
+            receiver_id: receiverId,
+            title: title,
+            content: content,
+            publish_date: new Date().toISOString().split('T')[0], // Today's date
+            to_all: 'No',
+            to_group: 'No',
+        };
+
+        axios.post('http://localhost:3000/send_news', news)
             .then(response => {
-                setIsEditing(null);
-                alert('Group profile updated successfully');
-                fetchGroups();
+                console.log('News sent successfully');
             })
             .catch(error => {
-                console.error('Error updating group:', error);
-                alert('Failed to update group profile');
-            })
-            .finally(() => {
-                setIsLoading(false);
+                console.error('Error sending news:', error);
             });
     };
 
@@ -130,7 +155,10 @@ const ManageGroups = () => {
                     number_of_attendees: '',
                     group_name: '',
                     description: '',
-                    group_status: 'Active'
+                    group_status: 'Active',
+                    registration_fee_youth: '',
+                    registration_fee_adult: '',
+                    payment_status: 'Unpaid'
                 });
                 setShowAddForm(false);
             })
@@ -253,6 +281,30 @@ const ManageGroups = () => {
                         onChange={handleNewGroupChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <input
+                        type="number"
+                        name="registration_fee_youth"
+                        placeholder="Registration Fee (Youth Camper)"
+                        value={newGroup.registration_fee_youth}
+                        onChange={handleNewGroupChange}
+                        className="form-input rounded-md shadow-sm mt-1 block w-full"
+                    />
+                                   <input
+                        type="number"
+                        name="registration_fee_adult"
+                        placeholder="Registration Fee (Adult Leader)"
+                        value={newGroup.registration_fee_adult}
+                        onChange={handleNewGroupChange}
+                        className="form-input rounded-md shadow-sm mt-1 block w-full"
+                    />
+
+
+                    <select
+                        name="payment_status"
+                        value={newGroup.payment_status}
+                        onChange={handleNewGroupChange}
+                        className="form-select rounded-md shadow-sm mt-1 block w-full"
+                    />
                     <select
                         name="group_status"
                         value={newGroup.group_status}
@@ -287,6 +339,8 @@ const ManageGroups = () => {
                                 <th className="px-2 py-3">Attendees</th>
                                 <th className="px-2 py-3">Group Name</th>
                                 <th className="px-2 py-3">Description</th>
+                                <th className="px-2 py-3">Registration Fee(Youth Camper)</th>
+                                <th className="px-2 py-3">Registration Fee(Adult Leader)</th>
                                 <th className="px-2 py-3">Payment Status</th>
 
                                 <th className="px-2 py-3">Status</th>
@@ -298,16 +352,17 @@ const ManageGroups = () => {
                             {filteredGroups.map(group => (
                                 <tr key={group.group_id} className="bg-white border-b hover:bg-gray-50">
                                     <td className="px-2 py-3">{group.group_id}</td>
-                                    <td className="px-2 py-3">{groupLeaders.map(leader => leader.phone_num)}</td>
+                                    <td className="px-2 py-3">{groupLeaders.find(leader => leader.group_leader_id === group.group_leader_id)?.phone_num || ''}</td>
                                     <td className="px-2 py-3">{group.group_leader_id}</td>
-                                    <td className="px-2 py-3" >{groupLeaders.map(leader => leader.first_name + leader.last_name)}</td>
+                                    <td className="px-2 py-3">{groupLeaders.find(leader => leader.group_leader_id === group.group_leader_id)?.first_name + ' ' + groupLeaders.find(leader => leader.group_leader_id === group.group_leader_id)?.last_name || ''}</td>
                                     {isEditing === group.group_id ? (
                                         <>
                                             <EditableField type="select" name="camp_id" value={group.camp_id} onChange={(e) => handleChange(group.group_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} options={camps.map(camp => ({ value: camp.camp_id , label: camp.camp_id }))} />
                                             <EditableField type="text" name="number_of_attendees" value={group.number_of_attendees} onChange={(e) => handleChange(group.group_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                                             <EditableField type="text" name="group_name" value={group.group_name} onChange={(e) => handleChange(group.group_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                                             <EditableField type="text" name="description" value={group.description} onChange={(e) => handleChange(group.group_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-
+                                            <EditableField type="number" name="registration_fee_youth" value={group.registration_fee_youth} onChange={(e) => handleChange(group.group_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                                            <EditableField type="number" name="registration_fee_adult" value={group.registration_fee_adult} onChange={(e) => handleChange(group.group_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                                           <EditableField
                                                 type="select"
                                                 name="payment_status"
@@ -343,6 +398,8 @@ const ManageGroups = () => {
                                             <td>{group.number_of_attendees}</td>
                                             <td>{group.group_name}</td>
                                             <td>{group.description}</td>
+                                            <td>{group.registration_fee_youth}</td>
+                                            <td>{group.registration_fee_adult}</td>
                                             <td>{group.payment_status}</td>
                                             <td>{group.group_status}</td>
                                         </>

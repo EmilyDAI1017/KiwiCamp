@@ -39,12 +39,14 @@ import Logout from './pages/logout'
 import NotFound from './components/notfound'
 
 //Admin Functions
-import DiscountManagement from './pages/admin_functions/discount_management';
+import ManagePaymentDiscount from './pages/admin_functions/manage_payment_discount/payment_discount.jsx'
+import ManageDiscounts from './pages/admin_functions/manage_payment_discount/manage_discount';
+import ManagePayment from './pages/admin_functions/manage_payment_discount/manage_payment';
 import ManageAccommodations from './pages/admin_functions/manage_accommodations';
 import ManageActivities from './pages/admin_functions/manage_activities';
 import ManageCamps from './pages/admin_functions/manage_camps';
 import ManageUsers from "./pages/admin_functions/manage_users";
-import NewsEdit from "./pages/admin_functions/news_edit";
+import ManageNews from "./pages/admin_functions/news_edit";
 import ReportGenerate from "./pages/admin_functions/report_generation";
 import ManageGrounds from "./pages/admin_functions/manage_grounds";
 
@@ -57,16 +59,39 @@ import ManageManagers from "./pages/admin_functions/manage_users/manage_managers
 import ManageStaff from "./pages/admin_functions/manage_users/manage_staff";
 
 //Admin manage Camps
-import ManageApplications from "./pages/admin_functions/manage_camps/manage_applications";
+import ManageRegistrations from "./pages/admin_functions/manage_camps/manage_camp_registrations.jsx";
 import ManagerCampsInfo from './pages/admin_functions/manage_camps/manager_camps_info'
 import ManageGroups from "./pages/admin_functions/manage_camps/manage_groups";
+
 
 //Group Leader Functions
 import Gl_Groups from "./pages/group_leader_functions/gl_groups";
 import CampApplication from "./pages/group_leader_functions/camps/camp_apply";
 import GroupApplication from "./pages/group_leader_functions/groups/group_apply";
-import GLManagerGroups from './pages/group_leader_functions/groups/manage_groups'
+import GLManageGroups from './pages/group_leader_functions/groups/manage_groups';
+import GroupApplicationForm from './pages/group_leader_functions/groups/group_application_form';
 
+//Youth Camper Functions
+import RegisterCamps from './pages/youth_functions/register_camps_youth';
+import CampDetailsY from './pages/youth_functions/camp_details_youth';
+import Youth_Pay from './pages/youth_functions/youth_pay';
+import CampersCardPaymentYouth from './pages/youth_functions/campers_card_payment_youth';
+import CampersSuccessPayYouth from './pages/youth_functions/campers_success_pay_youth.jsx';
+import BankInfoYouth from './pages/youth_functions/bank_info_youth.jsx';
+
+
+//Adult Leader Functions
+import RegisterCamps_AL from './pages/adult_leader_functions/register_camps_al';
+import CampDetails from './pages/adult_leader_functions/camp_details'
+import Adult_Pay from './pages/adult_leader_functions/adult_pay'
+import CampersCardPayment from './pages/adult_leader_functions/campers_card_payment'
+import CampersSuccessPay from './pages/adult_leader_functions/campers_success_pay'
+import BankInfoAd from './pages/adult_leader_functions/bank_info_ad.jsx'  
+
+//Payment
+import Payment from './pages/payment';
+import CardPayment from './pages/card_payment';
+import SuccessPay from './pages/group_leader_functions/groups/group_success_pay';
 function App() {
 
   return (
@@ -84,6 +109,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route path="/reset/:token" element={<ResetForm />} />
+        <Route path="/card_payment" element={<CardPayment />} />
 
         {/* Registration */}
         <Route path="/register/youth_camper" element={<Youth />} />
@@ -120,25 +146,49 @@ function App() {
       <Route path="/admin/manage_grounds" element={<ManageGrounds />} />
       <Route path="/admin/manage_camps" element={<ManageCamps />} />
       {/* Admin manage camps */}
-          <Route path="/admin/manage_camps/manage_applications" element={<ManageApplications />} />
+          <Route path="/admin/manage_camps/manage_camp_registrations" element={<ManageRegistrations />} />
           <Route path="/admin/manage_camps/manager_camps_info" element={<ManagerCampsInfo />} />
           <Route path="/admin/manage_camps/manage_groups" element={<ManageGroups />} />
-
+    <Route path="/admin/manage_payment_discount" element={<ManagePaymentDiscount />} />
+     <Route path="/admin/manage_payment" element={<ManagePayment />} />
+      <Route path="/admin/manage_discounts" element={<ManageDiscounts />} />
       <Route path="/admin/manage_activities" element={<ManageActivities />} />
       <Route path="/admin/manage_accommodations" element={<ManageAccommodations />} />
-      <Route path="/admin/discount_management" element={<DiscountManagement />} />
-      <Route path="/admin/news_edit" element={<NewsEdit />} />
+      <Route path="/admin/manage_discount" element={<ManageDiscounts />} />
+      <Route path="/admin/news_edit" element={<ManageNews />} />
       <Route path="/admin/report_generate" element={<ReportGenerate />} />      
       
       {/* Group Leader Functions */}
       <Route path='/group_leader_functions/gl_groups/:id' element={<Gl_Groups />} />
       <Route path='/group_leader_functions/camps/camp_apply/:id' element={<CampApplication />} />
       <Route path='/group_leader_functions/groups/group_apply/:id' element={<GroupApplication />} />
-      <Route path='/group_leader_functions/groups/manage_groups/:id' element={<GLManagerGroups />} />
-  
-    
+      <Route path='/group_leader_functions/groups/manage_groups/:id' element={<GLManageGroups />} />
+      <Route path='/group_leader_functions/groups/group_application_form/:id' element={<GroupApplicationForm />} />
+      <Route path="/groups/payment" element={<Payment />} />
+      <Route path="/group_leader_functions/groups/group_success_pay/:user_id" element={<SuccessPay />} />
+
+
+      {/* Youth Camper functions */}
+      <Route path="/youth_camper_functions/register_camps/:id" element={<RegisterCamps />} />
+      <Route path="/youth_register_camps/camps/:camp_id" element={<CampDetailsY />} />
+      <Route path="/youth_camper_functions/youth_pay/:user_id" element={<Youth_Pay />} />
+      <Route path="/youth_camper_functions/campers_card_payment" element={<CampersCardPaymentYouth />} />
+      <Route path="/youth_camper_functions/campers_success_pay/:user_id" element={<CampersSuccessPayYouth />} />
+      <Route path="/youth_camper_functions/bank_info_youth/:user_id" element={<BankInfoYouth />} />
+
+
+      {/* Adult Leader functions */}
+      <Route path="/adult_leader_functions/register_camps_al/:id" element={<RegisterCamps_AL />} />
+      <Route path="/adult_register_camps/camps/:camp_id" element={<CampDetails />} />
+      <Route path="/adult_leader_functions/adult_pay/:user_id" element={<Adult_Pay />} />
+      <Route path="/adult_leader_functions/campers_card_payment" element={<CampersCardPayment />} />
+      <Route path="/adult_leader_functions/campers_success_pay/:user_id" element={<CampersSuccessPay />} />
+      <Route path="/adult_leader_functions/bank_info_ad/:user_id" element={<BankInfoAd />} />
+      
           </Routes>
           </UserProvider>
+
+    
 
       
     </div>

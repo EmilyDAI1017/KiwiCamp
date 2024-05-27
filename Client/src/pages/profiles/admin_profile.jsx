@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Admin_Profile() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [adminData, setAdminData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
@@ -134,7 +135,17 @@ export default function Admin_Profile() {
 
                 <button type="button" className=" bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit'}</button>
                 {isEditing && <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="submit">Save</button>}
+
             </form>
+            <div>
+                <br></br>
+            <button
+          className="bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+          onClick={() => window.history.back()}
+        >
+          Back to dashboard
+        </button>
+                </div>
             </div>
         </div>
     );

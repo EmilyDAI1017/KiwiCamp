@@ -1,6 +1,7 @@
 import React from "react";  
 
-const GLManagerGroups = () => {
+const GLManageGroups = () => {
+    
     return (
         <div>
         <h2>Manage Groups</h2>
@@ -9,4 +10,4 @@ const GLManagerGroups = () => {
     );
 }
 
-export default GLManagerGroups;
+export default GLManageGroups;

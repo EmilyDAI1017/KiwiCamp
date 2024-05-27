@@ -81,7 +81,9 @@ const ManagerCampsInfo = () => {
     const handleSave = (id) => {
         setIsLoading(true);
         const camp = camps.find(camp => camp.camp_id === id);
-        const updatedCamp = { ...camp };
+        const updatedCamp = { ...camp,
+            start_date: formatDateForBackend(camp.start_date),
+            end_date: formatDateForBackend(camp.end_date)};
 
         if (!validateCamp(updatedCamp)) {
             setIsLoading(false);
@@ -163,6 +165,14 @@ const ManagerCampsInfo = () => {
         }
     };
 
+    function formatDateForBackend(dateStr) {
+        const date = new Date(dateStr);
+        if (!isNaN(date.getTime())) {
+          return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
+        }
+        return null;
+      }
+
     return (
         <div className="main-content">
             <h1 className="text-xl font-bold mb-4">Manage Camps</h1>
@@ -197,6 +207,7 @@ const ManagerCampsInfo = () => {
             {showAddForm && (
                 <div className="new-camp-form my-4">
                     <h2 className="text-lg font-bold mb-2">Add New Camp</h2>
+                    <label className="block text-sm font-medium text-gray-700">Ground ID</label>
                     <select
                         name="ground_id"
                         value={newCamp.ground_id}
@@ -210,6 +221,16 @@ const ManagerCampsInfo = () => {
                             </option>
                         ))}
                     </select>
+                    <label className="block text-sm font-medium text-gray-700">Camp Name</label>
+                    <input 
+                        type="text"
+                        name="camp_name"
+                        placeholder="Camp Name"
+                        value={newCamp.camp_name}
+                        onChange={handleNewCampChange}
+                        className="form-input rounded-md shadow-sm mt-1 block w-full"
+                    />
+                    <label className="block text-sm font-medium text-gray-700">Location</label>
                     <input
                         type="text"
                         name="location"
@@ -218,6 +239,7 @@ const ManagerCampsInfo = () => {
                         onChange={handleNewCampChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">Start Date</label>
                     <input
                         type="date"
                         name="start_date"
@@ -226,6 +248,7 @@ const ManagerCampsInfo = () => {
                         onChange={handleNewCampChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">End Date</label>
                     <input
                         type="date"
                         name="end_date"
@@ -234,6 +257,7 @@ const ManagerCampsInfo = () => {
                         onChange={handleNewCampChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">Capacity</label>
                     <input
                         type="text"
                         name="capacity"
@@ -242,6 +266,7 @@ const ManagerCampsInfo = () => {
                         onChange={handleNewCampChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">Schedule</label>
                     <input
                         type="text"
                         name="schedule"
@@ -250,6 +275,7 @@ const ManagerCampsInfo = () => {
                         onChange={handleNewCampChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">Description</label>
                     <input
                         type="text"
                         name="description"
@@ -258,6 +284,17 @@ const ManagerCampsInfo = () => {
                         onChange={handleNewCampChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">Price</label>
+
+                    <input
+                        type='float'
+                        name='price'
+                        placeholder='Price'
+                        value={newCamp.price}
+                        onChange={handleNewCampChange}
+                        className="form-input rounded-md shadow-sm mt-1 block w-full"
+                    />
+                    <label className="block text-sm font-medium text-gray-700">Status</label>
                     <select
                         name="status"
                         value={newCamp.status}
@@ -285,12 +322,14 @@ const ManagerCampsInfo = () => {
                             <tr className="text-sm font-semibold text-gray-700 bg-gray-100">
                                 <th className="px-4 py-3">Camp ID</th>
                                 <th className="px-4 py-3">Ground ID</th>
+                                <th className="px-4 py-3">Camp Name</th>
                                 <th className="px-4 py-3">Location</th>
                                 <th className="px-4 py-3">Start Date</th>
                                 <th className="px-4 py-3">End Date</th>
                                 <th className="px-4 py-3">Capacity</th>
                                 <th className="px-4 py-3">Schedule</th>
                                 <th className="px-4 py-3">Description</th>
+                                <th className="px-4 py-3">Price</th>
                                 <th className="px-4 py-3">Status</th>
                                 <th className="px-4 py-3">Actions</th>
                             </tr>
@@ -302,12 +341,14 @@ const ManagerCampsInfo = () => {
                                     {isEditing === camp.camp_id ? (
                                         <>
                                             <EditableField type="select" name="ground_id" value={camp.ground_id} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} options={campGrounds.map(ground => ({ value: ground.ground_id, label: ground.name }))} />
+                                            <EditableField type="text" name="camp_name" value={camp.camp_name} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                                             <EditableField type="text" name="location" value={camp.location} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                                            <EditableField type="date" name="start_date" value={camp.start_date} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
-                                            <EditableField type="date" name="end_date" value={camp.end_date} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                                            <EditableField type="date" name="start_date" value={formatDateForInput(camp.start_date)} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                                            <EditableField type="date" name="end_date" value={formatDateForInput(camp.end_date)} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                                             <EditableField type="text" name="capacity" value={camp.capacity} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                                             <EditableField type="text" name="schedule" value={camp.schedule} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                                             <EditableField type="text" name="description" value={camp.description} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
+                                            <EditableField type="float" name="price" value={camp.price} onChange={(e) => handleChange(camp.camp_id, e.target.name, e.target.value)} setCurrentField={setCurrentField} currentField={currentField} />
                                             <EditableField
                                                 type="select"
                                                 name="status"
@@ -324,12 +365,14 @@ const ManagerCampsInfo = () => {
                                     ) : (
                                         <>
                                             <td>{camp.ground_id}</td>
+                                            <td>{camp.camp_name}</td>
                                             <td>{camp.location}</td>
-                                            <td>{camp.start_date}</td>
-                                            <td>{camp.end_date}</td>
+                                            <td>{formatDateDisplay(camp.start_date)}</td>
+                                            <td>{formatDateDisplay(camp.end_date)}</td>
                                             <td>{camp.capacity}</td>
                                             <td>{camp.schedule}</td>
                                             <td>{camp.description}</td>
+                                            <td>{camp.price}</td>
                                             <td>{camp.status}</td>
                                         </>
                                     )}
@@ -358,6 +401,25 @@ const ManagerCampsInfo = () => {
             </div>
         </div>
     );
+
+
+    function formatDateForInput(dateStr) {
+        const date = new Date(dateStr);
+        if (!isNaN(date.getTime())) {
+          return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
+        }
+        return '';
+      }
+    
+      function formatDateDisplay(dateStr) {
+        const date = new Date(dateStr);
+        if (!isNaN(date.getTime())) {
+          return `${('0' + date.getDate()).slice(-2)}/${('0' + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`;
+        }
+        return "Invalid date";
+      }
+    }
+    
 
     function EditableField({ type = "text", name, value, onChange, setCurrentField, currentField, options = [] }) {
         const [inputValue, setInputValue] = useState(value);
@@ -411,6 +473,6 @@ const ManagerCampsInfo = () => {
             </td>
         );
     }
-};
+
 
 export default ManagerCampsInfo;

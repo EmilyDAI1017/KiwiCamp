@@ -144,97 +144,108 @@ const date = new Date(youthData.dob);
 const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   return (
 
-    <div className="main-content mt-10 bg-cover p-8 min-h-screen flex flex-col items-center justify-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1618526640189-81726d5dd707?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }} >
-    <div className="max-w-5xl w-full bg-white/90 shadow-lg rounded-lg p-8 space-y-6">        
-    
+    <div
+    className="main-content mt-10 bg-cover p-8 min-h-screen flex flex-col items-center justify-center"
+    style={{
+      backgroundImage: "url('https://images.unsplash.com/photo-1618526640189-81726d5dd707?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }}
+  >
+    <div className="max-w-5xl w-full bg-white/90 shadow-lg rounded-lg p-8 space-y-6 overflow-auto">
       <h1 className="text-4xl font-serif">Welcome, {youthData.first_name} {youthData.last_name}!</h1>
-      
+
       {isEditing ? (
-        <div >
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
-          <div className="mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
-          <p className="label">First name: <input className="input" type="text" name="first_name" value={youthData.first_name} onChange={handleChange} /></p>
-          <p className="label">Last name: <input className="input" type="text" name="last_name" value={youthData.last_name} onChange={handleChange} /></p>
-          Gender:
-        <select className="input" name="gender" value={youthData.gender} onChange={handleChange} disabled={!isEditing}>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-        <p>Date of Birth: {formattedDate} <input className="input" type="date" name="dob" value={formattedDate} onChange={handleChange} /></p>
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
+              <p className="label">First name: <input className="input" type="text" name="first_name" value={youthData.first_name} onChange={handleChange} /></p>
+              <p className="label">Last name: <input className="input" type="text" name="last_name" value={youthData.last_name} onChange={handleChange} /></p>
+              <p>Gender:
+                <select className="input" name="gender" value={youthData.gender} onChange={handleChange} disabled={!isEditing}>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </p>
+              <p>Date of Birth: <input className="input" type="date" name="dob" value={formattedDate} onChange={handleChange} /></p>
+            </div>
+
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
+              <p className="label"><strong>User ID:</strong> {youthData.user_id}</p>
+              <p className="label">Email: <input className="input" type="email" name="email" value={youthData.email} onChange={handleChange} /></p>
+              <p className="label">Phone Number: <input className="input" type="tel" name="phone_num" value={youthData.phone_num} onChange={handleChange} /></p>
+            </div>
+
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold text-gray-800">Guardian Information</h2>
+              <p className="label">Parent/guardian's name: <input className="input" type="text" name="parent_guardian_name" value={youthData.parent_guardian_name} onChange={handleChange} /></p>
+              <p className="label">Parent/guardian's phone number: <input className="input" type="tel" name="parent_guardian_phone" value={youthData.parent_guardian_phone} onChange={handleChange} /></p>
+              <p className="label">Parent/guardian's email: <input className="input" type="email" name="parent_guardian_email" value={youthData.parent_guardian_email} onChange={handleChange} /></p>
+              <p className="label">Relationship to camper: <input className="input" type="text" name="relationship_to_camper" value={youthData.relationship_to_camper} onChange={handleChange} /></p>
+            </div>
+
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold text-gray-800">Health Record</h2>
+              <p className="label">Medical Condition: <input className="input" type="text" name="medical_condition" value={healthData.medical_condition} onChange={handleHealthChange} /></p>
+              <p className="label">Allergies information: <input className="input" type="text" name="allergies_information" value={healthData.allergies_information} onChange={handleHealthChange} /></p>
+              <p className="label">Dietary requirement: <input className="input" type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} /></p>
+            </div>
           </div>
 
-          <div className="mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
-          <strong>User ID:</strong><p className="input" > {youthData.user_id}</p>
-          <p>Email: <input className="input" type="email" name="email" value={youthData.email} onChange={handleChange} /></p>
-          <p>Phone Number: <input className="input" type="tel" name="phone_num" value={youthData.phone_num} onChange={handleChange} /></p>
-          </div>
-        
-          <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">Guardian Information</h2>
-          <p>Parent/guardian's name: <input className="input" type="text" name="parent_guardian_name" value={youthData.parent_guardian_name} onChange={handleChange} /></p>
-          <p>Parent/guardian's phone number:<input className="input" type="tel" name="parent_guardian_phone" value={youthData.parent_guardian_phone} onChange={handleChange} /></p>
-          <p>Parent/guardian's email: <input className="input" type="email" name="parent_guardian_email" value={youthData.parent_guardian_email} onChange={handleChange} /></p>
-        	<p>Relationship to camper: <input className="input" type="text" name="relationship_to_camper" value= {youthData.relationship_to_camper} onChange={handleChange} /></p>
-          </div>
-
-          <div className="mb-4">
-           <h2 className="text-lg font-semibold text-gray-800">Health Record</h2>
-          <p>Medical Condition: <input className="input" type="text" name="medical_condition" value={healthData.medical_condition} onChange={handleHealthChange} /></p>
-          <p>Allergies information: <input className="input" type="text" name="allergies_information" value={healthData.allergies_information} onChange={handleHealthChange} /></p>
-          <p>Dietary requirement: <input className="input" type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} /></p>
-          </div>
-          
-       </div>
-
-         <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="submit">Save Changes</button>  
-        </form>        
-           
-         </div>
-     
-
-  
-  
+          <button className="bg-emerald-600 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded" type="submit">Save Changes</button>
+        </form>
       ) : (
-        
         <div className="grid grid-cols-2 gap-4">
           <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
-        <strong>First name:</strong> <p className="input" > {youthData.first_name}</p>
-        <strong>Last name:</strong> <p className="input" > {youthData.last_name}</p>
-        <strong>Gender:</strong> <p className="input" > {youthData.gender}</p>
-        <strong>Date of Birth:</strong> <p className="input" >{formattedDate}</p>
-      </div>
+            <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
+            <p className="label"><strong>First name:</strong> {youthData.first_name}</p>
+            <p className="label"><strong>Last name:</strong> {youthData.last_name}</p>
+            <p className="label"><strong>Gender:</strong> {youthData.gender}</p>
+            <p className="label"><strong>Date of Birth:</strong> {formattedDate}</p>
+          </div>
           <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
-        <strong>User ID:</strong><p className="input" > {youthData.user_id}</p>
-        <strong>Email:</strong> <p className="input" > {youthData.email}</p>
-        <strong>Phone number:</strong> <p className="input" > {youthData.phone_num}</p>
-           </div>
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">Guardian Information</h2>
-        <strong>Parent/guardian's name:</strong> <p className="input" >{youthData.parent_guardian_name}</p>
-        <strong>Parent/guardian's phone:</strong> <p className="input" >{youthData.parent_guardian_phone}</p>
-        <strong>Parent/guardian's email:</strong> <p className="input" >{youthData.parent_guardian_email}</p>
-        <strong>Relationship to camper:</strong> <p className="input" >{youthData.relationship_to_camper}</p>
-      </div>
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">Health Record</h2>
-        <strong>Medical Condition:</strong> <p className="input" >  {healthData.medical_condition}</p>
-        <strong>Allergies information:</strong> <p className="input" > {healthData.allergies_information}</p>
-        <strong>Dietary requirement:</strong> <p className="input" > {healthData.dietary_requirement}</p>
-        <strong>Updated date:</strong> <p className="input" > {healthData.last_updated_date}</p>
-      </div>
-
+            <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
+            <p className="label"><strong>User ID:</strong> {youthData.user_id}</p>
+            <p className="label"><strong>Email:</strong> {youthData.email}</p>
+            <p className="label"><strong>Phone number:</strong> {youthData.phone_num}</p>
+          </div>
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-gray-800">Guardian Information</h2>
+            <p className="label"><strong>Parent/guardian's name:</strong> {youthData.parent_guardian_name}</p>
+            <p className="label"><strong>Parent/guardian's phone:</strong> {youthData.parent_guardian_phone}</p>
+            <p className="label"><strong>Parent/guardian's email:</strong> {youthData.parent_guardian_email}</p>
+            <p className="label"><strong>Relationship to camper:</strong> {youthData.relationship_to_camper}</p>
+          </div>
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-gray-800">Health Record</h2>
+            <p className="label"><strong>Medical Condition:</strong> {healthData.medical_condition}</p>
+            <p className="label"><strong>Allergies information:</strong> {healthData.allergies_information}</p>
+            <p className="label"><strong>Dietary requirement:</strong> {healthData.dietary_requirement}</p>
+            <p className="label"><strong>Updated date:</strong> {healthData.last_updated_date}</p>
+          </div>
         </div>
       )}
-            <button className=" bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit Profile'}</button>
- 
-    </div>
 
+      <button
+        className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+        onClick={handleEditToggle}
+      >
+        {isEditing ? 'Cancel' : 'Edit Profile'}
+      </button>
+
+      <div>
+        <button
+          className="bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+          onClick={() => window.history.back()}
+        >
+          Back to dashboard
+        </button>
+      </div>
     </div>
-  );
-}
+  </div>
+);
+};

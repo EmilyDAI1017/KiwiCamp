@@ -24,8 +24,8 @@ function Admin_Dashboard() {
           icon={<FaMapMarkedAlt className="text-8xl text-red-500"/>}
         />
         <Card 
-          title="Manage Camps and Applications " 
-          description="Edit and manage camp details and decline/approve camps and groups applications" 
+          title="Camps and Groups " 
+          description="Edit and manage camps and groups" 
           navigateTo="/admin/manage_camps"
           icon={<FaCampground className="text-8xl text-green-600"/>}
         />
@@ -42,9 +42,9 @@ function Admin_Dashboard() {
           icon={<MdHotel className="text-8xl text-teal-500"/>}
         />
         <Card 
-          title="Discount Management" 
+          title="Manage Payment and Discount" 
           description="Edit and manage discounts" 
-          navigateTo="/admin/discount_management"
+          navigateTo="/admin/manage_payment_discount"
           icon={<MdLocalOffer className="text-8xl text-orange-500"/>}
         />
         <Card 

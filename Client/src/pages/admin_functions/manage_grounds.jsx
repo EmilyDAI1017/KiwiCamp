@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { debounce } from 'lodash';
+import '../../App.css';
 
 function ManageGrounds() {
   const [grounds, setGrounds] = useState([]);
