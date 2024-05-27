@@ -112,12 +112,14 @@ CREATE TABLE camp_grounds (
 CREATE TABLE camps (
     camp_id INT PRIMARY KEY AUTO_INCREMENT,
     ground_id INT NOT NULL,
+    camp_name VARCHAR(255) NOT NULL,
     location VARCHAR(255),
     start_date DATE,
     end_date DATE,
     capacity INT NOT NULL,
     schedule VARCHAR(255),
     description VARCHAR(255),
+    price FLOAT,
     status ENUM('Pending','Approved') NOT NULL,
     
     FOREIGN KEY (ground_id) REFERENCES camp_grounds(ground_id)
@@ -132,7 +134,9 @@ CREATE TABLE camp_groups (
     group_name VARCHAR(255) NOT NULL,
     description TEXT,
     group_status ENUM('Active', 'Inactive', 'Pending') NOT NULL,
-    payment_status ENUM('Unpaid', 'Paid') NOT NULL DEFAULT 'Unpaid'
+    payment_status ENUM('Unpaid', 'Paid') NOT NULL DEFAULT 'Unpaid',
+    registration_fee_youth FLOAT,
+    registration_fee_adult FLOAT,
     FOREIGN KEY (group_leader_id) REFERENCES group_leader(group_leader_id),
     FOREIGN KEY (camp_id) REFERENCES camps(camp_id)
 );
@@ -144,7 +148,8 @@ CREATE TABLE camp_teams (
     group_id INT NOT NULL,
     team_name VARCHAR(255) NOT NULL,
     adult_leader_id INT,  
-    accommodation_id INT,
+    accommodation_id_al INT,
+    accommodation_id_youth INT,
     FOREIGN KEY (group_id) REFERENCES camp_groups(group_id),
     FOREIGN KEY (adult_leader_id ) REFERENCES adult_leader(adult_leader_id )
 );
@@ -158,17 +163,28 @@ CREATE TABLE team_members (
     FOREIGN KEY (team_id) REFERENCES camp_teams(team_id)
 );
 
+CREATE TABLE group_members (
+    member_id INT PRIMARY KEY AUTO_INCREMENT,
+    group_id INT NOT NULL,
+    user_id INT NOT NULL,
+    member_type ENUM('Youth', 'Adult Leader') NOT NULL,
+    FOREIGN KEY (group_id) REFERENCES camp_groups(group_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
 
 
 -- Camper to Camp Registration Table
 CREATE TABLE camp_registrations (
     registration_id INT PRIMARY KEY AUTO_INCREMENT,
-    group_leader_id INT NOT NULL,
+    group_id INT NOT NULL,
     camp_id INT NOT NULL,
+    user_id INT NOT NULL,
+    camper_type ENUM('Youth', 'Adult Leader') NOT NULL,
     registration_date DATE,
-    status ENUM('Registered', 'Cancelled', 'Completed') NOT NULL,
-    FOREIGN KEY (group_leader_id) REFERENCES group_leader(group_leader_id),
-    FOREIGN KEY (camp_id) REFERENCES camps(camp_id)
+    status ENUM('Registered', 'Unpaid', 'Cancelled') NOT NULL,
+    FOREIGN KEY (group_id) REFERENCES camp_groups(group_id),
+    FOREIGN KEY (camp_id) REFERENCES camps(camp_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 
@@ -218,9 +234,15 @@ CREATE TABLE discount (
 -- Create News Table
 CREATE TABLE news (
     news_id INT PRIMARY KEY AUTO_INCREMENT,
+    receiver_id INT,
     title VARCHAR(255),
     content VARCHAR(255),
-    publish_date DATE
+    publish_date DATE,
+    to_all ENUM('Yes', 'No'), 
+    to_group ENUM('Youth', 'Adult Leader', 'Group Leader','No'),
+    FOREIGN KEY (receiver_id) REFERENCES users(user_id),
+    FOREIGN KEY (to_group) REFERENCES users(role)
+
 );
 
 -- Create Health Record Table
@@ -262,22 +284,34 @@ CREATE TABLE payment (
     user_id INT NOT NULL,
     camp_id INT NOT NULL,
     amount FLOAT NOT NULL,
-    payment_date DATE NOT NULL,
+    request_date DATE NOT NULL,
     description VARCHAR(255),
+    payment_status ENUM('Paid', 'Unpaid','Due') NOT NULL,
+    payment_date DATE,
+    pay_type ENUM('Card', 'Bank') NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (camp_id) REFERENCES camps(camp_id)
 );
 
--- Create Payment Installments Table
-CREATE TABLE payment_installments (
-    installment_id INT PRIMARY KEY AUTO_INCREMENT,
-    payment_id INT NOT NULL,
-    due_date DATE,
-    amount FLOAT,
-    status ENUM('Due', 'Paid') NOT NULL,
-    FOREIGN KEY (payment_id) REFERENCES payment(payment_id)
-);
+-- -- Create Payment Installments Table
+-- CREATE TABLE payment_installments (
+--     installment_id INT PRIMARY KEY AUTO_INCREMENT,
+--     payment_id INT NOT NULL,
+--     due_date DATE,
+--     amount FLOAT,
+--     status ENUM('Due', 'Paid') NOT NULL,
+--     FOREIGN KEY (payment_id) REFERENCES payment(payment_id)
+-- );
 
+CREATE TABLE card (
+    card_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    card_number VARCHAR(16) NOT NULL,
+    expiry_date VARCHAR(5) NOT NULL,
+    cvv VARCHAR(3) NOT NULL,
+    cardholder_name VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
 
 
 
