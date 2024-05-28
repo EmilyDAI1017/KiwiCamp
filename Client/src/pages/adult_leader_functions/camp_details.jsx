@@ -23,23 +23,15 @@ function CampDetails() {
       .catch(error => console.error('Error fetching camp details:', error));
   };
 
- const handleJoin = () => {
-
+  const handleJoin = async () => {
     if (camp.available_spots > 0) {
-      const currentDate = new Date();
-
-      // Insert a new record into camp_registrations table
-      axios.post(`http://localhost:3000/camper/camp_register/${user_id}`, {
-        group_id: camp.group_id,
-        camp_id: camp.camp_id,
-        user_id,
-        camper_type: 'Adult Leader',
-        registration_date: currentDate,
-        status: 'Unpaid'
-      })
-      .then(response => {
-
-
+      try {
+        const response = await axios.post(`http://localhost:3000/camper/camp_register/${user_id}`, {
+          group_id: camp.group_id,
+          camp_id: camp.camp_id,
+          camper_type: 'Adult Leader',
+          status: 'Unpaid'
+        });
         navigate(`/adult_leader_functions/adult_pay/${user_id}`, {
           state: {
             user_id,
@@ -53,17 +45,31 @@ function CampDetails() {
             registration_id: response.data.registration_id
           }
         });
-      })
-      .catch(error => {
-        console.error('Error registering for camp:', error);
-        alert('Failed to register for camp.');
-      });
+      } catch (error) {
+        console.log("Entered catch block");
+  
+        if (error.response) {
+          console.log("Error response data:", error.response.data);
+          console.log("Error response status:", error.response.status);
+  
+          if (error.response.status === 409 && error.response.data.alreadyRegistered) {
+            alert('You have applied to join this camp, please check your payment status.');
+          } else {
+            alert(`Error registering for camp: ${error.response.data.error}`);
+          }
+        } else if (error.request) {
+          console.log("No response received:", error.request);
+          alert('No response received from the server. Please try again later.');
+        } else {
+          console.log("Error message:", error.message);
+          alert(`An unexpected error occurred: ${error.message}`);
+        }
+      }
     } else {
       alert('No available spots!');
     }
   };
-
-  if (!camp) return <p>Loading camp details...</p>;
+  
 
   if (!camp) return <p>Loading camp details...</p>;
 

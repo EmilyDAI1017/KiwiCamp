@@ -12,7 +12,7 @@ const CamperSuccessPayYouth = () => {
             <div className="bg-white p-8 rounded-lg shadow-md max-w-md text-center">
                 <h1 className="text-2xl font-bold text-green-600 mb-4">Congratulations!</h1>
                 <p className="text-green-400 mb-2">
-                     Congratulations! You have joined the group {group_name} for the camp {camp_name} successfully!
+                  Congratulations! You have joined the group {group_name} for the camp {camp_name} successfully!
                 </p>
                 <p className="text-green-500 mb-2">
                 Thank you for your payment.

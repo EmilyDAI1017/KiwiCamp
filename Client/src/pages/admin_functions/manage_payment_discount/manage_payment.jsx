@@ -91,18 +91,15 @@ const ManagePayments = () => {
     const handleSave = async (id) => {
         setIsLoading(true);
         const payment = payments.find(payment => payment.payment_id === id);
-        const updatedPayment = { ...payment };
-    
+        const updatedPayment = { ...payment 
+            , request_date: formatDateForBackend(payment.request_date)
+            , payment_date: formatDateForBackend(payment.payment_date)};
+
         if (!validatePayment(updatedPayment)) {
             setIsLoading(false);
             return;
         }
-    
-        // Set payment_date to null if it's an empty string
-        if (updatedPayment.payment_date === '') {
-            updatedPayment.payment_date = null;
-        }
-    
+
         try {
             await axios.put(`http://localhost:3000/admin/manage_payments/${id}`, updatedPayment);
             setIsEditing(null);

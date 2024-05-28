@@ -43,22 +43,16 @@ const GroupApplicationForm = () => {
         axios.post(`http://localhost:3000/group_leader/group_apply/${id}`, newGroup)
             .then(response => {
                 const groupId = response.data.group_id;
-                const paymentData = {
-                    group_id: groupId,
-                    user_id: id,
-                    camp_id: newGroup.camp_id,
-                    amount: selectedCamp.price,
-                    request_date: new Date().toISOString().split('T')[0],
-                    payment_status: 'Unpaid',
-                    description: `Payment for group ${newGroup.group_name} from group leader with ${id} for camp ${selectedCamp.location}`
-                    
-                };
-
-                return axios.post('http://localhost:3000/groups/payments', paymentData).then(() => groupId); // Return groupId here
-            })
-            .then(groupId => {
                 alert("Group application submitted successfully");
-                navigate('/groups/payment', { state: { group: newGroup, camp: selectedCamp, user_id: id, group_id: groupId } });
+                navigate('/groups/payment', {
+                    state: {
+                        group: newGroup,
+                        camp: selectedCamp,
+                        camp_id: newGroup.camp_id,
+                        user_id: id,
+                        group_id: groupId
+                    }
+                });
             })
             .catch(error => {
                 console.error('Error applying for group:', error);

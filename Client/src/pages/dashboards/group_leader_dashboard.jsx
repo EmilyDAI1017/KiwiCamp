@@ -5,7 +5,7 @@ import { useUser } from '../../contexts/UserContext';
 import { FaUser, FaUsers, FaCampground, FaTasks, FaNewspaper, FaMapMarkedAlt } from 'react-icons/fa';
 import { MdHotel, MdLocalOffer, MdAssessment } from 'react-icons/md';
 import Sidebar from '../../components/navbar_dash'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 function Group_Leader_Dashboard() {
@@ -14,6 +14,9 @@ function Group_Leader_Dashboard() {
   const navigate = useNavigate();
   const [news, setNews] = useState([]);
   const [pendingGroups, setPendingGroups] = useState([]);
+  const [unpaidCampsBank, setUnpaidCampsBank] = useState([]);
+
+
 
   useEffect(() => {
     if (user?.id) {
@@ -34,16 +37,14 @@ function Group_Leader_Dashboard() {
 
   const fetchPendingGroups = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/group_leader/groups_unpaid/${userId}`);
+      const response = await axios.get(`http://localhost:3000/campers/unpaid_camps/${userId}`);
       setPendingGroups(response.data);
     } catch (error) {
       console.error('Error fetching pending groups:', error);
     }
   };
 
-  const handlePay = (group, camp) => {
-    navigate('/groups/payment', { state: { group, camp: group, user_id: user.id, group_id: group.group_id, camp_name: group.camp_name, price: group.price } });
-  };
+
 
   return (
     <div className="main-content bg-cover p-6 min-h-screen flex flex-col items-center justify-start columns-8xs" style={{ backgroundImage: "url('/src/images/group_leader.png')" }}>
@@ -67,7 +68,9 @@ function Group_Leader_Dashboard() {
           </div>
         </div>
 
-        <PendingGroupsBlock pendingGroups={pendingGroups} handlePay={handlePay} />
+        <PendingGroupsBlock pendingGroups={pendingGroups} />
+        <UnpaidCampsBankSection unpaidCampsBank={unpaidCampsBank} user={user} />
+
 
         <Card 
           title="My Profile"
@@ -82,11 +85,12 @@ function Group_Leader_Dashboard() {
           navigateTo={`/group_leader_functions/groups/group_apply/${user?.id}`}
           icon={<FaUsers className="text-8xl text-green-500"/>}
         />
+
         <Card 
-          title="Camps" 
-          description="View and manage camps" 
-          navigateTo="/group_leader_camps"
-          icon={<FaCampground className="text-8xl text-teal-500"/>}
+          title="My Payment" 
+          description="Check all payments you made and make payments"  
+          navigateTo={`/group_leader_functions/manage_my_payment_group_leader/${user?.id}`}
+          icon={<MdAssessment className="text-8xl text-red-500"/>}
         />
         <Card 
           title="Activities" 
@@ -100,18 +104,8 @@ function Group_Leader_Dashboard() {
           navigateTo="/group_leader_accommodations"
           icon={<MdHotel className="text-8xl text-pink-500"/>}
         />
-        <Card 
-          title="Discounts" 
-          description="View available discounts" 
-          navigateTo="/group_leader_discounts"
-          icon={<MdLocalOffer className="text-8xl text-orange-500"/>}
-        />
-        <Card 
-          title="Payment" 
-          description="Check due payments and make payments"  
-          navigateTo="/group_leader_reports"
-          icon={<MdAssessment className="text-8xl text-red-500"/>}
-        />
+
+
       </div>
     </div>
   );
@@ -125,35 +119,72 @@ function Group_Leader_Dashboard() {
   }
 }
 
-function PendingGroupsBlock({ pendingGroups, handlePay }) {
+function UnpaidCampsBankSection({ unpaidCampsBank, user }) {
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">Camps Awaiting Bank Transfer Confirmation</h2>
+      <div className="overflow-y-auto max-h-80">
+        {unpaidCampsBank.length > 0 ? 
+          unpaidCampsBank.map((registration) => (
+            <div key={registration.camp_id} className="mb-4">
+              <h3 className="text-xl font-semibold">Payment Create Date: {formatDateDisplay(registration.request_date)}</h3>
+                <p className="text-gray-700">Payment amount: ${registration.amount}</p>
+                <p className="text-gray-700">Payment Description: {registration.description}</p>
+                <div className="mt-4 bg-gray-50 p-4 rounded-lg">
+                  <h3 className="font-semibold mb-2">Bank Transfer Information</h3>
+                  <p><strong>Account Name:</strong> Kiwi Camp</p>
+                  <p><strong>Account Number:</strong> 1000-1000-1000-1000</p>
+                  <p><strong>Reference:</strong> {`${registration.id}-${registration.payment_id}`}</p>
+                  <p className="text-sm text-gray-500 mt-2">Please email the proof of payment to kiwi_camp@gmail.com. Your group application will be processed once the payment is confirmed.</p>
+              </div>
+            </div>
+          )) : 
+          <p>No camps awaiting bank transfer confirmation.</p>
+        }
+      </div>
+    </div>
+  );
+  }
+
+
+function PendingGroupsBlock({ pendingGroups }) {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   return (
     <div className="mt-12 w-full max-w-4xl">
-      <h2 className="text-3xl font-bold mb-6">Unpaid Group Applications</h2>
+      <h2 className="text-2xl font-bold mb-4">Unpaid Payments</h2>
       <div className="bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-96">
         {pendingGroups.length > 0 ? (
           pendingGroups.map((group) => (
             <div key={group.group_id} className="mb-4">
-              <h3 className="text-xl font-semibold">{group.group_name}</h3>
-              <p className="text-gray-700">Description: {group.description}</p>
-              <p className="text-sm text-gray-500">{`Number of Attendees: ${group.number_of_attendees}`}</p>
-              <p className="text-sm text-gray-500">{`Camp Name: ${group.camp_name}`}</p>
-              <p className="text-sm text-gray-500">{`Price: $ ${group.price}`}</p>
-              <p className="text-sm text-gray-500">{`Status: ${group.group_status}`}</p>
-              <p className="text-sm text-gray-500">{`Payment Status: ${group.payment_status}`}</p>
-              <button
-                onClick={() => handlePay(group, { camp_id: group.camp_id })}
-                className="mt-2 px-4 py-2 bg-yellow-500 text-white rounded"
-              >
-                Pay
-              </button>
+              <h3 className="text-xl font-semibold">Payment Create Date: {formatDateDisplay(group.request_date)}</h3>
+              <p className="text-gray-700">Payment amount: ${group.amount}</p>
+              <p className="text-gray-700">Payment Description: {group.description}</p>
+                      
             </div>
           ))
         ) : (
-          <p>No pending group applications.</p>
+          <p>No pending payments.</p>
         )}
+     
+     <button
+                            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
+                            onClick={() => navigate(`/group_leader_functions/manage_my_payment_group_leader/${id}`, { state: { id } })}
+                          >
+                            Manage Payment
+                          </button>
       </div>
     </div>
   );
+}
+
+function formatDateDisplay(dateStr) {
+  const date = new Date(dateStr);
+  if (!isNaN(date.getTime())) {
+    return `${('0' + date.getDate()).slice(-2)}/${('0' + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`;
+  }
+  return "Invalid date";
 }
 
 export default Group_Leader_Dashboard;

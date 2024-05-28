@@ -54,16 +54,33 @@ function CampDetailsY() {
           }
         });
       })
-      .catch(error => {
-        console.error('Error registering for camp:', error);
-        alert('Failed to register for camp.');
+      .catch(function (error) {
+        if (error.response) {
+          console.log("Error response data:", error.response.data);
+          console.log("Error response status:", error.response.status);
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          if (error.response.status === 409 && error.response.data.alreadyRegistered) {
+            alert('You have applied to join this camp, please check your payment status.');
+          } else {
+            alert(`Error registering for camp: ${error.response.data.error}`);
+          }
+        } else if (error.request) {
+          console.log("No response received:", error.request);
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          alert('No response received from the server. Please try again later.');
+        } else {
+          console.log("Error message:", error.message);
+          // Something happened in setting up the request that triggered an Error
+          alert(`An unexpected error occurred: ${error.message}`);
+        }
       });
     } else {
       alert('No available spots!');
     }
   };
-
-  if (!camp) return <p>Loading camp details...</p>;
 
   if (!camp) return <p>Loading camp details...</p>;
 

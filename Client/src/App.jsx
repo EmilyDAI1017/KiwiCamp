@@ -70,6 +70,8 @@ import CampApplication from "./pages/group_leader_functions/camps/camp_apply";
 import GroupApplication from "./pages/group_leader_functions/groups/group_apply";
 import GLManageGroups from './pages/group_leader_functions/groups/manage_groups';
 import GroupApplicationForm from './pages/group_leader_functions/groups/group_application_form';
+import ManageMyPaymentGroupLeader from './pages/group_leader_functions/manage_my_payment_group_leader';
+import BankInfo from './pages/bank_info';
 
 //Youth Camper Functions
 import RegisterCamps from './pages/youth_functions/register_camps_youth';
@@ -78,7 +80,7 @@ import Youth_Pay from './pages/youth_functions/youth_pay';
 import CampersCardPaymentYouth from './pages/youth_functions/campers_card_payment_youth';
 import CampersSuccessPayYouth from './pages/youth_functions/campers_success_pay_youth.jsx';
 import BankInfoYouth from './pages/youth_functions/bank_info_youth.jsx';
-
+import ManageMyPaymentYouth from './pages/youth_functions/manage_my_payment_youth';
 
 //Adult Leader Functions
 import RegisterCamps_AL from './pages/adult_leader_functions/register_camps_al';
@@ -87,6 +89,7 @@ import Adult_Pay from './pages/adult_leader_functions/adult_pay'
 import CampersCardPayment from './pages/adult_leader_functions/campers_card_payment'
 import CampersSuccessPay from './pages/adult_leader_functions/campers_success_pay'
 import BankInfoAd from './pages/adult_leader_functions/bank_info_ad.jsx'  
+import ManageMyPaymentAdult from './pages/adult_leader_functions/manage_my_payment_adult';
 
 //Payment
 import Payment from './pages/payment';
@@ -110,6 +113,7 @@ function App() {
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route path="/reset/:token" element={<ResetForm />} />
         <Route path="/card_payment" element={<CardPayment />} />
+
 
         {/* Registration */}
         <Route path="/register/youth_camper" element={<Youth />} />
@@ -166,8 +170,8 @@ function App() {
       <Route path='/group_leader_functions/groups/group_application_form/:id' element={<GroupApplicationForm />} />
       <Route path="/groups/payment" element={<Payment />} />
       <Route path="/group_leader_functions/groups/group_success_pay/:user_id" element={<SuccessPay />} />
-
-
+      <Route path="/group_leader_functions/manage_my_payment_group_leader/:user_id" element={<ManageMyPaymentGroupLeader  />} />
+      <Route path="/bank_info/:user_id" element={<BankInfo />} />
       {/* Youth Camper functions */}
       <Route path="/youth_camper_functions/register_camps/:id" element={<RegisterCamps />} />
       <Route path="/youth_register_camps/camps/:camp_id" element={<CampDetailsY />} />
@@ -175,8 +179,7 @@ function App() {
       <Route path="/youth_camper_functions/campers_card_payment" element={<CampersCardPaymentYouth />} />
       <Route path="/youth_camper_functions/campers_success_pay/:user_id" element={<CampersSuccessPayYouth />} />
       <Route path="/youth_camper_functions/bank_info_youth/:user_id" element={<BankInfoYouth />} />
-
-
+      <Route path='/youth_camper_functions/manage_my_payment_youth/:user_id' element={<ManageMyPaymentYouth />} />
       {/* Adult Leader functions */}
       <Route path="/adult_leader_functions/register_camps_al/:id" element={<RegisterCamps_AL />} />
       <Route path="/adult_register_camps/camps/:camp_id" element={<CampDetails />} />
@@ -184,7 +187,7 @@ function App() {
       <Route path="/adult_leader_functions/campers_card_payment" element={<CampersCardPayment />} />
       <Route path="/adult_leader_functions/campers_success_pay/:user_id" element={<CampersSuccessPay />} />
       <Route path="/adult_leader_functions/bank_info_ad/:user_id" element={<BankInfoAd />} />
-      
+      <Route path='/adult_leader_functions/manage_my_payment_adult/:user_id' element={<ManageMyPaymentAdult />} />
           </Routes>
           </UserProvider>
 

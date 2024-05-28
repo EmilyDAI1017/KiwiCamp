@@ -188,15 +188,6 @@ CREATE TABLE camp_registrations (
 );
 
 
--- Create Activity Table
-CREATE TABLE activity (
-    activity_id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255),
-    duration VARCHAR(50),
-    description VARCHAR(255),
-    cost FLOAT NOT NULL,
-    capacity INT 
-);
 
 CREATE TABLE accommodations (
     accommodation_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -256,7 +247,15 @@ CREATE TABLE health_record (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-
+-- Create Activity Table
+CREATE TABLE activity (
+    activity_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    duration VARCHAR(50),
+    description VARCHAR(255),
+    cost FLOAT NOT NULL,
+    capacity INT 
+);
 
 -- Create Camp Activities Link Table
 CREATE TABLE camp_activities (

@@ -70,7 +70,7 @@ const CampersCardPaymentYouth = () => {
         axios.post('http://localhost:3000/campers/card_payment', paymentData)
             .then(response => {
                 alert('Payment successfully processed');
-                navigate(`/adult_leader_functions/campers_success_pay/${user_id}`, { state: { user_id, group_name, camp_name } });
+                navigate(`/youth_camper_functions/campers_success_pay/${user_id}`, { state: { user_id, group_name, camp_name } });
             })
             .catch(error => {
                 console.error('Error storing card details:', error);

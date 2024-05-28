@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 const CardPayment = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { group, camp, user_id, group_id } = location.state;
+    const { group, camp, user_id, group_id, paymentId} = location.state;
 
     const [cardDetails, setCardDetails] = useState({
         card_number: '',
@@ -62,7 +62,8 @@ const CardPayment = () => {
             card_number: cardDetails.card_number,
             expiry_date: cardDetails.expiry_date,
             cvv: cardDetails.cvv,
-            cardholder_name: cardDetails.cardholder_name
+            cardholder_name: cardDetails.cardholder_name,
+            payment_id: paymentId
         };
 
         axios.post('http://localhost:3000/groups/card_payment', paymentData)

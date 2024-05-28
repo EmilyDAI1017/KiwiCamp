@@ -1917,7 +1917,6 @@ app.put('/admin/manage_payments/:id', (req, res) => {
     payment_date = null;
   }
 
-  
   const query = `
       UPDATE payment SET 
       user_id = ?, 
@@ -2153,9 +2152,62 @@ app.post('/groups/payments', (req, res) => {
 });
 
 
+  app.get('/group_leader/payments/:user_id', (req, res) => {
+    const { user_id } = req.params;
+    connection.query(`
+    SELECT
+    p.payment_id,
+    p.amount,
+    p.request_date,
+    cg.group_name,
+    cg.group_id,
+    c.camp_id,
+    c.camp_name,
+    p.payment_status,
+    p.description,
+    p.pay_type
+FROM
+    payment p
+JOIN
+    camps c ON p.camp_id = c.camp_id
+LEFT JOIN
+    camp_groups cg ON p.camp_id = cg.camp_id
+LEFT JOIN
+    group_leader gl ON cg.group_leader_id = gl.group_leader_id
+WHERE
+    p.user_id = ?
+GROUP BY
+    p.payment_id,
+    p.amount,
+    p.request_date,
+    cg.group_name,
+    cg.group_id,
+    c.camp_id,
+    c.camp_name,
+    p.payment_status,
+    p.description,
+    p.pay_type
+ORDER BY
+    p.request_date DESC;
+
+
+      `, [user_id], (error, results) => {
+        if (error) {
+            console.error('Error fetching unpaid camps:', error);
+            return res.status(500).json({ error: 'Failed to fetch unpaid camps' });
+        }
+        if (results.length === 0) {
+          console.log(`No payment found for user_id: ${user_id}`);
+        } else {
+          console.log(`Fetched ${results.length} payment for user_id: ${user_id}`);
+        }
+        res.json(results);
+    });
+  });
+
 
 app.post('/groups/card_payment', (req, res) => {
-  const { user_id, card_number, expiry_date, cvv, cardholder_name, group_id } = req.body;
+  const { user_id, card_number, expiry_date, cvv, cardholder_name, group_id, payment_id} = req.body;
 
   const insertCardQuery = `INSERT INTO card (user_id, card_number, expiry_date, cvv, cardholder_name)
                            VALUES (?, ?, ?, ?, ?)`;
@@ -2175,9 +2227,11 @@ app.post('/groups/card_payment', (req, res) => {
           }
 
           // Update payment status only after successful group status update
-          const updatePaymentStatusQuery = `UPDATE payment SET payment_status = 'Paid', payment_date = CURDATE() WHERE user_id = ?`;
-          connection.query(updatePaymentStatusQuery, [user_id], (err, results) => {
-              if (err) {
+
+          const updatePaymentStatusQuery = `UPDATE payment SET payment_status = 'Paid', payment_date = CURDATE(), pay_type = 'Card' WHERE payment_id = ?`;
+          connection.query(updatePaymentStatusQuery, [payment_id], (err, results) => {
+              console.log('Payment status updated');
+            if (err) {
                   console.error(err);
                   return res.status(500).send('Error updating payment status');
               }
@@ -2187,6 +2241,305 @@ app.post('/groups/card_payment', (req, res) => {
       });
   });
 });
+app.put('/groups/bank_info/:paymentId', (req, res) => {
+  const { paymentId } = req.params;
+  const { pay_type } = req.body;
+  const query = 'UPDATE payment SET pay_type = ? WHERE payment_id = ?';
+  connection.query(query, [pay_type, paymentId], (err, results) => {
+    if (err) {
+      console.error('Error updating payment:', err);
+      res.status(500).send('Error updating payment');
+    } else {
+      res.send('Payment updated successfully');
+    }
+  }
+  );
+}
+);
+
+
+//admin manage teams
+app.get('/group_leader/groups/:group_id', (req, res) => {
+  const group_id = req.params.group_id;
+  const query = 'SELECT * FROM camp_groups WHERE group_id = ?';
+  connection.query(query, [group_id], (err, result) => {
+      if (err) throw err;
+      res.send(result[0]);
+  });
+});
+
+// Fetch group members (adult leaders and youth campers) from camp_registrations
+app.get('/group_leader/groups/members/:group_id', (req, res) => {
+  const group_id = req.params.group_id;
+
+  const queryLeaders = `
+      SELECT al.*, cr.camp_id
+      FROM adult_leader al
+      JOIN camp_registrations cr ON al.user_id = cr.user_id
+      LEFT JOIN camp_teams ct ON al.adult_leader_id = ct.adult_leader_id
+      WHERE cr.group_id = ? AND cr.camper_type = 'Adult Leader'
+      AND ct.adult_leader_id IS NULL
+  `;
+
+  const queryCampers = `
+      SELECT y.*, cr.camp_id
+      FROM youth y
+      JOIN camp_registrations cr ON y.user_id = cr.user_id
+      LEFT JOIN team_members tm ON y.camper_id = tm.camper_id
+      WHERE cr.group_id = ? AND cr.camper_type = 'Youth'
+      AND tm.camper_id IS NULL
+  `;
+
+  connection.query(queryLeaders, [group_id], (err, leaders) => {
+      if (err) {
+          console.error('Error fetching group members (leaders):', err);
+          return res.status(500).send('Error fetching group members (leaders)');
+      }
+
+      connection.query(queryCampers, [group_id], (err, campers) => {
+          if (err) {
+              console.error('Error fetching group members (campers):', err);
+              return res.status(500).send('Error fetching group members (campers)');
+          }
+
+          res.send({ adultLeaders: leaders, youthCampers: campers });
+      });
+  });
+});
+
+
+// Fetch teams and their members
+app.get('/group_leader/teams/:group_id', (req, res) => {
+  const group_id = req.params.group_id;
+
+  const queryTeams = `
+      SELECT t.*, al.first_name AS leader_first_name, al.last_name AS leader_last_name
+      FROM camp_teams t
+      LEFT JOIN adult_leader al ON t.adult_leader_id = al.adult_leader_id
+      WHERE t.group_id = ?
+  `;
+
+  const queryMembers = `
+      SELECT tm.team_id, y.first_name, y.last_name, y.camper_id
+      FROM team_members tm
+      JOIN youth y ON tm.camper_id = y.camper_id
+      WHERE tm.team_id IN (SELECT team_id FROM camp_teams WHERE group_id = ?)
+  `;
+
+  connection.query(queryTeams, [group_id], (err, teams) => {
+      if (err) throw err;
+
+      connection.query(queryMembers, [group_id], (err, members) => {
+          if (err) throw err;
+
+          const teamMap = {};
+          teams.forEach(team => {
+              teamMap[team.team_id] = {
+                  ...team,
+                  members: []
+              };
+          });
+
+          members.forEach(member => {
+              if (teamMap[member.team_id]) {
+                  teamMap[member.team_id].members.push(member);
+              }
+          });
+
+          res.send(Object.values(teamMap));
+      });
+  });
+});
+
+// Create a new team
+app.post('/group_leader/teams', (req, res) => {
+  const { group_id, team_name, adult_leader_id } = req.body;
+  const query = 'INSERT INTO camp_teams (group_id, team_name, adult_leader_id) VALUES (?, ?, ?)';
+  connection.query(query, [group_id, team_name, adult_leader_id], (err, result) => {
+      if (err) throw err;
+      const team_id = result.insertId;
+
+      res.send({ id: team_id, team_name, adult_leader_id });
+  });
+});
+
+// Add a camper to a specific team
+app.post('/group_leader/teams/add_camper', (req, res) => {
+  const { team_id, camper_id } = req.body;
+  const query = 'INSERT INTO team_members (team_id, camper_id) VALUES (?, ?)';
+  connection.query(query, [team_id, camper_id], (err, result) => {
+      if (err) throw err;
+      res.send('Camper added to team successfully');
+  });
+});
+
+// Update a leader for a team
+app.put('/group_leader/teams/remove_leader/:team_id/:leader_id', (req, res) => {
+  const { team_id, leader_id } = req.params;
+  
+  const updateTeamQuery = 'UPDATE camp_teams SET adult_leader_id = NULL WHERE team_id = ? AND adult_leader_id = ?';
+  connection.query(updateTeamQuery, [team_id, leader_id], (err, result) => {
+      if (err) {
+          console.error('Error removing leader from team:', err);
+          return res.status(500).send('Error removing leader from team');
+      }
+      res.send('Leader removed from team successfully');
+  });
+});
+
+// Remove a camper from a team
+app.delete('/group_leader/teams/remove_camper/:team_id/:camper_id', (req, res) => {
+  const { team_id, camper_id } = req.params;
+  const query = 'DELETE FROM team_members WHERE team_id = ? AND camper_id = ?';
+  connection.query(query, [team_id, camper_id], (err, result) => {
+      if (err) {
+          console.error('Error removing camper from team:', err);
+          return res.status(500).send('Error removing camper from team');
+      }
+      res.send('Camper removed from team successfully');
+  });
+});
+
+// Assign accommodation to a leader
+app.post('/group_leader/teams/assign_accommodation/leader', (req, res) => {
+  const { team_id, leader_id, camp_id } = req.body;
+
+  // Get user_id from leader_id
+  const getUserIdQuery = 'SELECT user_id FROM adult_leader WHERE adult_leader_id = ?';
+
+  connection.query(getUserIdQuery, [leader_id], (err, userIdResults) => {
+      if (err) throw err;
+
+      const user_id = userIdResults[0].user_id;
+
+      // Check if the leader already has an accommodation assigned
+      const checkAssignmentQuery = `
+          SELECT * FROM accommodation_assignments 
+          WHERE user_id = ? AND camp_id = ?
+      `;
+
+      connection.query(checkAssignmentQuery, [user_id, camp_id], (err, checkResults) => {
+          if (err) throw err;
+
+          if (checkResults.length > 0) {
+              return res.status(400).send('Leader already has an accommodation assigned');
+          }
+
+          // Get available cabin for the leader
+          const getCabinQuery = `
+              SELECT accommodation_id 
+              FROM accommodations 
+              WHERE type = 'Cabin' AND status = 'Active' AND capacity = 1 
+              LIMIT 1
+          `;
+
+          connection.query(getCabinQuery, (err, results) => {
+              if (err) throw err;
+
+              if (results.length === 0) {
+                  return res.status(400).send('No available cabins');
+              }
+
+              const accommodation_id = results[0].accommodation_id;
+
+              // Assign cabin to leader
+              const assignAccommodationQuery = `
+                  INSERT INTO accommodation_assignments (accommodation_id, user_id, camp_id) 
+                  VALUES (?, ?, ?)
+              `;
+
+              connection.query(assignAccommodationQuery, [accommodation_id, user_id, camp_id], (err, result) => {
+                  if (err) throw err;
+
+                  // Update the status of the accommodation to 'Inactive'
+                  const updateAccommodationStatusQuery = `
+                      UPDATE accommodations 
+                      SET status = 'Inactive' 
+                      WHERE accommodation_id = ?
+                  `;
+
+                  connection.query(updateAccommodationStatusQuery, [accommodation_id], (err, updateResult) => {
+                      if (err) throw err;
+                      res.send('Leader accommodation assigned successfully');
+                  });
+              });
+          });
+      });
+  });
+});
+
+
+// Assign accommodation to a camper
+app.post('/group_leader/teams/assign_accommodation/camper', (req, res) => {
+  const { team_id, camper_id, camp_id } = req.body;
+
+  // Get user_id from camper_id
+  const getUserIdQuery = 'SELECT user_id FROM youth WHERE camper_id = ?';
+
+  connection.query(getUserIdQuery, [camper_id], (err, userIdResults) => {
+      if (err) throw err;
+
+      const user_id = userIdResults[0].user_id;
+
+      // Check if the camper already has an accommodation assigned
+      const checkAssignmentQuery = `
+          SELECT * FROM accommodation_assignments 
+          WHERE user_id = ? AND camp_id = ?
+      `;
+
+      connection.query(checkAssignmentQuery, [user_id, camp_id], (err, checkResults) => {
+          if (err) throw err;
+
+          if (checkResults.length > 0) {
+              return res.status(400).send('Camper already has an accommodation assigned');
+          }
+
+          // Get available tent for the camper with less than 5 occupants
+          const getTentQuery = `
+              SELECT accommodation_id 
+              FROM accommodations 
+              WHERE type = 'Tent' AND status = 'Active' AND capacity > current_occupancy
+              ORDER BY current_occupancy ASC 
+              LIMIT 1
+          `;
+
+          connection.query(getTentQuery, (err, results) => {
+              if (err) throw err;
+
+              if (results.length === 0) {
+                  return res.status(400).send('No available tents');
+              }
+
+              const accommodation_id = results[0].accommodation_id;
+
+              // Assign tent to camper and update the current occupancy
+              const assignAccommodationQuery = `
+                  INSERT INTO accommodation_assignments (accommodation_id, user_id, camp_id) 
+                  VALUES (?, ?, ?)
+              `;
+
+              connection.query(assignAccommodationQuery, [accommodation_id, user_id, camp_id], (err, result) => {
+                  if (err) throw err;
+
+                  const updateOccupancyQuery = `
+                      UPDATE accommodations 
+                      SET current_occupancy = current_occupancy + 1 
+                      WHERE accommodation_id = ?
+                  `;
+
+                  connection.query(updateOccupancyQuery, [accommodation_id], (err, updateResult) => {
+                      if (err) throw err;
+                      res.send('Camper accommodation assigned successfully');
+                  });
+              });
+          });
+      });
+  });
+});
+
+
+
+
 
 
 
@@ -2319,40 +2672,73 @@ app.get('/adult_register_camps/camps', (req, res) => {
 });
 
 
-//Fetch card unpaid camps registration for camper to show on the dashboard
+// app.get('/campers/unpaid_camps/:user_id', (req, res) => {
+//   const { user_id } = req.params;
+  
+//   // Define the SQL query
+//   const query = `
+//     SELECT camps.camp_name, payment.amount, payment.request_date, payment.payment_id, camp_registrations.registration_id
+//     FROM camp_registrations
+//     JOIN payment ON camp_registrations.camp_id = payment.camp_id
+//       AND camp_registrations.user_id = payment.user_id
+//     JOIN camps ON camp_registrations.camp_id = camps.camp_id
+//     WHERE camp_registrations.user_id = ?
+//       AND camp_registrations.status = 'Unpaid'
+//       AND payment.payment_status = 'Unpaid'
+//       AND payment.pay_type = 'Card';
+//   `;
+
+//   // Execute the query
+//   connection.query(query, [user_id], (error, results) => {
+//     if (error) {
+//       console.error('Error fetching unpaid camps:', error);
+//       return res.status(500).json({ error: 'Failed to fetch unpaid camps' });
+//     }
+
+//     // Log results and respond
+//     if (results.length === 0) {
+//       console.log(`No unpaid camps found for user_id: ${user_id}`);
+//     } else {
+//       console.log(`Fetched ${results.length} unpaid camps for user_id: ${user_id}`);
+//     }
+
+//     // Send the results as JSON response
+//     res.json(results);
+//   });
+// });
+
 app.get('/campers/unpaid_camps/:user_id', (req, res) => {
   const { user_id } = req.params;
-  connection.query(`
-  SELECT camps.camp_name, payment.amount, payment.request_date, payment.payment_id, camp_registrations.registration_id
-  FROM camp_registrations
-  JOIN payment ON camp_registrations.camp_id = payment.camp_id
-      AND camp_registrations.user_id = payment.user_id
-  JOIN camps ON camp_registrations.camp_id = camps.camp_id
-  WHERE camp_registrations.user_id = ?
-    AND camp_registrations.status = 'Unpaid'
-    AND payment.pay_type = 'Card';`, [user_id], (error, results) => {
-      if (error) {
+  
+  // Define the SQL query
+  const query = `
+    SELECT payment.amount, payment.request_date, payment.payment_id, payment.description
+    FROM payment
+    WHERE payment.user_id = ?
+      AND payment.payment_status = 'Unpaid'
+      AND payment.pay_type = 'Card';
+  `;
+  connection.query(query, [user_id], (error, results) => {
+        if (error) {
           console.error('Error fetching unpaid camps:', error);
           return res.status(500).json({ error: 'Failed to fetch unpaid camps' });
-      }
-      res.json(results);
-  });
-});
+        }
+        // Send the results as JSON response
+        res.json(results);
+      });
+    });
+
 
 // Fetch unpaid bank transfer camps registration for camper to show on the dashboard
 app.get('/campers/unpaid_camps_bank/:user_id', (req, res) => {
   const { user_id } = req.params;
   
   const query = `
-    SELECT camps.camp_name, payment.amount, payment.request_date, camp_groups.group_name, payment.pay_type
-    FROM camp_registrations
-    JOIN payment ON camp_registrations.camp_id = payment.camp_id
-        AND camp_registrations.user_id = payment.user_id
-    JOIN camps ON camp_registrations.camp_id = camps.camp_id
-    JOIN camp_groups ON camp_registrations.group_id = camp_groups.group_id
-    WHERE camp_registrations.user_id = ?
-      AND camp_registrations.status = 'Unpaid'
-      AND payment.pay_type = 'Bank';
+  SELECT payment.user_id, payment.amount, payment.request_date, payment.payment_id, payment.description
+  FROM payment
+  WHERE payment.user_id = ?
+    AND payment.payment_status = 'Unpaid'
+    AND payment.pay_type = 'Bank';
   `;
 
   connection.query(query, [user_id], (error, results) => {
@@ -2361,17 +2747,31 @@ app.get('/campers/unpaid_camps_bank/:user_id', (req, res) => {
       console.error('Error fetching unpaid camps:', error);
       return res.status(500).json({ error: 'Failed to fetch unpaid camps' });
     }
-    
-    if (results.length === 0) {
-      console.log(`No unpaid bank transfer camps found for user_id: ${user_id}`);
-    } else {
-      console.log(`Fetched ${results.length} unpaid bank transfer camps for user_id: ${user_id}`);
-    }
-    console.log(results);
     res.json(results);
   });
 });
 
+//Get all registered camps for a camper
+app.get("/campers/registered_camps/:user_id", (req, res) => {
+  const { user_id } = req.params;
+  connection.query(`
+  SELECT camps.camp_name, camps.start_date, camps.end_date, camps.capacity,
+  camps.schedule, camps.description, camp_groups.description AS group_description, camp_groups.group_name, camp_registrations.registration_id, camp_registrations.status
+  FROM camp_registrations
+  JOIN camp_groups ON camp_registrations.group_id = camp_groups.group_id
+  JOIN camps ON camp_groups.camp_id = camps.camp_id
+  WHERE camp_registrations.user_id = ?
+  AND camp_registrations.status = 'Registered';
+  `, [user_id], (error, results) => {
+    if (error) {
+      console.error('Error fetching registered camps:', error);
+      return res.status(500).json({ error: 'Failed to fetch registered camps' });
+    }
+    console.log(`Fetched ${results.length} registered camps for user_id: ${user_id}`);
+    res.json(results);
+  });
+}
+);
 
 
 //Fetch camp details
@@ -2433,18 +2833,32 @@ app.post('/camper/camp_register/:user_id', (req, res) => {
   const { user_id } = req.params;
   const { group_id, camp_id, camper_type, status } = req.body;
   const registration_date = new Date().toISOString().split('T')[0];
-  const query = `INSERT INTO camp_registrations (user_id, group_id, camp_id, camper_type, registration_date, status)
-                  VALUES (?, ?, ?, ?, ?, ?)`;
-  connection.query(query, [user_id, group_id, camp_id, camper_type, registration_date, status], (error, results) => {
+
+  const checkQuery = `SELECT * FROM camp_registrations WHERE user_id = ? AND camp_id = ?`;
+  const insertQuery = `INSERT INTO camp_registrations (user_id, group_id, camp_id, camper_type, registration_date, status)
+                       VALUES (?, ?, ?, ?, ?, ?)`;
+
+  connection.query(checkQuery, [user_id, camp_id], (error, results) => {
+    if (error) {
+      console.error('Error checking existing registration:', error);
+      return res.status(500).json({ error: 'Failed to check existing registration' });
+    }
+
+    if (results.length > 0) {
+      return res.status(409).json({ error: 'User is already registered for this camp', alreadyRegistered: true });
+    }
+
+    connection.query(insertQuery, [user_id, group_id, camp_id, camper_type, registration_date, status], (error, results) => {
       if (error) {
-          console.error('Error registering for camp:', error);
-          return res.status(500).json({ error: 'Failed to register for camp' });
+        console.error('Error registering for camp:', error);
+        return res.status(500).json({ error: 'Failed to register for camp' });
       }
+
       res.status(201).json({ message: 'Registered for camp successfully', registration_id: results.insertId });
-  }
-  );
-}
-);
+    });
+  });
+});
+
 
 //Discount
 app.get('/camp/discount/:camp_id', (req, res) => {
@@ -2517,7 +2931,31 @@ app.post('/campers/card_payment', (req, res) => {
 });
 
 
-
+  //Fetch card camps registration for camper to show on the dashboard
+  app.get('/campers/camp_payments/:user_id', (req, res) => {
+    const { user_id } = req.params;
+    connection.query(`
+    SELECT camps.camp_name, payment.amount, payment.payment_status, payment.pay_type, payment.request_date, payment.payment_id, payment.description, camp_registrations.registration_id, camp_groups.group_id, camp_groups.group_name
+    FROM camp_registrations
+    JOIN payment ON camp_registrations.camp_id = payment.camp_id
+        AND camp_registrations.user_id = payment.user_id
+    JOIN camps ON camp_registrations.camp_id = camps.camp_id
+    JOIN camp_groups ON camp_registrations.group_id = camp_groups.group_id
+    WHERE camp_registrations.user_id = ?
+      AND payment.description LIKE '%Camp%';
+      `, [user_id], (error, results) => {
+        if (error) {
+            console.error('Error fetching unpaid camps:', error);
+            return res.status(500).json({ error: 'Failed to fetch unpaid camps' });
+        }
+        if (results.length === 0) {
+          console.log(`No payment found for user_id: ${user_id}`);
+        } else {
+          console.log(`Fetched ${results.length} payment for user_id: ${user_id}`);
+        }
+        res.json(results);
+    });
+  });
 
 
 
