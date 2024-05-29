@@ -93,6 +93,23 @@ const GroupApplication = () => {
                 </button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <GroupBlock
+                    title="Approved Groups"
+                    groups={filteredGroups(approvedGroups)}
+                    groupType="approved"
+                    handleCancelApplication={handleCancelApplication}
+                    handlePay={handlePay}
+                    navigate={navigate} // Pass navigate function
+                />
+            <GroupBlock
+                    title="Applied Groups"
+                    groups={filteredGroups(appliedGroups)}
+                    groupType="applied"
+                    handleCancelApplication={handleCancelApplication}
+                    handlePay={handlePay}
+                    navigate={navigate} // Pass navigate function
+                />
+
                 <GroupBlock
                     title="Previous Group Applications"
                     groups={filteredGroups(previousApplications)}
@@ -100,62 +117,76 @@ const GroupApplication = () => {
                     handleCancelApplication={handleCancelApplication}
                     handlePay={handlePay}
                 />
-                <GroupBlock
-                    title="Applied Groups"
-                    groups={filteredGroups(appliedGroups)}
-                    groupType="applied"
-                    handleCancelApplication={handleCancelApplication}
-                    handlePay={handlePay}
-                />
-                <GroupBlock
-                    title="Approved Groups"
-                    groups={filteredGroups(approvedGroups)}
-                    groupType="approved"
-                    handleCancelApplication={handleCancelApplication}
-                    handlePay={handlePay}
-                />
+         
             </div>
         </div>
     );
 };
 
-const GroupBlock = ({ title, groups, groupType, handleCancelApplication, handlePay }) => {
+const GroupBlock = ({ title, groups, groupType, handleCancelApplication, handlePay, navigate }) => {
+    const handleManageGroupClick = (group) => {
+        console.log('group.camp_id:', group.camp_id);
+        navigate(`/group_leader_functions/groups/manage_groups/${group.group_id}`, { state: { campId: group.camp_id } });
+    };
+
     return (
-        <div>
-            <h2>{title}</h2>
-            {groups.length > 0 ? (
-                groups.map(group => (
-                    <div key={group.group_id} className="mb-4 p-4 border rounded">
-                        <p>Group Name: {group.group_name}</p>
-                        <p>Camp ID: {group.camp_id}</p>
-                        <p>Number of Attendees: {group.number_of_attendees}</p>
-                        <p>Description: {group.description}</p>
-                        <p>Status: {group.group_status}</p>
-                        <p>Payment Status: {group.payment_status}</p> {/* Display payment status */}
-                        <p>Camp Name: {group.camp_name}</p> {/* Display camp name */}
-                        <p>Price: {group.price}</p> {/* Display camp price */}
-                        <p>Registration Fee For Youth Campers: {group.registration_fee_youth}</p>
-                        <p>Registration Fee For Adult Campers: {group.registration_fee_adult}</p>
+        <div className="main-content mx-auto p-4">
+        <h2 className="text-2xl font-bold mb-6">{title}</h2>
+        {groups.length > 0 ? (
+            groups.map(group => (
+                <div key={group.group_id} className="mb-4 p-6 border rounded-lg shadow-lg bg-white">
+                    <div className="grid grid-cols-2 gap-4">
                         <div>
-                            {groupType === 'applied' && (
-                                <>
-                                    <button onClick={() => handleCancelApplication(group.group_id)} className="bg-red-500 text-white px-2 py-1 rounded mr-2">Cancel Application</button>
-                                    {group.payment_status === 'Unpaid' && (
-                                        <button onClick={() => handlePay(group, { camp_id: group.camp_id, camp_name: group.camp_name, price: group.price })} className="bg-yellow-500 text-white px-2 py-1 rounded">Pay</button>
-                                    )}
-                                </>
-                            )}
-                            {groupType === 'approved' && (
-                                <Link to={`/group_leader_functions/groups/manage_groups/${group.group_id}`} className="bg-green-500 text-white px-2 py-1 rounded">Manage Group</Link>
-                            )}
+                            <p><span className="font-semibold">Group Name:</span> {group.group_name}</p>
+                            <p><span className="font-semibold">Camp ID:</span> {group.camp_id}</p>
+                            <p><span className="font-semibold">Number of Attendees:</span> {group.number_of_attendees}</p>
+                            <p><span className="font-semibold">Description:</span> {group.description}</p>
+                        </div>
+                        <div>
+                            <p><span className="font-semibold">Status:</span> {group.group_status}</p>
+                            <p><span className="font-semibold">Payment Status:</span> {group.payment_status}</p>
+                            <p><span className="font-semibold">Camp Name:</span> {group.camp_name}</p>
+                            <p><span className="font-semibold">Price:</span> {group.price}</p>
+                            <p><span className="font-semibold">Registration Fee (Youth):</span> {group.registration_fee_youth}</p>
+                            <p><span className="font-semibold">Registration Fee (Adult):</span> {group.registration_fee_adult}</p>
                         </div>
                     </div>
-                ))
-            ) : (
-                <p>No {title.toLowerCase()}.</p>
-            )}
-        </div>
-    );
-};
+                    <div className="mt-4 space-x-2">
+                    {groupType === 'approved' && (
+                            <button
+                                onClick={() => handleManageGroupClick(group)}
+                                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200"
+                            >
+                                Manage Group
+                            </button>
+                        )}
+                        {groupType === 'applied' && (
+                            <>
+                                <button 
+                                    onClick={() => handleCancelApplication(group.group_id)} 
+                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
+                                >
+                                    Cancel Application
+                                </button>
+                                {group.payment_status === 'Unpaid' && (
+                                    <button 
+                                        onClick={() => handlePay(group, { camp_id: group.camp_id, camp_name: group.camp_name, price: group.price })} 
+                                        className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-200"
+                                    >
+                                        Pay
+                                    </button>
+                                )}
+                            </>
+                        )}
 
+                    </div>
+                </div>
+            ))
+        ) : (
+            <p className="text-gray-500">No {title.toLowerCase()}.</p>
+        )}
+    </div>
+    );
+}
+    
 export default GroupApplication;

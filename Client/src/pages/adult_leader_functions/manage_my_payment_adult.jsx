@@ -1,6 +1,6 @@
 import React, { useState, useEffect,  } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../../contexts/UserContext';
 
 const ManageMyPaymentAdult = () => {
@@ -10,6 +10,7 @@ const ManageMyPaymentAdult = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState('all');
     const [section, setSection] = useState('camps');
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsLoading(true);
@@ -74,14 +75,7 @@ const ManageMyPaymentAdult = () => {
                     Activity Payments
                 </button>
             </div>
-            <div className="filter-buttons mb-4">
-                <button
-                    className={`px-4 py-2 mr-2 ${filter === 'all' ? 'bg-blue-600' : 'bg-gray-600'} text-white rounded`}
-                    onClick={() => setFilter('all')}
-                >
-                    All Payments
-                </button>
-            </div>
+
             {isLoading ? (
                 <p>Loading payments...</p>
             ) : (

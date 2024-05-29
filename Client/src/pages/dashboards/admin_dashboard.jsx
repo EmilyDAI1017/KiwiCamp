@@ -32,7 +32,7 @@ function Admin_Dashboard() {
         <Card 
           title="Manage Activities" 
           description="Edit and manage activity details" 
-          navigateTo="/admin/manage_activities"
+          navigateTo="/admin/activities"
           icon={<FaTasks className="text-8xl text-purple-500"/>}
         />
         <Card 

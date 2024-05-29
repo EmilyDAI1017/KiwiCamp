@@ -270,11 +270,11 @@ CREATE TABLE camp_activities (
 CREATE TABLE activity_registrations (
     act_reg_id INT PRIMARY KEY AUTO_INCREMENT,
     activity_id INT NOT NULL,
-    camper_id INT NOT NULL,
+    user_id INT NOT NULL,
     status ENUM('Registered', 'Cancelled', 'Completed') NOT NULL,
     registration_date DATE NOT NULL,
     FOREIGN KEY (activity_id) REFERENCES activity(activity_id),
-    FOREIGN KEY (camper_id) REFERENCES youth(camper_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 -- Create Payment Table

@@ -93,6 +93,12 @@ const ManageMyPaymentGroupLeader = () => {
                     )}
                 </div>
             )}
+                    <button
+          className="mt-5 bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+          onClick={() => window.history.back()}
+        >
+          Back to dashboard
+        </button>
         </div>
     );
 

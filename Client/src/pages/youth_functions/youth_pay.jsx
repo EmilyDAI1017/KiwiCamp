@@ -53,16 +53,16 @@ function Youth_Pay() {
       description: `Payment for ${camp_name}, Group: ${group_name}`,
       payment_status: 'Unpaid',
       payment_date: null,
-      pay_type: paymentMethod === 'card' ? 'Card' : 'Bank'
+      pay_type: paymentMethod === 'Card' ? 'Card' : 'Bank'
     };
 
     axios.post(`http://localhost:3000/campers/payment`, paymentData)
       .then(response => {
         const paymentId = response.data.payment_id;
 
-        if (paymentMethod === 'card') {
+        if (paymentMethod === 'Card') {
           navigate('/youth_camper_functions/campers_card_payment', { state: { camp_id, camp_name, group_name, user_id, group_id, paymentId, registration_id, finalPrice } });
-        } else if (paymentMethod === 'bank') {
+        } else if (paymentMethod === 'Bank') {
           navigate(`/youth_camper_functions/bank_info_youth/${user_id}`, { state: { user_id, group_name, camp_name } });
         }
       })
@@ -92,9 +92,9 @@ function Youth_Pay() {
             type="radio"
             name="paymentMethod"
             value="card"
-            checked={paymentMethod === 'card'}
+            checked={paymentMethod === 'Card'}
             onChange={() => {
-              setPaymentMethod('card');
+              setPaymentMethod('Card');
               setShowBankInfo(false);
             }}
             className="mr-2"
@@ -106,9 +106,9 @@ function Youth_Pay() {
             type="radio"
             name="paymentMethod"
             value="bank"
-            checked={paymentMethod === 'bank'}
+            checked={paymentMethod === 'Bank'}
             onChange={() => {
-              setPaymentMethod('bank');
+              setPaymentMethod('Bank');
             }}
             className="mr-2"
           />

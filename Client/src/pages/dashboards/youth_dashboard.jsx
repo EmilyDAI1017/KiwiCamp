@@ -4,6 +4,10 @@ import Card from "../../components/card";
 import '../../App.css';
 import { useUser } from '../../contexts/UserContext';
 import { FaUser, FaUsers } from 'react-icons/fa';
+import { TbPigMoney } from "react-icons/tb";
+import { FaCampground } from "react-icons/fa";
+import {  } from "react-icons/fa";
+
 import { useNavigate, useParams } from 'react-router-dom';
 
 function YouthCamperDashboard() {
@@ -72,34 +76,51 @@ function YouthCamperDashboard() {
   }, [fetchNews, fetchPayments, fetchUnpaidCampsBank, fetchRegisteredCamps]);
 
   return (
-    <div className="main_content">
+   // mt-10 bg-cover p-8 min-h-screen flex flex-col items-center 
+    <div className="main-content min-h-screen bg-cover bg-no-repeat p-6 flex flex-col items-center justify-start columns-8xs" 
+    style={{
+      backgroundImage: "url('/src/images/youth.avif')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      height: '100%'}}
+      >
       <div className="container mx-auto py-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-blue-600">Youth Camper Dashboard</h1>
-          <p className="text-gray-600">Welcome, {user.name}!</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <Card 
             title="My Profile"
             description="Edit and manage your profile"
             navigateTo={`/youth_profile/${user_id}`}
-            icon={<FaUser className="text-4xl text-blue-500" />}
+            icon={<FaUser className="text-8xl text-yellow-500" />}
+            bgImage={'/src/images/card_bg2.jpeg'}
           />
           <Card 
             title="Join a Camp"
             description="Join a camp as a youth camper"
             navigateTo={`/youth_camper_functions/register_camps/${user_id}`}
-            icon={<FaUsers className="text-4xl text-green-500" />}
-          />
+            icon={<FaUsers className="text-8xl text-orange-500" />}
+            bgImage={'/src/images/bg.jpeg'}
+         />
           <Card 
             title="My payment"
-            description="Manage your payment"
+            description="Manage your payment for camps and activities"
             navigateTo={`/youth_camper_functions/manage_my_payment_youth/${user_id}`}
-            icon={<FaUsers className="text-4xl text-green-500" />}
+            icon={<TbPigMoney className="text-8xl text-violet-500" />}
+            bgImage={'/src/images/card_bg2.jpeg'}
           />
+
+          <Card
+            title="My Camps"
+            description= "Camps，teams，accommodations and book activities"
+            navigateTo={`/camper_functions/camps/${user_id}`}
+            icon={<FaCampground className="text-8xl text-green-600" />}
+            bgImage={'/src/images/camp_bg.jpeg'}
+          />
+
           <MemoizedRegisteredCampsSection registeredCamps={registeredCamps} />
           <MemoizedNewsSection news={news} />
-          <MemoizedPaymentsSection payments={payments} navigate={navigate} user={user} />
+          <MemoizedPaymentsSection payments={payments} navigate={navigate} user={user} user_id={user_id} />
           <MemoizedUnpaidCampsBankSection unpaidCampsBank={unpaidCampsBank} user={user} />
         </div>
       </div>
@@ -117,7 +138,7 @@ function YouthCamperDashboard() {
 
 const NewsSection = memo(({ news }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="card bg-white p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Latest News</h2>
       <div className="overflow-y-auto max-h-80">
         {news.length > 0 ? 
@@ -135,9 +156,10 @@ const NewsSection = memo(({ news }) => {
   );
 });
 
-const PaymentsSection = memo(({ payments, navigate, user }) => {
+const PaymentsSection = memo(({ payments, navigate, user, user_id }) => {
+  console.log(user_id)
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="card bg-white p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Unpaid Payments</h2>
       <div className="overflow-y-auto max-h-80">
         {payments.length > 0 ? 
@@ -163,7 +185,7 @@ const PaymentsSection = memo(({ payments, navigate, user }) => {
 
 const UnpaidCampsBankSection = memo(({ unpaidCampsBank, user }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="card bg-white p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Camps Awaiting Bank Transfer Confirmation</h2>
       <div className="overflow-y-auto max-h-80">
         {unpaidCampsBank.length > 0 ?
@@ -190,7 +212,7 @@ const UnpaidCampsBankSection = memo(({ unpaidCampsBank, user }) => {
 
 const RegisteredCampsSection = memo(({ registeredCamps }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="card bg-white p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Registered Camps</h2>
       <div className="overflow-y-auto max-h-80">
         {registeredCamps.length > 0 ? 

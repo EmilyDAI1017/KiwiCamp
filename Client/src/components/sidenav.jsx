@@ -14,8 +14,8 @@ function Navbar() {
     return (
         <div className="navbar-wrapper">
             <nav className="nav">
-                <a href="/" className="site-title"><GiForestCamp className="site-title" /> Kiwi Camp</a>
-                <button onClick={() => setIsOpen(!isOpen)} className="text-green-600 text-xl md:hidden focus:outline-none">
+                <a href="/" className="site-title text-8xl"><GiForestCamp className="site-title text-6xl text-yellow-200"  /> <p className='text-5xl'>Kiwi Camp</p></a>
+                <button onClick={() => setIsOpen(!isOpen)} className="text-green-600 text-3xl md:hidden focus:outline-none">
                     <span>☰</span>
                 </button>
                 <div className={`${isOpen ? 'smallbar' : ''} ${isOpen ? 'block' : 'hidden'} w-full md:w-auto md:flex md:items-center text-1rem`}>

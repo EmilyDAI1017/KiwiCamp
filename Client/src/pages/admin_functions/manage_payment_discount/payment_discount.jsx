@@ -1,9 +1,10 @@
 import React from "react";
 import '../../../App.css';
 import Card from "../../../components/card";
-import { FcApproval } from "react-icons/fc";
-import { GiForestCamp } from "react-icons/gi";
-import { MdOutlineGroups2 } from "react-icons/md";
+import { MdAttachMoney } from "react-icons/md";
+import { MdOutlineDiscount } from "react-icons/md";
+
+
 
 
 const ManagePaymentDiscount = () => {
@@ -14,13 +15,13 @@ const ManagePaymentDiscount = () => {
                     title="Manage Payments"
                     description="Edit and manage camp information"
                     navigateTo="/admin/manage_payment"
-                    icon={<GiForestCamp className="text-9xl text-green-600" />}
+                    icon={<MdAttachMoney className="text-9xl text-green-600" />}
                 />
                 <Card 
                     title="Manage Discounts"
                     description="Edit and manage group information"
                     navigateTo="/admin/manage_discounts"
-                    icon={<MdOutlineGroups2 className="text-8xl text-blue-500" />}
+                    icon={<MdOutlineDiscount className="text-8xl text-blue-500" />}
 
                 /> 
  

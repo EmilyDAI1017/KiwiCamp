@@ -139,96 +139,113 @@ export default function Adult_Leader_Profile() {
   const date = new Date(leaderData.dob);
   const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   return (
-    <div className="main-content mt-12 bg-cover p-8 min-h-screen flex flex-col items-center justify-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1618526640189-81726d5dd707?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }} >
-   <div className="max-w-3xl w-full bg-white/90 shadow-lg rounded-lg p-8 space-y-6">        
-      <h1 className="text-4xl font-serif">Welcome {leaderData.first_name} {leaderData.last_name}!</h1>
-      {isEditing ? (
-      <form onSubmit={handleSubmit} className="mt-4">
-      
-        <p className="label">
-          First Name:
-          <input className="input"  type="text" name="first_name" value={leaderData.first_name} onChange={handleChange} disabled={!isEditing} />
-        </p>
-        <p className="label">
-          Last Name:
-          <input className="input"  type="text" name="last_name" value={leaderData.last_name} onChange={handleChange} disabled={!isEditing} />
-        </p>
-        <p className="label"> 
-          Email:
-          <input className="input"  type="email" name="email" value={leaderData.email} onChange={handleChange} disabled={!isEditing} />
-        </p>
-        <p className="label"> 
-          Phone Number:
-          <input className="input"  type="text" name="phone_num" value={leaderData.phone_num} onChange={handleChange} disabled={!isEditing} />
-        </p>
-        <p className="label">
-        Gender:
-        <select className="input" name="gender" value={leaderData.gender} onChange={handleChange} disabled={!isEditing}>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-        </p>
-        <p className="label">
-          Date of Birth:  {formattedDate}
-          <input className="input" type="date" name="dob" value={formattedDate} onChange={handleChange} disabled={!isEditing} />
-        </p >
-        <p className="label">Emergency Contact Name:
-          <input className="input" type="text" name="emergency_contacts_name" value={leaderData.emergency_contacts_name} onChange={handleChange} disabled={!isEditing} />
-        </p>
-
-        <p className="label">Emergency Contact Phone:
-          <input className="input" type="text" name="emergency_contacts_phone" value={leaderData.emergency_contacts_phone} onChange={handleChange} disabled={!isEditing} />
-        </p>
-
-        <p>Health Record:</p>
-        <p className="label">
-          Medical Condition:
-          <input className="input" type="text" name="medical_condition" value={healthData.medical_condition} onChange={handleHealthChange} disabled={!isEditing} />
-        </p>
-        <p className="label">
-          Allergies information:
-          <input className="input" type="text" name="allergies_information" value={healthData.allergies_information} onChange={handleHealthChange} disabled={!isEditing} />
-        </p>
-        <p className="label"> 
-          Dietary requirement:
-          <input className="input" type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} disabled={!isEditing} />
-        </p>
-
-
-        <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="submit">Save Changes</button>
-      </form>
-
-      
-      ):(
-      <div>
-        First Name: <p className="input" >{leaderData.first_name}</p>
-        Last Name: <p className="input">{leaderData.last_name}</p>
-        Email: <p className="input">{leaderData.email}</p>
-        Phone Number: <p className="input">{leaderData.phone_num}</p>
-        Gender: <p className="input">{leaderData.gender}</p>
-        Date of Birth: <p className="input">{formattedDate}</p>
-        Emergency Contact Name: <p className="input">{leaderData.emergency_contacts_name}</p>
-        Emergency Contact Phone: <p className="input">{leaderData.emergency_contacts_phone}</p>
-        {healthData && (
-          <div>
-        <p className="text-3xl font-serif text-gray-800">Health Record:</p>
-        Medical Condition: <p className="input">{healthData.medical_condition}</p>
-        Allergies information: <p className="input">{healthData.allergies_information}</p>
-        Dietary requirement: <p className="input">{healthData.dietary_requirement}</p>
-        Updated date: <p>{healthData.last_updated_date}</p>
-        </div> 
-          )}
-
-
+    <div className="main-content bg-gray-100/90 flex flex-col items-center justify-center min-h-screen py-12"
+        style={{
+            backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            height: '100%'
+        }}>
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h1 className="text-3xl font-bold text-center text-green-600 mb-6">Welcome {leaderData.first_name} {leaderData.last_name}!</h1>
+            {isEditing ? (
+                <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                    <div>
+                        <label className="block text-gray-700">First Name:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="text" name="first_name" value={leaderData.first_name} onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Last Name:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="text" name="last_name" value={leaderData.last_name} onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Email:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="email" name="email" value={leaderData.email} onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Phone Number:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="text" name="phone_num" value={leaderData.phone_num} onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Gender:</label>
+                        <select className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            name="gender" value={leaderData.gender} onChange={handleChange}>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Date of Birth:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="date" name="dob" value={formattedDate} onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Emergency Contact Name:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="text" name="emergency_contacts_name" value={leaderData.emergency_contacts_name} onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Emergency Contact Phone:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="text" name="emergency_contacts_phone" value={leaderData.emergency_contacts_phone} onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Medical Condition:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="text" name="medical_condition" value={healthData.medical_condition} onChange={handleHealthChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Allergies information:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="text" name="allergies_information" value={healthData.allergies_information} onChange={handleHealthChange} />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Dietary requirement:</label>
+                        <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
+                            type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} />
+                    </div>
+                    <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full" type="submit">Save Changes</button>
+                </form>
+            ) : (
+                <div className="space-y-4">
+                    <p className="text-gray-700"><strong>First Name:</strong> {leaderData.first_name}</p>
+                    <p className="text-gray-700"><strong>Last Name:</strong> {leaderData.last_name}</p>
+                    <p className="text-gray-700"><strong>Email:</strong> {leaderData.email}</p>
+                    <p className="text-gray-700"><strong>Phone Number:</strong> {leaderData.phone_num}</p>
+                    <p className="text-gray-700"><strong>Gender:</strong> {leaderData.gender}</p>
+                    <p className="text-gray-700"><strong>Date of Birth:</strong> {formattedDate}</p>
+                    <p className="text-gray-700"><strong>Emergency Contact Name:</strong> {leaderData.emergency_contacts_name}</p>
+                    <p className="text-gray-700"><strong>Emergency Contact Phone:</strong> {leaderData.emergency_contacts_phone}</p>
+                    {healthData && (
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-800 mt-6">Health Record:</h2>
+                            <p className="text-gray-700"><strong>Medical Condition:</strong> {healthData.medical_condition}</p>
+                            <p className="text-gray-700"><strong>Allergies information:</strong> {healthData.allergies_information}</p>
+                            <p className="text-gray-700"><strong>Dietary requirement:</strong> {healthData.dietary_requirement}</p>
+                            <p className="text-gray-700"><strong>Updated date:</strong> {healthData.last_updated_date}</p>
+                        </div>
+                    )}
+                </div>
+            )}
+            <button   className="mt-2 bg-blue-600 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+ onClick={handleEditToggle}>
+                {isEditing ? 'Cancel' : 'Edit Profile'}
+            </button>
+            <br></br>
+            <button
+          className="mt-2 bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+          onClick={() => window.history.back()}
+        >
+          Back to dashboard
+        </button>
         </div>
-
-
-      )}
-          <button className=" bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 mt-3 rounded" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit Profile'}</button>
-
+   
     </div>
-
-    </div>
-  );
-}
+);
+};

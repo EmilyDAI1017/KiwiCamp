@@ -49,6 +49,8 @@ import ManageUsers from "./pages/admin_functions/manage_users";
 import ManageNews from "./pages/admin_functions/news_edit";
 import ReportGenerate from "./pages/admin_functions/report_generation";
 import ManageGrounds from "./pages/admin_functions/manage_grounds";
+import AssignAcToCamps from './pages/admin_functions/assign_ac_to_camps.jsx';
+import Activities from './pages/admin_functions/activities.jsx';
 
 //Admin manager Users Accounts
 import ManageCampers from "./pages/admin_functions/manage_users/manage_users_campers";
@@ -81,6 +83,11 @@ import CampersCardPaymentYouth from './pages/youth_functions/campers_card_paymen
 import CampersSuccessPayYouth from './pages/youth_functions/campers_success_pay_youth.jsx';
 import BankInfoYouth from './pages/youth_functions/bank_info_youth.jsx';
 import ManageMyPaymentYouth from './pages/youth_functions/manage_my_payment_youth';
+import RegisterActivities from './pages/youth_functions/register_activities.jsx'
+import PayForActivities from './pages/youth_functions/pay_for_activities.jsx'
+import ActivityCardPaymentYouth from './pages/youth_functions/activities_card_payment_youth.jsx'
+import MyCamps from './pages/youth_functions/camps_functions.jsx'
+import TeamsAndAccommodations from './pages/youth_functions/teams_and_accommodations.jsx'
 
 //Adult Leader Functions
 import RegisterCamps_AL from './pages/adult_leader_functions/register_camps_al';
@@ -90,6 +97,10 @@ import CampersCardPayment from './pages/adult_leader_functions/campers_card_paym
 import CampersSuccessPay from './pages/adult_leader_functions/campers_success_pay'
 import BankInfoAd from './pages/adult_leader_functions/bank_info_ad.jsx'  
 import ManageMyPaymentAdult from './pages/adult_leader_functions/manage_my_payment_adult';
+import TeamsAndAccommodationsAL from './pages/adult_leader_functions/teams_and_accom.jsx'
+import MyCampsAL from './pages/adult_leader_functions/camp_functions_al.jsx'
+
+
 
 //Payment
 import Payment from './pages/payment';
@@ -156,10 +167,14 @@ function App() {
     <Route path="/admin/manage_payment_discount" element={<ManagePaymentDiscount />} />
      <Route path="/admin/manage_payment" element={<ManagePayment />} />
       <Route path="/admin/manage_discounts" element={<ManageDiscounts />} />
-      <Route path="/admin/manage_activities" element={<ManageActivities />} />
+      <Route path="/admin/activities" element={<Activities />} />
+          <Route path="/admin/manage_activities" element={<ManageActivities />} />
+          <Route path="/admin/assign_ac_to_camps" element={<AssignAcToCamps />} />
+
       <Route path="/admin/manage_accommodations" element={<ManageAccommodations />} />
       <Route path="/admin/manage_discount" element={<ManageDiscounts />} />
       <Route path="/admin/news_edit" element={<ManageNews />} />
+     
       <Route path="/admin/report_generate" element={<ReportGenerate />} />      
       
       {/* Group Leader Functions */}
@@ -180,6 +195,13 @@ function App() {
       <Route path="/youth_camper_functions/campers_success_pay/:user_id" element={<CampersSuccessPayYouth />} />
       <Route path="/youth_camper_functions/bank_info_youth/:user_id" element={<BankInfoYouth />} />
       <Route path='/youth_camper_functions/manage_my_payment_youth/:user_id' element={<ManageMyPaymentYouth />} />
+      <Route path="/camper_functions/my_camps/:user_id" element={<RegisterActivities />} />
+      <Route path='/youth_camper_functions/register_activities/pay/:user_id' element={<PayForActivities />} />
+      <Route path='/youth_camper_functions/activity_card_payment' element={<ActivityCardPaymentYouth />} />
+      <Route path='/camper_functions/camps/:user_id' element={<MyCamps />} />
+      <Route path='/camps_functions/teams_and_accommodations/:user_id' element={<TeamsAndAccommodations />} />
+
+
       {/* Adult Leader functions */}
       <Route path="/adult_leader_functions/register_camps_al/:id" element={<RegisterCamps_AL />} />
       <Route path="/adult_register_camps/camps/:camp_id" element={<CampDetails />} />
@@ -188,6 +210,9 @@ function App() {
       <Route path="/adult_leader_functions/campers_success_pay/:user_id" element={<CampersSuccessPay />} />
       <Route path="/adult_leader_functions/bank_info_ad/:user_id" element={<BankInfoAd />} />
       <Route path='/adult_leader_functions/manage_my_payment_adult/:user_id' element={<ManageMyPaymentAdult />} />
+      <Route path='/adult_leader_functions/teams_and_accommodations/al/:user_id' element={<TeamsAndAccommodationsAL />} />
+      <Route path='/adult_leader_functions/camp_functions_al/:user_id' element={<MyCampsAL />} />
+          
           </Routes>
           </UserProvider>
 

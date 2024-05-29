@@ -6,13 +6,14 @@ const BankInfoYouth = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const{ user_id } = useParams();
-    const { camp_name, group_name } = location.state;
+    const { camp_name, group_name, total_cost} = location.state;
     return (
         <div className="main-content flex items-center justify-center min-h-screen bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md max-w-md text-center">
                 <h1 className="text-2xl font-bold text-green-600 mb-4">Bank Transfer Information</h1>
                 <p className="text-green-800 mb-2"> </p>
                 <p className="text-green-700 mb-2">
+                <p><strong>Amount :</strong> {total_cost}</p>
                 <p><strong>Account Name:</strong> Kiwi Camp</p>
                 <p><strong>Account Number:</strong> 1000-1000-1000-1000</p>
                 <p><strong>Reference:</strong> {`${group_name}-${camp_name}-${user_id}`}</p>

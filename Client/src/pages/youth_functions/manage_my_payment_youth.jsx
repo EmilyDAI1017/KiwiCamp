@@ -77,15 +77,7 @@ const ManageMyPaymentYouth = () => {
                     Activity Payments
                 </button>
             </div>
-            <div className="filter-buttons mb-4">
-                <button
-                    className={`px-4 py-2 mr-2 ${filter === 'all' ? 'bg-blue-600' : 'bg-gray-600'} text-white rounded`}
-                    onClick={() => setFilter('all')}
-                >
-                    All Payments
-                </button>
-  
-            </div>
+
             {isLoading ? (
                 <p>Loading payments...</p>
             ) : (
@@ -115,7 +107,6 @@ const ManageMyPaymentYouth = () => {
 
                                         <td className="px-2 py-3">{payment.payment_status}</td>
                                         <td className="px-2 py-3">{payment.pay_type}</td>
-                                        <td> {payment.group_name} /{payment.group_id}/{payment.registration_id}</td>
                                         <td className="px-2 py-3">
                                             {payment.payment_status === 'Unpaid' && payment.pay_type !== 'Bank' && (
                                                 <button 

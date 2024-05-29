@@ -4,6 +4,7 @@ import '../../App.css';
 import { useUser } from '../../contexts/UserContext';
 import { useNavigate, useParams } from 'react-router-dom'; 
 import { FaUser, FaUsers, FaCampground, FaTasks, FaNewspaper, FaMapMarkedAlt } from 'react-icons/fa';
+import { TbPigMoney } from "react-icons/tb";
 
 function Adult_Leader_Dashboard() {
   const { user } = useUser();
@@ -47,35 +48,43 @@ function Adult_Leader_Dashboard() {
   , [id]);
 
   return (
-    <div className="main_content">
+    <div className="main-content h-screen bg-cover bg-no-repeat p-6 flex flex-col items-center justify-start columns-8xs" 
+    style={{ backgroundImage: "url('/src/images/group_leader.png')", 
+          height: '100%',
+          }}>
     <div className="container mx-auto py-8">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-blue-600">Adult Leader Dashboard</h1>
-        <p className="text-gray-600">Welcome, {user.username}!</p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <Card 
           title="My Profile"
           description="Edit and manage your profile"
           navigateTo={`/adult_leader_profile/${id}`}
-          icon={<FaUser className="text-4xl text-blue-500" />}
+          icon={<FaUser className="text-8xl text-blue-500" />}
         />
         <Card 
           title="Join a Camp"
           description="Join a camp as a youth camper"
           navigateTo={`/adult_leader_functions/register_camps_al/${id}`}
-          icon={<FaUsers className="text-4xl text-green-500" />}
+          icon={<FaUsers className="text-8xl text-orange-500" />}
         />
 
           <Card 
             title="My payment"
-            description="Manage your payment"
+            description="Manage your payment for camps and activities"
             navigateTo={`/adult_leader_functions/manage_my_payment_adult/${id}`}
-            icon={<FaUsers className="text-4xl text-green-500" />}
+            icon={<TbPigMoney className="text-8xl text-pink-500" />}
           />
+
+          <Card
+            title="My Camps"
+            description= "Camps，teams，accommodations and book activities"
+            navigateTo={`/adult_leader_functions/camp_functions_al/${id}`}
+            icon={<FaCampground className="text-8xl text-green-600" />}
+          />
+          
         <RegisteredCampsSection registeredCamps={registeredCamps} />  
         <NewsSection news={news} />
-        <UnpaidCampsSection unpaidCamps={unpaidCamps} navigate={navigate} user={user} />
+        <UnpaidCampsSection unpaidCamps={unpaidCamps} navigate={navigate} user={user} user_id={id} />
         <UnpaidCampsBankSection unpaidCampsBank={unpaidCampsBank} user={user} />
       </div>
     </div>
@@ -86,7 +95,7 @@ function Adult_Leader_Dashboard() {
 
 function NewsSection({ news }) {
 return (
-  <div className="bg-white p-6 rounded-lg shadow-lg">
+  <div className="card bg-white p-6 rounded-lg shadow-lg">
     <h2 className="text-2xl font-bold mb-4">Latest News</h2>
     <div className="overflow-y-auto max-h-80">
       {news.length > 0 ? 
@@ -104,10 +113,10 @@ return (
 );
 }
 
-function UnpaidCampsSection({ unpaidCamps, navigate, user }) {
+function UnpaidCampsSection({ unpaidCamps, navigate, user, user_id }) {
 return (
-  <div className="bg-white p-6 rounded-lg shadow-lg">
-    <h2 className="text-2xl font-bold mb-4">Unpaid Camps</h2>
+  <div className="card bg-white p-6 rounded-lg shadow-lg">
+    <h2 className="text-2xl font-bold mb-4">Unpaid Payments</h2>
     <div className="overflow-y-auto max-h-80">
       {unpaidCamps.length > 0 ? 
         unpaidCamps.map((payment) => (
@@ -117,7 +126,7 @@ return (
             <p className="text-gray-700">Payment Description: {payment.description}</p>
             <button
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
-              onClick={() => navigate('/youth_camper_functions/manage_my_payment_youth', { state: { id: id } })}
+              onClick={() => navigate(`/adult_leader_functions/manage_my_payment_adult/${user_id}`, { state: { id: id } })}
             >
               Manage Payment
             </button>
@@ -132,7 +141,7 @@ return (
 
 function UnpaidCampsBankSection({ unpaidCampsBank, user }) {
 return (
-  <div className="bg-white p-6 rounded-lg shadow-lg">
+  <div className="card bg-white p-6 rounded-lg shadow-lg">
     <h2 className="text-2xl font-bold mb-4">Camps Awaiting Bank Transfer Confirmation</h2>
     <div className="overflow-y-auto max-h-80">
       {unpaidCampsBank.length > 0 ? 
@@ -159,7 +168,7 @@ return (
 
 function RegisteredCampsSection({ registeredCamps }) {
 return (
-  <div className="bg-white p-6 rounded-lg shadow-lg">
+  <div className="card bg-white p-6 rounded-lg shadow-lg">
     <h2 className="text-2xl font-bold mb-4">Registered Camps</h2>
     <div className="overflow-y-auto max-h-80">
       {registeredCamps.length > 0 ? 

@@ -153,7 +153,7 @@ const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYe
       backgroundRepeat: 'no-repeat',
     }}
   >
-    <div className="max-w-5xl w-full bg-white/90 shadow-lg rounded-lg p-8 space-y-6 overflow-auto">
+    <div className="max-w-5xl w-full bg-white/80 shadow-lg rounded-lg p-8 space-y-6 overflow-auto">
       <h1 className="text-4xl font-serif">Welcome, {youthData.first_name} {youthData.last_name}!</h1>
 
       {isEditing ? (
