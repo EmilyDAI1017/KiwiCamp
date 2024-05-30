@@ -3512,13 +3512,318 @@ app.post('/campers/card_payment', (req, res) => {
     });
     
 
+//Admin generate reports
+// Report: Camper Demographics
+app.get('/report/camper-demographics', (req, res) => {
+  const sql = `
+      SELECT 
+          gender, 
+          COUNT(*) as count 
+      FROM youth 
+      GROUP BY gender
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []); // Ensure response is always an array
+  });
+});
+
+
+// Report: Activity Participation
+app.get('/report/activity-participation', (req, res) => {
+  const sql = `
+      SELECT 
+          a.name as activity_name, 
+          COUNT(ar.user_id) as participants 
+      FROM activity a 
+      JOIN activity_registrations ar 
+      ON a.activity_id = ar.activity_id 
+      GROUP BY a.name
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []); // Ensure response is always an array
+  });
+});
+
+// Report: Payment Status
+app.get('/report/payment-status', (req, res) => {
+  const sql = `
+      SELECT 
+          payment_status, 
+          COUNT(*) as count 
+      FROM payment 
+      GROUP BY payment_status
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []); // Ensure response is always an array
+  });
+});
+
+app.get('/report/age-distribution', (req, res) => {
+  const query = `
+      SELECT 
+          CASE
+              WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 0 AND 5 THEN '0-5'
+              WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 6 AND 10 THEN '6-10'
+              WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 11 AND 15 THEN '11-15'
+              WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 16 AND 20 THEN '16-20'
+              ELSE '21+'
+          END AS age_range,
+          COUNT(*) AS count
+      FROM youth
+      GROUP BY age_range;
+  `;
+  connection.query(query, (err, results) => {
+      if (err) {
+          console.error('Error fetching age distribution report:', err);
+          res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+          res.json(results);
+      }
+  });
+});
+
+app.get('/report/camp-attendance', (req, res) => {
+  const sql = `
+      SELECT 
+          c.camp_name AS camp,
+          COUNT(cr.registration_id) AS attendees
+      FROM camp_registrations cr
+      JOIN camps c ON cr.camp_id = c.camp_id
+      GROUP BY c.camp_name
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []);
+  });
+});
+
+app.get('/report/group-participation', (req, res) => {
+  const sql = `
+      SELECT 
+          cg.group_name AS \`group\`,
+          cg.number_of_attendees AS \`size\`
+      FROM camp_groups cg
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []);
+  });
+});
+
+
+app.get('/report/accommodation-usage', (req, res) => {
+  const sql = `
+      SELECT 
+          a.type AS type,
+          COUNT(aa.assignment_id) AS \`usage\`
+      FROM accommodation_assignments aa
+      JOIN accommodations a ON aa.accommodation_id = a.accommodation_id
+      GROUP BY a.type
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []);
+  });
+});
+
+// Payment Summary Report
+app.get('/report/payment-summary', (req, res) => {
+  const sql = `
+      SELECT 
+          p.payment_status AS status,
+          COUNT(p.payment_id) AS \`count\`,
+          SUM(p.amount) AS amount
+      FROM payment p
+      GROUP BY p.payment_status
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []);
+  });
+});
+
+
+// Discount Usage Report
+app.get('/report/discount-usage', (req, res) => {
+  const sql = `
+      SELECT 
+          d.discount_type AS discount_type,
+          COUNT(d.discount_id) AS \`usage\`
+      FROM discount d
+      GROUP BY d.discount_type
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []);
+  });
+});
+
+// Payment Status Report
+app.get('/report/payment-status', (req, res) => {
+  const sql = `
+      SELECT 
+          payment_status, 
+          COUNT(*) as \`count\`
+      FROM payment 
+      GROUP BY payment_status
+  `;
+  connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result || []);
+  });
+});
+
+
+app.get('/group_leaders/my_campers/:id', (req, res) => {
+  const { id } = req.params;
+  const group_leader_id_query = `SELECT group_leader_id FROM group_leader WHERE user_id = ?`;
+
+  // First query to get the group_leader_id
+  connection.query(group_leader_id_query, [id], (err, results) => {
+    if (err) {
+      console.error('Error fetching group leader ID:', err);
+      return res.status(500).json({ error: 'Database query error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Group leader not found' });
+    }
+
+    const group_leader_id = results[0].group_leader_id;
+
+    const sql = `
+            SELECT
+            y.first_name AS youth_first_name, 
+            y.last_name AS youth_last_name, 
+            y.email AS youth_email, 
+            y.phone_num AS youth_phone, 
+            y.gender AS youth_gender, 
+            y.dob AS youth_dob,
+            y.parent_guardian_name,
+            y.parent_guardian_phone,
+            y.parent_guardian_email,
+            y.relationship_to_camper,
+            y.activity_preferences,
+            a.first_name AS adult_first_name, 
+            a.last_name AS adult_last_name, 
+            a.email AS adult_email, 
+            a.phone_num AS adult_phone, 
+            a.gender AS adult_gender, 
+            a.dob AS adult_dob,
+            a.emergency_contacts_name,
+            a.emergency_contacts_phone,
+            hr.medical_condition,
+            hr.allergies_information,
+            hr.dietary_requirement,
+            hr.last_updated_date,
+            cl.group_name,
+            c.camp_name,
+            t.team_name
+        FROM
+            camp_groups cl
+            INNER JOIN group_leader gl ON cl.group_leader_id = gl.group_leader_id
+            INNER JOIN camp_registrations cr ON cl.group_id = cr.group_id
+            INNER JOIN users u ON cr.user_id = u.user_id
+            LEFT JOIN youth y ON y.user_id = u.user_id AND cr.camper_type = 'Youth'
+            LEFT JOIN adult_leader a ON a.user_id = u.user_id AND cr.camper_type = 'Adult Leader'
+            LEFT JOIN camp_teams t ON t.group_id = cl.group_id
+            LEFT JOIN team_members tm ON tm.camper_id = y.camper_id OR tm.camper_id = a.adult_leader_id
+            LEFT JOIN camps c ON cl.camp_id = c.camp_id
+            LEFT JOIN health_record hr ON hr.user_id = u.user_id
+        WHERE
+            gl.group_leader_id = ?
+              `;
+
+    // Second query to get the campers
+    connection.query(sql, [group_leader_id], (err, results) => {
+      if (err) {
+        console.error('Error fetching campers:', err);
+        return res.status(500).json({ error: 'Database query error' });
+      }
+
+      res.json(results);
+    });
+  });
+});
+
+
+
+
+app.get('/adult_leaders/my_campers/:user_id', (req, res) => {
+  const { user_id } = req.params;
+  
+  // Query to get the adult_leader_id based on user_id
+  const get_adult_id_query = `SELECT adult_leader_id FROM adult_leader WHERE user_id = ?`;
+
+  connection.query(get_adult_id_query, [user_id], (err, results) => {
+    if (err) {
+      console.error('Error fetching adult leader ID:', err);
+      return res.status(500).send('Error fetching adult leader ID');
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Adult leader not found' });
+    }
+
+    const adult_leader_id = results[0].adult_leader_id;
+
+    // Query to get all youth campers in the same camp(s) as the adult leader
+    const campersQuery = `
+    SELECT
+      y.camper_id,
+      y.first_name,
+      y.last_name,
+      y.email,
+      y.phone_num,
+      y.gender,
+      y.dob,
+      y.parent_guardian_name,
+      y.parent_guardian_phone,
+      y.parent_guardian_email,
+      y.relationship_to_camper,
+      y.activity_preferences,
+      ct.team_name
+    FROM
+      camp_registrations cr
+    LEFT JOIN
+      camp_groups cg ON cr.group_id = cg.group_id
+    LEFT JOIN
+      camp_teams ct ON ct.group_id = cg.group_id
+    INNER JOIN
+      team_members tm ON tm.team_id = ct.team_id
+    LEFT JOIN
+      youth y ON y.camper_id = tm.camper_id
+    WHERE
+      cr.camp_id IN (
+        SELECT camp_id
+        FROM camp_registrations
+        WHERE user_id = ?
+      )
+      AND cr.camper_type = 'Youth'
+      AND cr.status = 'Registered'
+    `;
+
+    connection.query(campersQuery, [user_id], (err, campers) => {
+      if (err) {
+        console.error('Error fetching campers:', err);
+        return res.status(500).send('Error fetching campers');
+      }
+
+      if (campers.length === 0) {
+        return res.status(404).json({ error: 'No campers found' });
+      }
+
+      console.log('Campers:', campers);
+      res.json(campers);
+    });
+  });
+});
 
 
  
   app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
   });
-
-
-
-

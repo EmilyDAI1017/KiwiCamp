@@ -163,15 +163,6 @@ CREATE TABLE team_members (
     FOREIGN KEY (team_id) REFERENCES camp_teams(team_id)
 );
 
-CREATE TABLE group_members (
-    member_id INT PRIMARY KEY AUTO_INCREMENT,
-    group_id INT NOT NULL,
-    user_id INT NOT NULL,
-    member_type ENUM('Youth', 'Adult Leader') NOT NULL,
-    FOREIGN KEY (group_id) REFERENCES camp_groups(group_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
 
 -- Camper to Camp Registration Table
 CREATE TABLE camp_registrations (

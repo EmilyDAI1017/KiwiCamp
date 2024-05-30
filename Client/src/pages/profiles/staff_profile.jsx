@@ -144,6 +144,14 @@ export default function Staff_Profile() {
                 <button type="button" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 ease-in-out" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit'}</button>
                 {isEditing && <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="submit">Save</button>}
             </form>
+            <div className="mt-4">
+            <button
+          className="bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+          onClick={() => window.history.back()}
+        >
+          Back to dashboard
+        </button>
+        </div>
         </div>
     </div>
     );

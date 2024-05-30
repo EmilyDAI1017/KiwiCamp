@@ -48,7 +48,7 @@ function Group_Leader_Dashboard() {
 
   return (
     <div className="main-content h-screen bg-cover bg-no-repeat p-6 flex flex-col items-center justify-start columns-8xs" 
-    style={{ backgroundImage: "url('/src/images/group_leader.png')",
+    style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
         height: '100%',
     }}>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
@@ -66,6 +66,12 @@ function Group_Leader_Dashboard() {
           navigateTo={`/group_leader_functions/groups/group_apply/${user?.id}`}
           icon={<FaUsers className="text-8xl text-green-500"/>}
         />
+        <Card
+          title="My Campers"
+          description="View and manage your campers"
+          navigateTo={`/group_leader_functions/my_campers/${user?.id}`}
+          icon={<FaUsers className="text-8xl text-green-500"/>}
+        />
 
         <Card 
           title="My Payment" 
@@ -79,7 +85,7 @@ function Group_Leader_Dashboard() {
           navigateTo="/group_leader_activities"
           icon={<FaTasks className="text-8xl text-purple-500"/>}
         />
-                <div className="card mt-12 w-full max-w-4xl">
+        <div className="card ">
           <h2 className="text-3xl font-bold mb-6">Latest News</h2>
           <div className="bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-96">
             {news.length > 0 ? 
@@ -115,7 +121,7 @@ function Group_Leader_Dashboard() {
 
 function UnpaidCampsBankSection({ unpaidCampsBank, user }) {
   return (
-    <div className="card mt-12 w-full max-w-4xl">
+    <div className="card">
       <h2 className="text-2xl font-bold mb-4">Camps Awaiting Bank Transfer Confirmation</h2>
       <div className="bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-96">
         {unpaidCampsBank.length > 0 ? 
@@ -146,7 +152,7 @@ function PendingGroupsBlock({ pendingGroups }) {
   const { id } = useParams();
 
   return (
-    <div className="card mt-12 w-full max-w-4xl">
+    <div className="card">
       <h2 className="text-3xl font-bold mb-6">Unpaid Payments</h2>
       <div className="bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-96">
         {pendingGroups.length > 0 ? (

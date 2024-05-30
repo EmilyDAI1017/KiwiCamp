@@ -49,7 +49,7 @@ function Adult_Leader_Dashboard() {
 
   return (
     <div className="main-content h-screen bg-cover bg-no-repeat p-6 flex flex-col items-center justify-start columns-8xs" 
-    style={{ backgroundImage: "url('/src/images/group_leader.png')", 
+    style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')", 
           height: '100%',
           }}>
     <div className="container mx-auto py-8">
