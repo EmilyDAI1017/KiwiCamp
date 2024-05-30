@@ -104,7 +104,7 @@ export default function Adult_Leader_Profile() {
     <div
       className="main-content mt-10 bg-cover p-8 min-h-screen flex flex-col items-center justify-center"
       style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1618526640189-81726d5dd707?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+        backgroundImage: "url('/src/images/camp_bg2.jpeg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

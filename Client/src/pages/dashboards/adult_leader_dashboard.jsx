@@ -95,7 +95,11 @@ function Adult_Leader_Dashboard() {
 
 function NewsSection({ news }) {
 return (
-  <div className="card bg-white p-6 rounded-lg shadow-lg">
+  <div className="card bg-green p-6 rounded-lg shadow-lg"
+  style={{
+    backgroundImage: "url(’/src/images/rainbow.jpg’)"
+  }}
+  >
     <h2 className="text-2xl font-bold mb-4">Latest News</h2>
     <div className="overflow-y-auto max-h-80">
       {news.length > 0 ? 

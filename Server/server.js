@@ -3326,15 +3326,17 @@ app.post('/campers/card_payment', (req, res) => {
     WHERE camp_registrations.user_id = ?
       AND payment.description LIKE '%Camp%';
       `, [user_id], (error, results) => {
+        console.log(results);
         if (error) {
             console.error('Error fetching unpaid camps:', error);
             return res.status(500).json({ error: 'Failed to fetch unpaid camps' });
         }
         if (results.length === 0) {
           console.log(`No payment found for user_id: ${user_id}`);
-        } else {
-          console.log(`Fetched ${results.length} payment for user_id: ${user_id}`);
+          return res.json([]);
         }
+        console.log(`Fetched ${results.length} payments for user_id: ${user_id}`);
+      
         res.json(results);
     });
   });

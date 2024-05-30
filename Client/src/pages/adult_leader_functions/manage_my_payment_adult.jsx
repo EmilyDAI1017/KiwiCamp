@@ -59,8 +59,22 @@ const ManageMyPaymentAdult = () => {
     const sortedPayments = paymentsToShow.sort((a, b) => a.payment_status === 'Unpaid' && a.pay_type ==='Card' ? -1 : 1);
 
     return (
-        <div className="main-content">
+        <div className="main-content"
+        style={{
+            backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            height: '100vh'
+          }}
+        >
             <h1 className="text-xl font-bold mb-4">Manage My Payments</h1>
+            <button
+                className="bg-green-600 hover:bg-green-900 mb-3 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+                onClick={() => window.history.back()}
+            >
+                Back to dashboard
+            </button>
             <div className="filter-buttons mb-4">
                 <button
                     className={`px-4 py-2 mr-2 ${section === 'camps' ? 'bg-blue-600' : 'bg-gray-600'} text-white rounded`}

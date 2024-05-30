@@ -1,69 +1,86 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useUser } from '../../contexts/UserContext';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const ManageMyPaymentYouth = () => {
     const { user_id } = useParams();
-    console.log('user id:', user_id);
     const [campsPayment, setCampsPayment] = useState([]);
     const [activitiesPayment, setActivitiesPayment] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [filter, setFilter] = useState('all');
     const [section, setSection] = useState('camps');
     const navigate = useNavigate();
 
     useEffect(() => {
-        setIsLoading(true);
-        fetch(`http://localhost:3000/campers/camp_payments/${user_id}`)
-            .then(response => response.json())
-            .then(data => {
-                setCampsPayment(data);
+        const fetchPayments = async () => {
+            setIsLoading(true);
+            try {
+                if (section === 'camps') {
+                    const campsResponse = await axios.get(`http://localhost:3000/campers/camp_payments/${user_id}`);
+                    setCampsPayment(campsResponse.data);
+                    setActivitiesPayment([]); // Clear activities payment when fetching camps payment
+                } else {
+                    const activitiesResponse = await axios.get(`http://localhost:3000/campers/activity_payments/${user_id}`);
+                    setActivitiesPayment(activitiesResponse.data);
+                    setCampsPayment([]); // Clear camps payment when fetching activities payment
+                }
+            } catch (error) {
+                console.error('Error fetching payments:', error);
+            } finally {
                 setIsLoading(false);
-            })
-            .catch(error => {
-                console.error('Error fetching camp payments:', error);
-                setIsLoading(false);
-            });
-
-        fetch(`http://localhost:3000/campers/activity_payments/${user_id}`)
-            .then(response => response.json())
-            .then(data => {
-                setActivitiesPayment(data);
-                setIsLoading(false);
-            })
-            .catch(error => {
-                console.error('Error fetching activity payments:', error);
-                setIsLoading(false);
-            });
-    }, [user_id]);
-
-    const handlePay = (paymentId, campId, campName, groupName, amount, userId, groupId, registrationId) => {
-        navigate('/youth_camper_functions/campers_card_payment', {
-            state: {
-                camp_id: campId,
-                camp_name: campName,
-                group_name: groupName,
-                finalPrice: amount,
-                user_id: userId,
-                group_id: groupId,
-                paymentId: paymentId,
-                registration_id: registrationId
             }
-        });
+        };
+
+        fetchPayments();
+    }, [user_id, section]); // Add section as a dependency to re-fetch payments on section change
+
+    const handlePay = (payment) => {
+        const state = section === 'camps'
+            ? {
+                camp_id: payment.camp_id,
+                camp_name: payment.camp_name,
+                group_name: payment.group_name,
+                finalPrice: payment.amount,
+                user_id,
+                group_id: payment.group_id,
+                paymentId: payment.payment_id,
+                registration_id: payment.registration_id
+            }
+            : {
+                activity_id: payment.activity_id,
+                activity_name: payment.activity_name,
+                group_name: payment.group_name,
+                finalPrice: payment.amount,
+                user_id,
+                group_id: payment.group_id,
+                paymentId: payment.payment_id,
+                registration_id: payment.registration_id
+            };
+
+        navigate('/youth_camper_functions/campers_card_payment', { state });
     };
 
+    const paymentsToShow = section === 'camps' ? campsPayment : activitiesPayment;
+    const sortedPayments = paymentsToShow.sort((a, b) => a.payment_status === 'Unpaid' && a.pay_type ==='Card' ? -1 : 1);
 
-    const filteredCampsPayments = filter === 'all' ? campsPayment : campsPayment.filter(payment => payment.payment_status === 'Unpaid');
-    const filteredActivitiesPayments = filter === 'all' ? activitiesPayment : activitiesPayment.filter(payment => payment.payment_status === 'Unpaid');
-
-    const paymentsToShow = section === 'camps' ? filteredCampsPayments : filteredActivitiesPayments;
-    const sortedPayments = paymentsToShow.sort((a, b) => a.pay_type === 'Card' && a.payment_status ==='Unpaid' ? -1 : 1);
 
     return (
-        <div className="main-content">
+        <div className="main-content"
+        style={{
+            backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            height: '100vh'
+          }}>
             <h1 className="text-xl font-bold mb-4">Manage My Payments</h1>
+            <button
+                className="bg-green-600 hover:bg-green-900 mb-3 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+                onClick={() => window.history.back()}
+            >
+                Back to dashboard
+            </button>
             <div className="filter-buttons mb-4">
+        
                 <button
                     className={`px-4 py-2 mr-2 ${section === 'camps' ? 'bg-blue-600' : 'bg-gray-600'} text-white rounded`}
                     onClick={() => setSection('camps')}
@@ -104,16 +121,12 @@ const ManageMyPaymentYouth = () => {
                                         <td className="px-2 py-3">$ {payment.amount}</td>
                                         <td className="px-2 py-3">{formatDateDisplay(payment.request_date)}</td>
                                         <td className="px-2 py-3">{payment.description}</td>
-
                                         <td className="px-2 py-3">{payment.payment_status}</td>
                                         <td className="px-2 py-3">{payment.pay_type}</td>
                                         <td className="px-2 py-3">
                                             {payment.payment_status === 'Unpaid' && payment.pay_type !== 'Bank' && (
                                                 <button 
-                                                    onClick={() => handlePay(
-                                                        payment.payment_id, payment.camp_id, payment.camp_name, payment.group_name, payment.amount, user_id, payment.group_id, payment.registration_id
-                                                        )}
-                                                    // camp_id, camp_name, group_name, finalPrice, user_id, group_id, paymentId,registration_id 
+                                                    onClick={() => handlePay(payment)}
                                                     className="bg-green-500 text-white px-2 py-1 rounded"
                                                 >
                                                     Pay
@@ -127,11 +140,12 @@ const ManageMyPaymentYouth = () => {
                     )}
                 </div>
             )}
+
         </div>
     );
 
     function formatDateDisplay(dateStr) {
-        if (!dateStr) return "N/A"; // Return "N/A" or any default text for null dates
+        if (!dateStr) return "N/A";
         const date = new Date(dateStr);
         if (!isNaN(date.getTime())) {
             return `${('0' + date.getDate()).slice(-2)}/${('0' + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`;
