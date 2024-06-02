@@ -14,7 +14,7 @@ const AssignAcToCamps = () => {
     }, []);
 
     const fetchPendingCamps = () => {
-        axios.get('http://localhost:3000/admin/manage_camps?status=Pending')
+        axios.get('http://localhost:3000/admin/manage_camps')
             .then(response => {
                 setCamps(response.data);
             })

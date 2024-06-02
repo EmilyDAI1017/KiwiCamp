@@ -336,7 +336,7 @@ const ManageGroups = () => {
             {selectedTeamForManagement && (
                 <div className="bg-gray-100 p-2 rounded-lg">
                     {teams
-                    .filter(team => team.team_id.toString() === selectedTeamForManagement)
+                    .filter(team => team.team_id === parseInt(selectedTeamForManagement, 10))
                     .map(team => (
                         <div key={team.team_id} className="mb-2 p-3 rounded-lg">
                             <h3 className="text-3xl font-semibold mb-4">{team.team_name}</h3>

@@ -59,56 +59,147 @@ const generateSalt = () => {
         return crypto.randomBytes(16).toString('hex');
 };
 
+// async function createAccounts() {
+//     const password = "123";
+//     const saltRounds = 10;
+//     const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+//     // Array of user accounts
+//     const accounts = [
+//         { username: 'manager1', role: 'Manager', firstName: 'John', lastName: 'Doe', gender: 'Male', email: 'manager1@example.com', phone: '1234567890'},
+//         { username: 'staff1', role: 'Staff', firstName: 'Jane', lastName: 'Doe', gender: 'Female', email: 'staff1@example.com', phone: '0987654321', emergencyName: 'Emergency', emergencyPhone: '1122334455' },
+//         { username: 'admin1', role: 'Admin', firstName: 'Jim', lastName: 'Beam', gender: 'Male', email: 'admin1@example.com', phone: '1231231234'}
+//     ];
+
+//     accounts.forEach(account => {
+//         // Insert into users table
+//         connection.query('INSERT INTO users SET ?', {
+//             username: account.username,
+//             password_hash: hashedPassword,
+//             role: account.role,
+//             salt: saltRounds.toString(), // Store salt rounds as salt for simplicity
+//             email: account.email
+//         }, (err, results) => {
+//             if (err) throw err;
+//             const userId = results.insertId;
+
+//             // Insert into respective role table
+//             let roleTableData = {
+//                 user_id: userId,
+//                 first_name: account.firstName,
+//                 last_name: account.lastName,
+//                 gender: account.gender,
+//                 email: account.email,
+//                 phone_num: account.phone
+//             };
+
+//             if (account.role === 'Manager') {
+//                 connection.query('INSERT INTO manager SET ?', roleTableData, logResult);
+//             } else if (account.role === 'Staff') {
+//                 roleTableData.emergency_contacts_name = account.emergencyName;
+//                 roleTableData.emergency_contacts_phone = account.emergencyPhone;
+//                 connection.query('INSERT INTO staff SET ?', roleTableData, logResult);
+//             } else if (account.role === 'Admin') {
+//                 connection.query('INSERT INTO admin SET ?', roleTableData, logResult);
+//             }
+//         });
+//     });
+// }
+
+
 async function createAccounts() {
-    const password = "123";
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const password = "123";
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Array of user accounts
-    const accounts = [
-        { username: 'manager1', role: 'Manager', firstName: 'John', lastName: 'Doe', gender: 'Male', email: 'manager1@example.com', phone: '1234567890'},
-        { username: 'staff1', role: 'Staff', firstName: 'Jane', lastName: 'Doe', gender: 'Female', email: 'staff1@example.com', phone: '0987654321', emergencyName: 'Emergency', emergencyPhone: '1122334455' },
-        { username: 'admin1', role: 'Admin', firstName: 'Jim', lastName: 'Beam', gender: 'Male', email: 'admin1@example.com', phone: '1231231234'}
-    ];
+  // Array of user accounts
+  const accounts = [
+      { username: 'manager1', role: 'Manager', firstName: 'John', lastName: 'Doe', gender: 'Male', email: 'manager1@example.com', phone: '1234567890' },
+      { username: 'staff1', role: 'Staff', firstName: 'Jane', lastName: 'Doe', gender: 'Female', email: 'staff1@example.com', phone: '0987654321', emergencyName: 'Emergency', emergencyPhone: '1122334455' },
+      { username: 'admin1', role: 'Admin', firstName: 'Jim', lastName: 'Beam', gender: 'Male', email: 'admin1@example.com', phone: '1231231234' },
+      { username: 'youth1', role: 'Youth', firstName: 'Alice', lastName: 'Smith', gender: 'Female', email: 'alice@example.com', phone: '1112223333', parentName: 'Bob Smith', parentPhone: '3332221111', parentEmail: 'bob@example.com', relationship: 'Father', activityPreferences: 'Swimming, Hiking', dob: '2010-04-04' },
+      { username: 'youth2', role: 'Youth', firstName: 'Tom', lastName: 'Johnson', gender: 'Male', email: 'tom@example.com', phone: '4445556666', parentName: 'Mary Johnson', parentPhone: '6665554444', parentEmail: 'mary@example.com', relationship: 'Mother', activityPreferences: 'Archery, Canoeing', dob: '2011-05-05' },
+      { username: 'youth3', role: 'Youth', firstName: 'Eve', lastName: 'Brown', gender: 'Female', email: 'eve@example.com', phone: '7778889999', parentName: 'Sam Brown', parentPhone: '9998887777', parentEmail: 'sam@example.com', relationship: 'Father', activityPreferences: 'Arts, Crafts', dob: '2012-06-06' },
+      { username: 'youth4', role: 'Youth', firstName: 'Max', lastName: 'Davis', gender: 'Male', email: 'max@example.com', phone: '0001112222', parentName: 'Sara Davis', parentPhone: '2221110000', parentEmail: 'sara@example.com', relationship: 'Mother', activityPreferences: 'Fishing, Hiking', dob: '2013-07-07' },
+      { username: 'youth5', role: 'Youth', firstName: 'Sophia', lastName: 'Wilson', gender: 'Female', email: 'sophia@example.com', phone: '3334445555', parentName: 'Paul Wilson', parentPhone: '5554443333', parentEmail: 'paul@example.com', relationship: 'Father', activityPreferences: 'Swimming, Soccer', dob: '2014-08-08' },
+      { username: 'youth6', role: 'Youth', firstName: 'Luke', lastName: 'Taylor', gender: 'Male', email: 'luke@example.com', phone: '6667778888', parentName: 'Laura Taylor', parentPhone: '8887776666', parentEmail: 'laura@example.com', relationship: 'Mother', activityPreferences: 'Basketball, Tennis', dob: '2015-09-09' },
+      { username: 'adult_leader1', role: 'Adult Leader', firstName: 'Liam', lastName: 'Anderson', gender: 'Male', email: 'liam@example.com', phone: '1234567891', emergencyName: 'Emma Anderson', emergencyPhone: '9876543211', dob: '1985-10-10' },
+      { username: 'adult_leader2', role: 'Adult Leader', firstName: 'Olivia', lastName: 'Thomas', gender: 'Female', email: 'olivia@example.com', phone: '1234567892', emergencyName: 'John Thomas', emergencyPhone: '9876543212', dob: '1986-11-11' },
+      { username: 'adult_leader3', role: 'Adult Leader', firstName: 'Noah', lastName: 'Moore', gender: 'Male', email: 'noah@example.com', phone: '1234567893', emergencyName: 'Isabella Moore', emergencyPhone: '9876543213', dob: '1987-12-12' },
+      { username: 'adult_leader4', role: 'Adult Leader', firstName: 'Emma', lastName: 'Martin', gender: 'Female', email: 'emma@example.com', phone: '1234567894', emergencyName: 'Liam Martin', emergencyPhone: '9876543214', dob: '1988-01-01' },
+      { username: 'adult_leader5', role: 'Adult Leader', firstName: 'Ava', lastName: 'Garcia', gender: 'Female', email: 'ava@example.com', phone: '1234567895', emergencyName: 'Noah Garcia', emergencyPhone: '9876543215', dob: '1989-02-02' },
+      { username: 'adult_leader6', role: 'Adult Leader', firstName: 'William', lastName: 'Martinez', gender: 'Male', email: 'william@example.com', phone: '1234567896', emergencyName: 'Olivia Martinez', emergencyPhone: '9876543216', dob: '1990-03-03' },
+      { username: 'group_leader1', role: 'Group Leader', firstName: 'James', lastName: 'Hernandez', gender: 'Male', email: 'james@example.com', phone: '1234567897', emergencyName: 'Sophia Hernandez', emergencyPhone: '9876543217', dob: '1970-04-04' },
+      { username: 'group_leader2', role: 'Group Leader', firstName: 'Isabella', lastName: 'Lopez', gender: 'Female', email: 'isabella@example.com', phone: '1234567898', emergencyName: 'James Lopez', emergencyPhone: '9876543218', dob: '1971-05-05' },
+      { username: 'group_leader3', role: 'Group Leader', firstName: 'Elijah', lastName: 'Gonzalez', gender: 'Male', email: 'elijah@example.com', phone: '1234567899', emergencyName: 'Ava Gonzalez', emergencyPhone: '9876543219', dob: '1972-06-06' }
+  ];
 
-    accounts.forEach(account => {
-        // Insert into users table
-        connection.query('INSERT INTO users SET ?', {
-            username: account.username,
-            password_hash: hashedPassword,
-            role: account.role,
-            salt: saltRounds.toString(), // Store salt rounds as salt for simplicity
-            email: account.email
-        }, (err, results) => {
-            if (err) throw err;
-            const userId = results.insertId;
+  for (const account of accounts) {
+  await new Promise((resolve, reject) => {
+    // Insert into users table
+    connection.query('INSERT INTO users SET ?', {
+        username: account.username,
+        password_hash: hashedPassword,
+        role: account.role,
+        salt: saltRounds.toString(), // Store salt rounds as salt for simplicity
+        email: account.email
+    }, (err, results) => {
+        if (err) return reject(err);
+        const userId = results.insertId;
 
-            // Insert into respective role table
-            let roleTableData = {
-                user_id: userId,
-                first_name: account.firstName,
-                last_name: account.lastName,
-                gender: account.gender,
-                email: account.email,
-                phone_num: account.phone
-            };
+        // Insert into respective role table
+        let roleTableData = {
+            user_id: userId,
+            first_name: account.firstName,
+            last_name: account.lastName,
+            gender: account.gender,
+            email: account.email,
+            phone_num: account.phone
+        };
 
-            if (account.role === 'Manager') {
-                connection.query('INSERT INTO manager SET ?', roleTableData, logResult);
-            } else if (account.role === 'Staff') {
-                roleTableData.emergency_contacts_name = account.emergencyName;
-                roleTableData.emergency_contacts_phone = account.emergencyPhone;
-                connection.query('INSERT INTO staff SET ?', roleTableData, logResult);
-            } else if (account.role === 'Admin') {
-                connection.query('INSERT INTO admin SET ?', roleTableData, logResult);
-            }
-        });
+        if (account.role === 'Manager') {
+            connection.query('INSERT INTO manager SET ?', roleTableData, logResult(resolve, reject));
+        } else if (account.role === 'Staff') {
+            roleTableData.emergency_contacts_name = account.emergencyName;
+            roleTableData.emergency_contacts_phone = account.emergencyPhone;
+            connection.query('INSERT INTO staff SET ?', roleTableData, logResult(resolve, reject));
+        } else if (account.role === 'Admin') {
+            connection.query('INSERT INTO admin SET ?', roleTableData, logResult(resolve, reject));
+        } else if (account.role === 'Youth') {
+            roleTableData.parent_guardian_name = account.parentName;
+            roleTableData.parent_guardian_phone = account.parentPhone;
+            roleTableData.parent_guardian_email = account.parentEmail;
+            roleTableData.relationship_to_camper = account.relationship;
+            roleTableData.activity_preferences = account.activityPreferences;
+            roleTableData.dob = account.dob;
+            connection.query('INSERT INTO youth SET ?', roleTableData, logResult(resolve, reject));
+        } else if (account.role === 'Adult Leader') {
+            roleTableData.emergency_contacts_name = account.emergencyName;
+            roleTableData.emergency_contacts_phone = account.emergencyPhone;
+            roleTableData.dob = account.dob;
+            connection.query('INSERT INTO adult_leader SET ?', roleTableData, logResult(resolve, reject));
+        } else if (account.role === 'Group Leader') {
+            roleTableData.emergency_contacts_name = account.emergencyName;
+            roleTableData.emergency_contacts_phone = account.emergencyPhone;
+            roleTableData.dob = account.dob;
+            connection.query('INSERT INTO group_leader SET ?', roleTableData, logResult(resolve, reject));
+        }
     });
+});
+}
 }
 
-function logResult(err, results) {
-    if (err) throw err;
-    console.log('Inserted:', results.insertId);
+
+// function logResult(err, results) {
+//     if (err) throw err;
+//     console.log('Inserted:', results.insertId);
+// }
+
+function logResult(resolve, reject) {
+  return (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+  };
 }
 
 // Export the function
@@ -118,15 +209,9 @@ module.exports = {
 
 
 
-const usersToCreate = [
-    { username: 'manager1', role: 'Manager', firstName: 'John', lastName: 'Doe', gender: 'Male', email: 'manager1@example.com', phone: '1234567890' },
-    { username: 'staff1', role: 'Staff', firstName: 'Jane', lastName: 'Doe', gender: 'Female', email: 'staff1@example.com', phone: '0987654321', emergencyName: 'Emergency', emergencyPhone: '1122334455' },
-    { username: 'admin1', role: 'Admin', firstName: 'Jim', lastName: 'Beam', gender: 'Male', email: 'admin1@example.com', phone: '1231231234' }
-];
-
 // Only use when creating team members initial accounts
 
-   // createAccounts(usersToCreate);
+// createAccounts();
 
   // Login route
   app.post('/login', async (req, res) => {
