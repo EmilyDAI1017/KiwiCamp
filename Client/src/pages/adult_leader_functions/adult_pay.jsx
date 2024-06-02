@@ -73,16 +73,22 @@ function Adult_Pay() {
       });
   };
   return (
-    <div className="main-content bg-cover p-6 min-h-screen flex flex-col items-center justify-start columns-8xs">
-      <div className="mt-12 w-full max-w-4xl">
+    <div className="main-content flex bg-cover bg-center bg-no-repeat p-8"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+                height: '100vh'
+        }}>      
+        <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
+
         <h2 className="text-3xl font-bold mb-6">Pay to Join Camp: {camp_name}</h2>
-        <p>Group Name: {group_name}</p>
-        <p>Start Date: {formatDateDisplay(start_date)}</p>
-        <p>End Date: {formatDateDisplay(end_date)}</p>
-        <p>Price: ${price}</p></div>
+        <div className="mb-6 text-2xl">
+        <p><strong>Group Name: </strong>{group_name}</p>
+        <p><strong>Start Date:  </strong>{formatDateDisplay(start_date)}</p>
+        <p><strong>End Date:  </strong>{formatDateDisplay(end_date)}</p>
+        <p><strong>Price:  </strong>${price}</p></div>
         {isEarlyBird && <p className="text-green-600">Early Bird Discount Available!</p>}
+        
         <div className="payment-method">
-                <h2>Select Payment Method</h2>
+                <h2 className="text-xl font-semibold mb-4">Select Payment Method</h2>
                 <label>
                     <input
                         type="radio"
@@ -113,8 +119,8 @@ function Adult_Pay() {
                 </label>
             </div>
             <button
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
-                onClick={handlePayment}
+            className="mb-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={handlePayment}
             >
                 Proceed with Payment
             </button>
@@ -128,12 +134,14 @@ function Adult_Pay() {
                 </div>
             )} */}
             <button
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
-                onClick={() => navigate(-1)} // Go back to the previous page
+            className="mb-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={() => navigate(-1)} // Go back to the previous page
             >
                 Back
             </button>
+            </div>
         </div>
+  
     );
 
 

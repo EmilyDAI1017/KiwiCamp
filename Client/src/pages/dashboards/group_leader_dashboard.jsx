@@ -7,6 +7,10 @@ import { MdHotel, MdLocalOffer, MdAssessment } from 'react-icons/md';
 import Sidebar from '../../components/navbar_dash'; 
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { FaPeopleRoof } from "react-icons/fa6";
+import { TbPigMoney } from "react-icons/tb";
+
+
 
 function Group_Leader_Dashboard() {
   const { user, logout } = useUser();
@@ -58,36 +62,50 @@ function Group_Leader_Dashboard() {
           description="Edit and manage your profile"
           navigateTo={`/group_leader_profile/${user?.id}`}
           icon={<FaUser className="text-8xl text-blue-500"/>}
-          image="https://images.pexels.com/photos/163097/twitter-social-media-communication-internet-network-163097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-        />
+          bgImage={'/src/images/card_bg2.jpeg'}
+          />
         <Card 
           title="My Groups" 
           description="Manage your groups" 
           navigateTo={`/group_leader_functions/groups/group_apply/${user?.id}`}
           icon={<FaUsers className="text-8xl text-green-500"/>}
+          bgImage={'/src/images/bg.jpeg'}
+
         />
         <Card
           title="My Campers"
           description="View and manage your campers"
           navigateTo={`/group_leader_functions/my_campers/${user?.id}`}
-          icon={<FaUsers className="text-8xl text-green-500"/>}
+          icon={<FaPeopleRoof className="text-8xl text-orange-400"/>}
+          bgImage={'/src/images/bg.jpeg'}
+
         />
 
         <Card 
           title="My Payment" 
           description="Check all payments you made and make payments"  
           navigateTo={`/group_leader_functions/manage_my_payment_group_leader/${user?.id}`}
-          icon={<MdAssessment className="text-8xl text-red-500"/>}
+          icon={<TbPigMoney className="text-8xl text-purple-500"/>}
+          bgImage={'/src/images/card_bg2.jpeg'}
+
         />
-        <Card 
+        {/* <Card 
           title="Activities" 
           description="Register for activities" 
           navigateTo="/group_leader_activities"
-          icon={<FaTasks className="text-8xl text-purple-500"/>}
-        />
-        <div className="card ">
+          icon={<FaTasks className="text-8xl text-red-500"/>}
+          bgImage={'/src/images/bg.jpeg'} />*/}
+
+      
+        <div className="card "
+            style={{
+              backgroundImage: "url('/src/images/rainbow3.jpeg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            }}>
           <h2 className="text-3xl font-bold mb-6">Latest News</h2>
-          <div className="bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-96">
+          <div className=" overflow-y-auto max-h-96">
             {news.length > 0 ? 
             (
               news.map((item) => (
@@ -121,9 +139,16 @@ function Group_Leader_Dashboard() {
 
 function UnpaidCampsBankSection({ unpaidCampsBank, user }) {
   return (
-    <div className="card">
+    <div className="card"
+    style={{
+      backgroundImage: "url('/src/images/news.jpeg')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }}
+    >
       <h2 className="text-2xl font-bold mb-4">Camps Awaiting Bank Transfer Confirmation</h2>
-      <div className="bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-96">
+      <div className="overflow-y-auto max-h-96">
         {unpaidCampsBank.length > 0 ? 
           unpaidCampsBank.map((registration) => (
             <div key={registration.camp_id} className="mb-4">
@@ -152,9 +177,16 @@ function PendingGroupsBlock({ pendingGroups }) {
   const { id } = useParams();
 
   return (
-    <div className="card">
+    <div className="card"
+    style={{
+      backgroundImage: "url('/src/images/rainbow4.jpeg')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'top',
+      backgroundRepeat: 'no-repeat',
+    }}
+    >
       <h2 className="text-3xl font-bold mb-6">Unpaid Payments</h2>
-      <div className="bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-96">
+      <div className=" overflow-y-auto max-h-96">
         {pendingGroups.length > 0 ? (
           pendingGroups.map((group) => (
             <div key={group.group_id} className="mb-4">
@@ -169,7 +201,7 @@ function PendingGroupsBlock({ pendingGroups }) {
         )}
      
      <button
-                            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
+                            className="mt-2 px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 focus:outline-none"
                             onClick={() => navigate(`/group_leader_functions/manage_my_payment_group_leader/${id}`, { state: { id } })}
                           >
                             Manage Payment

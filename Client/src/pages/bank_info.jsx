@@ -8,7 +8,13 @@ const BankInfo = () => {
     const{ user_id } = useParams();
     const { camp_name, group_name } = location.state;
     return (
-        <div className="main-content flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="main-content flex items-center justify-center min-h-screen bg-gray-100"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        height: '100%'}}
+        >
             <div className="bg-white p-8 rounded-lg shadow-md max-w-md text-center">
                 <h1 className="text-2xl font-bold text-green-600 mb-4">Bank Transfer Information</h1>
                 <p className="text-green-800 mb-2"> </p>
@@ -23,7 +29,7 @@ const BankInfo = () => {
                 <p className="text-green-500 mb-4">
                 Your group application will be processed once the payment is confirmed.                </p>
                 <button
-                    className="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="mt-4 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     onClick={() => navigate(`/group_leader_dashboard/${user_id}`)} // Go back to the previous page
                 >
                     Back to Dashboard

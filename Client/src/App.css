@@ -29,6 +29,11 @@ html, body {
   box-sizing: border-box;
   background-color: #f7fafc;
   padding: 2rem;
+  background-image: url('/src/images/camp_bg2.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
   margin-top: 10ch; /* Matches the height of the navbar to offset the content */
 }
 
@@ -189,16 +194,23 @@ h1, h2, h3 {
   font-size: 3rem; /* Adjusted icon size */
   color: #1a202c; /* Dark icon color */
 }
+.card h2{
+  color: #372f0d;
+  margin: 8px 0;
+  font-size: 1.5rem; /* Adjusted font size */
+  font-family: Georgia;
+}
 
 .card h3 {
-  color: #2d3748;
-  margin: 8px 0;
+  color: #372f0d;
+  margin: 3px 0 16px 0;
   font-size: 1.25rem; /* Adjusted font size */
+  font-family: Georgia;
 }
 
 .card p {
-  color: #4a5568;
-  font-size: 0.875rem; /* Smaller font size */
+  color: #123316;
+  font-size: 1rem; /* Smaller font size */
   margin: 0;
 }
 

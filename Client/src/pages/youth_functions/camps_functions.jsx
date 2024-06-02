@@ -10,7 +10,11 @@ import { useParams } from "react-router-dom";
 const MyCamps = () => {
     const { user_id } = useParams();
     return (
-        <div className="main-content p-8 bg-gradient-to-r from-green-50 to-green-70 min-h-screen flex flex-col items-center justify-center">
+        <div className="main-content p-8 bg-gradient-to-r from-green-50 to-green-70 min-h-screen flex flex-col items-center justify-center"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+                height: '100vh'
+        }}
+        >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <Card
                     title="View my Camps and choose activities "

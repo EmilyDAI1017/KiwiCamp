@@ -146,8 +146,9 @@ export default function Adult_Leader_Profile() {
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             height: '100%'
+
         }}>
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+        <div className="bg-white/90 p-8 rounded-lg shadow-lg w-full  overflow-auto max-w-lg">
             <h1 className="text-3xl font-bold text-center text-green-600 mb-6">Welcome {leaderData.first_name} {leaderData.last_name}!</h1>
             {isEditing ? (
                 <form onSubmit={handleSubmit} className="mt-4 space-y-4">
@@ -210,7 +211,7 @@ export default function Adult_Leader_Profile() {
                         <input className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200"
                             type="text" name="dietary_requirement" value={healthData.dietary_requirement} onChange={handleHealthChange} />
                     </div>
-                    <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full" type="submit">Save Changes</button>
+                    <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="submit">Save Changes</button>
                 </form>
             ) : (
                 <div className="space-y-4">

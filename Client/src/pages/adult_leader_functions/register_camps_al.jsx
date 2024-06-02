@@ -41,10 +41,11 @@ function RegisterCamps_AL() {
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
-      height: '100vh'
+      height: '100vh',
+
     }}>
       <div className="mt-12 w-full max-w-4xl">
-        <h2 className="text-3xl font-bold mb-6">Available Camps</h2>
+        <h2 className="text-3xl text-green-700 font-bold mb-6">Available Camps</h2>
         <div className="grid grid-cols-3 gap-6">
           {camps.length > 0 ? (
             camps.map(camp => (
@@ -52,20 +53,20 @@ function RegisterCamps_AL() {
                 key={camp.camp_id}
                 className="card rounded-lg shadow-lg my-3 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out overflow-hidde"
                 onClick={() => handleRegister(camp)}
-                style={{ backgroundImage: `url('/src/images/rainbow.jpeg')`,
+                style={{ backgroundImage: `url('/src/images/rainbow3.jpeg')`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'top',
+                backgroundPosition: 'centre',
                 backgroundRepeat: 'no-repeat',
-                height: '260px',
-                opacity: '0.9'
+                height: '300px',
+                opacity: '0.9',
                }}
               >
                 <div className="card-icon mb-4 flex justify-center">
                   {/* Optional icon can be added here */}
-                </div>
-                <h3 className="text-2xl font-bold text-gray-800">{camp.camp_name}</h3>
-                <p className="text-4xl text-gray-700">Start Date: {formatDateDisplay(camp.start_date)}</p>
-                <p className="text-4xl text-gray-700">Price: ${camp.price}</p>
+                </div> 
+                <h2 className="p-5 mx-2 text-2xl font-bold text-gray-800">{camp.camp_name}</h2>
+                <p className=" text-4xl p-5 text-gray-800">Start Date: {formatDateDisplay(camp.start_date)}</p>
+                <p className="tex-5xl text-gray-800">Price: ${camp.price}</p>
               </div>
             ))
           ) : (

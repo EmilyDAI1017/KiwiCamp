@@ -6,7 +6,13 @@ const SuccessPay = () => {
     const navigate = useNavigate();
     const{ user_id } = useParams();
     return (
-        <div className="main-content flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="main-content flex items-center justify-center min-h-screen bg-gray-100"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        height: '100%'}}
+        >
             <div className="bg-white p-8 rounded-lg shadow-md max-w-md text-center">
                 <h1 className="text-2xl font-bold text-green-600 mb-4">Congratulations!</h1>
                 <p className="text-green-400 mb-2">
@@ -22,8 +28,8 @@ const SuccessPay = () => {
                     Then you can manage your approved groups.
                 </p>
                 <button
-                    className="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    onClick={() => navigate(`/group_leader_dashboard/${user_id}`)} // Go back to the previous page
+            className="mb-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={() => navigate(`/group_leader_dashboard/${user_id}`)} // Go back to the previous page
                 >
                     Back to Dashboard
                 </button>

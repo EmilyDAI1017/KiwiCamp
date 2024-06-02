@@ -108,6 +108,7 @@ export default function Adult_Leader_Profile() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        height: '100vh'
       }}
     >
       <div className="max-w-5xl w-full bg-white/90 shadow-lg rounded-lg p-8 space-y-6 overflow-auto">

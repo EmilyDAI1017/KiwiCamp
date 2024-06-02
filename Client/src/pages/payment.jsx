@@ -5,7 +5,7 @@ import axios from 'axios';
 const Payment = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { group, camp, camp_id, camp_name, price, user_id, group_id } = location.state;
+    const { group, camp, camp_id, user_id, group_id } = location.state;
     const [paymentMethod, setPaymentMethod] = useState('card');
 
     const handlePayment = () => {
@@ -19,7 +19,6 @@ const Payment = () => {
             pay_type: paymentMethod === 'card' ? 'Card' : 'Bank'
         };
 
-        // Create payment record in the database
         axios.post(`http://localhost:3000/groups/payments`, paymentData)
             .then(response => {
                 const paymentId = response.data.payment_id;
@@ -27,7 +26,6 @@ const Payment = () => {
                 if (paymentMethod === 'card') {
                     navigate('/card_payment', { state: { group, camp, user_id, group_id, paymentId } });
                 } else if (paymentMethod === 'bank') {
-                    // Update the payment type to 'Bank' before navigating to bank_info
                     axios.put(`http://localhost:3000/groups/bank_info/${paymentId}`, { pay_type: 'Bank' })
                         .then(() => {
                             navigate(`/bank_info/${user_id}`, { state: { user_id, group_name: group.group_name, camp_name: camp.camp_name, paymentId } });
@@ -45,51 +43,60 @@ const Payment = () => {
     };
 
     return (
-        <div className="main-content">
-            <h1>Payment for Group: {group.group_name}</h1>
-            <div className="payment-details">
-                <p><strong>Camp:</strong> {camp.camp_name}</p>
-                <p><strong>Camp ID:</strong> {camp_id}</p>
-                <p><strong>Price:</strong> ${camp.price}</p>
-                <p><strong>Number of Attendees:</strong> {group.number_of_attendees}</p>
+        <div className="main-content flex bg-cover bg-center bg-no-repeat p-8"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+                height: '100vh'
+        }}>
+            <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
+                <h1 className="text-3xl font-bold mb-6">Payment for Group: {group.group_name}</h1>
+                <div className="mb-6 text-2xl">
+                    <p><strong>Camp:</strong> {camp.camp_name}</p>
+                    <p><strong>Camp ID:</strong> {camp_id}</p>
+                    <p><strong>Price:</strong> ${camp.price}</p>
+                    <p><strong>Number of Attendees:</strong> {group.number_of_attendees}</p>
+                </div>
+                <div className="mb-6">
+                    <h2 className="text-xl font-semibold mb-4">Select Payment Method</h2>
+                    <div className="items-center mb-4">
+                        <label className="items-center">
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="card"
+                                checked={paymentMethod === 'card'}
+                                onChange={() => setPaymentMethod('card')}
+                                className="form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
+                            />
+                            <span className="ml-2">Pay by Card</span>
+                        </label>
+                        <label className="items-center ml-6">
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="bank"
+                                checked={paymentMethod === 'bank'}
+                                onChange={() => setPaymentMethod('bank')}
+                                className="form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
+                            />
+                            <span className="ml-2">Bank Transfer</span>
+                        </label>
+                    </div>
+                </div>
+                <div className=" space-x-4">
+                    <button
+            className="mb-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={handlePayment}
+                    >
+                        Proceed with Payment
+                    </button>
+                    <button
+            className="mb-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={() => navigate(-1)}
+                    >
+                        Back
+                    </button>
+                </div>
             </div>
-            <div className="payment-method">
-                <h2>Select Payment Method</h2>
-                <label>
-                    <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="card"
-                        checked={paymentMethod === 'card'}
-                        onChange={() => setPaymentMethod('card')}
-                        className="mr-2"
-                    />
-                    Pay by Card
-                </label>
-                <label className="ml-4">
-                    <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="bank"
-                        checked={paymentMethod === 'bank'}
-                        onChange={() => setPaymentMethod('bank')}
-                        className="mr-2"
-                    />
-                    Bank Transfer
-                </label>
-            </div>
-            <button
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
-                onClick={handlePayment}
-            >
-                Proceed with Payment
-            </button>
-            <button
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
-                onClick={() => navigate(-1)} // Go back to the previous page
-            >
-                Back
-            </button>
         </div>
     );
 };

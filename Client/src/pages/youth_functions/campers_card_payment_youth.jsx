@@ -79,7 +79,12 @@ const CampersCardPaymentYouth = () => {
     };
 
     return (
-        <div className="main-content">
+        <div className="main-content flex bg-cover bg-center bg-no-repeat p-8"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+                height: '100vh'
+        }}>  
+                <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
+
             <h1>Enter Card Details for Payment</h1>
             <h2>Payment for {camp_name}</h2>
             <h3>Amount: ${finalPrice}</h3>
@@ -122,17 +127,18 @@ const CampersCardPaymentYouth = () => {
                 {errors.cardholder_name && <p className="text-red-500">{errors.cardholder_name}</p>}
             </div>
             <button
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
-                onClick={handleCardPayment}
+            className="mb-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={handleCardPayment}
             >
                 Submit Payment
             </button>
             <button
-                    className="mt-2 px-4 py-2 bg-gray-500 text-white rounded shadow hover:bg-gray-600 focus:outline-none"
-                    onClick={() =>  navigate(`/youth_camper_dashboard/${user_id}`)}// Go back to the previous page
+            className="mb-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={() =>  navigate(`/youth_camper_dashboard/${user_id}`)}// Go back to the previous page
                 >
                     Back
                 </button>
+        </div>
         </div>
     );
 };

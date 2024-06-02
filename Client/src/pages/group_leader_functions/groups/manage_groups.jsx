@@ -12,7 +12,6 @@ const ManageGroups = () => {
     const navigate = useNavigate();
     const campId = location.state && location.state.campId;
 
-
     const [groupDetails, setGroupDetails] = useState({});
     const [adultLeaders, setAdultLeaders] = useState([]);
     const [youthCampers, setYouthCampers] = useState([]);
@@ -24,6 +23,7 @@ const ManageGroups = () => {
     const [availableCabins, setAvailableCabins] = useState([]);
     const [availableTents, setAvailableTents] = useState([]);
     const [selectedAccommodation, setSelectedAccommodation] = useState('');
+    const [selectedTeamForManagement, setSelectedTeamForManagement] = useState('');
 
     useEffect(() => {
         fetchGroupDetails();
@@ -34,7 +34,6 @@ const ManageGroups = () => {
     }, [group_id]);
 
     useEffect(() => {
-        // Fetch available cabins and tents once groupDetails are available
         if (groupDetails.camp_id || (location.state && location.state.campId)) {
             fetchAvailableCabins();
             fetchAvailableTents();
@@ -108,8 +107,8 @@ const ManageGroups = () => {
                 setTeams([...teams, response.data]);
                 setTeamName('');
                 setSelectedLeader('');
-                fetchGroupMembers();  // Refresh members list after creating team
-                fetchTeams();  // Refresh teams list after creating team
+                fetchGroupMembers();
+                fetchTeams();
             })
             .catch(error => {
                 console.error("Error creating team:", error);
@@ -128,8 +127,8 @@ const ManageGroups = () => {
         })
             .then(response => {
                 alert('Camper added to team successfully');
-                fetchTeams();  // Refresh teams list after adding camper
-                fetchGroupMembers();  // Refresh members list after adding camper
+                fetchTeams();
+                fetchGroupMembers();
             })
             .catch(error => {
                 console.error("Error adding camper to team:", error);
@@ -140,8 +139,8 @@ const ManageGroups = () => {
         axios.put(`http://localhost:3000/group_leader/teams/update_leader/${team_id}/${leader_id}`)
             .then(response => {
                 alert('Leader updated successfully');
-                fetchTeams();  // Refresh teams list after updating leader
-                fetchGroupMembers();  // Refresh members list after updating leader
+                fetchTeams();
+                fetchGroupMembers();
             })
             .catch(error => {
                 console.error("Error updating leader in team:", error);
@@ -149,7 +148,7 @@ const ManageGroups = () => {
     };
 
     const assignAccommodationToLeader = (team_id, leader_id) => {
-        const camp_id = groupDetails.camp_id; // Assuming camp_id is part of groupDetails
+        const camp_id = groupDetails.camp_id;
 
         axios.post('http://localhost:3000/group_leader/teams/assign_accommodation/leader', {
             accommodation_id: selectedAccommodation,
@@ -158,18 +157,18 @@ const ManageGroups = () => {
         })
             .then(response => {
                 alert('Leader accommodation assigned successfully');
-                fetchTeams();  // Refresh teams list after assigning accommodation
+                fetchTeams();
             })
             .catch(error => {
                 if (error.response.status === 400) {
-                    alert('Accommodation is already assigned to this camper');
+                    alert('Accommodation is already assigned to this leader');
                 }
                 console.error("Error assigning accommodation to leader:", error);
             });
     };
 
     const assignAccommodationToCamper = (team_id, camper_id) => {
-        const camp_id = groupDetails.camp_id; // Assuming camp_id is part of groupDetails
+        const camp_id = groupDetails.camp_id;
 
         axios.post('http://localhost:3000/group_leader/teams/assign_accommodation/camper', {
             accommodation_id: selectedAccommodation,
@@ -178,13 +177,12 @@ const ManageGroups = () => {
         })
             .then(response => {
                 alert('Camper accommodation assigned successfully');
-                fetchTeams();  // Refresh teams list after assigning accommodation
+                fetchTeams();
             })
             .catch(error => {
                 if (error.response.status === 400) {
                     alert('Accommodation is already assigned to this camper');
                 }
-
                 console.error("Error assigning accommodation to camper:", error);
             });
     };
@@ -193,8 +191,8 @@ const ManageGroups = () => {
         axios.put(`http://localhost:3000/group_leader/teams/remove_leader/${team_id}/${leader_id}`)
             .then(response => {
                 alert('Leader removed from team successfully');
-                fetchTeams();  // Refresh teams list after removing leader
-                fetchGroupMembers();  // Refresh members list after removing leader
+                fetchTeams();
+                fetchGroupMembers();
             })
             .catch(error => {
                 console.error("Error removing leader from team:", error);
@@ -205,8 +203,8 @@ const ManageGroups = () => {
         axios.delete(`http://localhost:3000/group_leader/teams/remove_camper/${team_id}/${camper_id}`)
             .then(response => {
                 alert('Camper removed from team successfully');
-                fetchTeams();  // Refresh teams list after removing camper
-                fetchGroupMembers();  // Refresh members list after removing camper
+                fetchTeams();
+                fetchGroupMembers();
             })
             .catch(error => {
                 console.error("Error removing camper from team:", error);
@@ -217,188 +215,220 @@ const ManageGroups = () => {
         axios.delete(`http://localhost:3000/group_leader/teams/delete/${team_id}`)
             .then(response => {
                 alert('Team deleted and members released successfully');
-                fetchTeams();  // Refresh teams list after deleting team
-                fetchGroupMembers();  // Refresh members list after deleting team
+                fetchTeams();
+                fetchGroupMembers();
             })
             .catch(error => {
                 console.error("Error deleting team:", error);
             });
     };
 
+    useEffect(() => {
+        console.log('Selected Team:', selectedTeamForManagement);
+        console.log('Teams:', teams);
+    }, [selectedTeamForManagement, teams]);
+    
+
     return (
-        <div className="main-content mx-auto p-6">
-            <h1 className="text-4xl font-bold mb-6">Manage Group: {groupDetails.group_name}</h1>
-            
-            <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-                <h2 className="text-2xl font-semibold mb-4">Create Team</h2>
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        value={teamName}
-                        onChange={(e) => setTeamName(e.target.value)}
-                        placeholder="Team Name"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                    />
-                </div>
-                <div className="mb-4">
-                    <select
-                        value={selectedLeader}
-                        onChange={(e) => setSelectedLeader(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                    >
-                        <option value="">Select Adult Leader</option>
-                        {adultLeaders.map(leader => (
-                            <option key={leader.adult_leader_id} value={leader.adult_leader_id}>
-                                {leader.first_name} {leader.last_name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+        <div className="main-content bg-cover bg-center bg-no-repeat p-8" 
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+                height: '100%',
+        }}>
+            <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
+                <h1 className="text-4xl text-green-700 font-bold mb-6">Manage Group: {groupDetails.group_name}</h1>
                 <button
-                    className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                    onClick={createTeam}
-                >
-                    Create Team
-                </button>
-            </div>
+            className="mb-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
 
-            <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-                <h2 className="text-2xl font-semibold mb-4">Add Camper to Team</h2>
-                <div className="mb-4">
-                    <select
-                        value={selectedTeam}
-                        onChange={(e) => setSelectedTeam(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                    >
-                        <option value="">Select Team</option>
-                        {teams.map(team => (
-                            <option key={team.team_id} value={team.team_id}>
-                                {team.team_name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="mb-4">
-                    <select
-                        value={selectedCamper}
-                        onChange={(e) => setSelectedCamper(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                    >
-                        <option value="">Select Camper</option>
-                        {youthCampers.map(camper => (
-                            <option key={camper.camper_id} value={camper.camper_id}>
-                                {camper.first_name} {camper.last_name} {camper.accommodation ? `- Accommodation: ${camper.accommodation}` : ''}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <button
-                    className="w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-                    onClick={addCamperToTeam}
-                >
-                    Add Camper
-                </button>
-            </div>
 
-            <div className="bg-white shadow-md rounded-lg p-6">
-                <h2 className="text-2xl font-semibold mb-4">Teams</h2>
-                {teams.map(team => (
-                    <div key={team.team_id} className="mb-6">
-                        <h3 className="text-3xl font-semibold">{team.team_name}</h3>
-                        <div className="mb-4  grid grid-cols-2">
-                        <div>
-                        <p className="mb-2">Leader: </p>
-                        <p className='mb-2 text-xl'> {team.leader_first_name} {team.leader_last_name}</p>
+                    onClick={() => navigate(-1)} // Go back to the previous page
+                >
+                    Back
+                </button>
+                <div className="bg-white-100/90 p-6 mb-6 rounded-lg">
+                    <h2 className="text-2xl font-semibold mb-4">Create Team</h2>
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            value={teamName}
+                            onChange={(e) => setTeamName(e.target.value)}
+                            placeholder="Team Name"
+                            className=" w-fit px-4 py-2 border border-gray-300 rounded-md"
+                        />
+                    </div>
+                    <div className="mb-4">
                         <select
-                                value={team.adult_leader_id}
-                                onChange={(e) => updateLeaderInTeam(team.team_id, e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                            >
-                                <option value="">Replace Leader</option>
-                                {adultLeaders.map(leader => (
-                                    
-                                    <option key={leader.adult_leader_id} value={leader.adult_leader_id}>
-                                        {leader.first_name} {leader.last_name}
-                                    </option>
-                    
-                                ))}
-                            </select>
-                            <p className="mb-2">Current Accommodation: </p>
-                            <p>Type: {team.type} Name:{team.location_description}</p>
-                                <label className="block text-sm font-medium text-gray-700">Accommodation:</label>
-                                <select
-                                    value={team.accommodation_id}
-                                    onChange={(e) => assignAccommodationToLeader(team.team_id, team.adult_leader_id, false)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                                >
-                                    <option value="">Select Accommodation</option>
-                                    {availableCabins.map(accommodation => (
-                                        <option key={accommodation.accommodation_id} value={accommodation.accommodation_id}>
-                                                    {accommodation.location_description} (Tent) - Occupants: {accommodation.current_occupancy}/{accommodation.capacity}
-                                        </option>
-                                    ))}
-                             </select>
+                            value={selectedLeader}
+                            onChange={(e) => setSelectedLeader(e.target.value)}
+                            className="w-fit px-4 py-2 border border-gray-300 rounded-md"
+                        >
+                            <option value="">Select Adult Leader</option>
+                            {adultLeaders.map(leader => (
+                                <option key={leader.adult_leader_id} value={leader.adult_leader_id}>
+                                    {leader.first_name} {leader.last_name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <button
+            className="mb-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={createTeam}
+                    >
+                        Create Team
+                    </button>
+                </div>
 
+                <div className="bg-white-100/90 p-6 mb-6 rounded-lg">
+                    <h2 className="text-2xl font-semibold mb-4">Add Camper to Team</h2>
+                    <div className="mb-4">
+                        <select
+                            value={selectedTeam}
+                            onChange={(e) => setSelectedTeam(e.target.value)
+                            }
 
-                        <div className="mb-4">
-                      
+                            className=" w-fit px-4 py-2 border border-gray-300 rounded-md"
+                        >
+                            <option value="">Select Team</option>
+                            {teams.map(team => (
+                                <option key={team.team_id} value={team.team_id}>
+                                    {team.team_name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="mb-4">
+                        <select
+                            value={selectedCamper}
+                            onChange={(e) => setSelectedCamper(e.target.value)}
+                            className=" w-fit px-4 py-2 border border-gray-300 rounded-md"
+                        >
+                            <option value="">Select Camper</option>
+                            {youthCampers.map(camper => (
+                                <option key={camper.camper_id} value={camper.camper_id}>
+                                    {camper.first_name} {camper.last_name} {camper.accommodation ? `- Accommodation: ${camper.accommodation}` : ''}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <button
+            className="mb-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={addCamperToTeam}
+                    >
+                        Add Camper
+                    </button>
+                </div>
+
+                <div className="bg-white-100/90 p-6 mb-6 rounded-lg">
+            <h2 className="text-2xl font-semibold mb-4">Manage Teams</h2>
+            <div className="mb-4">
+                <select
+                    value={selectedTeamForManagement}
+                    onChange={(e) => setSelectedTeamForManagement(e.target.value)}
+                    className="w-fit px-4 py-2 border border-gray-300 rounded-md"
+                >
+                    <option value="">Select Team to Manage</option>
+                    {teams.map(team => (
+                        <option key={team.team_id} value={team.team_id}>
+                            {team.team_name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            {selectedTeamForManagement && (
+                <div className="bg-gray-100 p-2 rounded-lg">
+                    {teams
+                    .filter(team => team.team_id.toString() === selectedTeamForManagement)
+                    .map(team => (
+                        <div key={team.team_id} className="mb-2 p-3 rounded-lg">
+                            <h3 className="text-3xl font-semibold mb-4">{team.team_name}</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p className="mb-2 text-xl"><strong>Leader:</strong> {team.leader_first_name} {team.leader_last_name}</p>
+                                    <select
+                                        value={team.adult_leader_id}
+                                        onChange={(e) => updateLeaderInTeam(team.team_id, e.target.value)}
+                                        className="w-fit px-4 py-2 border border-gray-100 rounded-md mb-4"
+                                    >
+                                        <option value="">Replace Leader</option>
+                                        {adultLeaders.map(leader => (
+                                            <option key={leader.adult_leader_id} value={leader.adult_leader_id}>
+                                                {leader.first_name} {leader.last_name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <p className="mb-2"><strong>Current Accommodation:</strong></p>
+                                    <p className="mb-4">Type: {team.type} Name: {team.location_description}</p>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Allocate An Accommodation:</label>
+                                    <select
+                                        value={team.accommodation_id}
+                                        onChange={(e) => assignAccommodationToLeader(team.team_id, team.adult_leader_id, e.target.value)}
+                                        className="w-fit px-4 py-2 border border-gray-300 rounded-md"
+                                    >
+                                        <option value="">Select Accommodation</option>
+                                        {availableCabins.map(accommodation => (
+                                            <option key={accommodation.accommodation_id} value={accommodation.accommodation_id}>
+                                                {accommodation.location_description} (Cabin) - Occupants: {accommodation.current_occupancy}/{accommodation.capacity}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <br></br>
+                                    <button
+                                        className="w-fit bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 mt-4"
+                                        onClick={() => removeLeaderFromTeam(team.team_id, team.adult_leader_id)}
+                                    >
+                                        Remove Leader
+                                    </button>
+                                </div>
+                                <div>
+                                    <p className="mb-2 text-xl"><strong>Members:</strong></p>
+                                    <ul className="divide-y divide-gray-200">
+                                        {team.members.map((member, index) => (
+                                            <li key={index} className="py-4">
+                                                <p className="mb-2"><strong>Name: {member.first_name} {member.last_name}</strong></p>
+                                                <p className="mb-2"><strong>Current Accommodation:</strong></p>
+                                                <p className="mb-4">Type: {member.type} Name: {member.location_description}</p>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">Allocate An Accommodation:</label>
+                                                <select
+                                                    value={member.accommodation_id}
+                                                    onChange={(e) => assignAccommodationToCamper(team.team_id, member.camper_id, e.target.value)}
+                                                    className="w-fit px-4 py-2 border border-gray-300 rounded-md"
+                                                >
+                                                    <option value="">Select Accommodation</option>
+                                                    {availableTents.map(accommodation => (
+                                                        <option key={accommodation.accommodation_id} value={accommodation.accommodation_id}>
+                                                            {accommodation.location_description} (Tent) - Occupants: {accommodation.current_occupancy}/{accommodation.capacity}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <br></br>
+                                                <button
+                                                    className="w-fit bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 mt-4"
+                                                    onClick={() => removeCamperFromTeam(team.team_id, member.camper_id)}
+                                                >
+                                                    Remove Camper
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
                             <button
-                                className="bg-orange-500 text-white px-2 py-1 rounded"
-                                onClick={() => removeLeaderFromTeam(team.team_id, team.adult_leader_id)}
+                                className="w-fit bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 mt-4"
+                                onClick={() => deleteTeam(team.team_id)}
                             >
-                                Remove Leader
+                                Delete Team
                             </button>
                         </div>
-                        </div>
-                        <div>
-                        <ul className="divide-y divide-gray-200">
-                            <p className="mb-2">Members:</p>
-                            {team.members.map((member, index) => (
-                                <li key={index} className="py-4">
-                                    {member.first_name} {member.last_name}
-                                    <p className="mt-2"> Current Accommodation: </p>
-                                    <p>Type: {member.type} Name: {member.location_description}</p>
-                                    <div className="mt-2">
-                                        <label className="block text-sm font-medium text-gray-700">Accommodation:</label>
-                                        <select
-                                            value={member.accommodation_id}
-                                            onChange={(e) => assignAccommodationToCamper(team.team_id, member.camper_id, false)}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                                        >
-                                            <option value="">Select Accommodation</option>
-                                            {availableTents.map(accommodation => (
-                                                <option key={accommodation.accommodation_id} value={accommodation.accommodation_id}>
-                                                    {accommodation.location_description} (Tent) - Occupants: {accommodation.current_occupancy}/{accommodation.capacity}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <button
-                                        className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
-                                        onClick={() => removeCamperFromTeam(team.team_id, member.camper_id)}
-                                    >
-                                        Remove Camper
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
+                    ))}
+                </div>
+            )}
         </div>
 
-                      
-                    </div>
-                                      <button
-                            className="bg-red-500 text-white px-4 py-2 rounded mt-4"
-                            onClick={() => deleteTeam(team.team_id)}
-                        >
-                            Delete Team
-                        </button>
-                    </div>
-                ))}
 
-            </div>
-        </div>
-    
+
+
+    </div>
+</div>
     );
-};
+}
 
 export default ManageGroups;

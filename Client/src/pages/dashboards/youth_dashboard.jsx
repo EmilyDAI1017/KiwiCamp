@@ -92,14 +92,14 @@ function YouthCamperDashboard() {
             title="My Profile"
             description="Edit and manage your profile"
             navigateTo={`/youth_profile/${user_id}`}
-            icon={<FaUser className="text-8xl text-yellow-500" />}
+            icon={<FaUser className="text-8xl text-orange-500" />}
             bgImage={'/src/images/card_bg2.jpeg'}
           />
           <Card 
             title="Join a Camp"
             description="Join a camp as a youth camper"
             navigateTo={`/youth_camper_functions/register_camps/${user_id}`}
-            icon={<FaUsers className="text-8xl text-orange-500" />}
+            icon={<FaUsers className="text-8xl text-pink-500" />}
             bgImage={'/src/images/bg.jpeg'}
          />
           <Card 
@@ -138,8 +138,15 @@ function YouthCamperDashboard() {
 
 const NewsSection = memo(({ news }) => {
   return (
-    <div className="card bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Latest News</h2>
+    <div className="card bg-white p-6 rounded-lg shadow-lg"
+    style={{
+      backgroundImage: "url('/src/images/rainbow3.jpeg')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }}
+    >
+      <h2 className="text-2xl text-green-800 font-bold mb-4">Latest News</h2>
       <div className="overflow-y-auto max-h-80">
         {news.length > 0 ? 
           news.map((item) => (
@@ -159,8 +166,15 @@ const NewsSection = memo(({ news }) => {
 const PaymentsSection = memo(({ payments, navigate, user, user_id }) => {
   console.log(user_id)
   return (
-    <div className="card bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Unpaid Payments</h2>
+    <div className="card bg-white p-6 rounded-lg shadow-lg"
+    style={{
+      backgroundImage: "url('/src/images/rainbow4.jpeg')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'top',
+      backgroundRepeat: 'no-repeat',
+    }}
+    >
+      <h2 className="text-2xl text-green-700 font-bold mb-4">Unpaid Payments</h2>
       <div className="overflow-y-auto max-h-80">
         {payments.length > 0 ? 
           payments.map((payment) => (
@@ -169,10 +183,10 @@ const PaymentsSection = memo(({ payments, navigate, user, user_id }) => {
               <p className="text-gray-700">Payment amount: ${payment.amount}</p>
               <p className="text-gray-700">Payment Description: {payment.description}</p>
               <button
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
+                className="mt-2 px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 focus:outline-none"
                 onClick={() => navigate(`/youth_camper_functions/manage_my_payment_youth/${user_id}`, { state: { user_id } })}
               >
-                Manage Payment
+                Manage My Payment
               </button>
             </div>
           )) : 
@@ -185,8 +199,15 @@ const PaymentsSection = memo(({ payments, navigate, user, user_id }) => {
 
 const UnpaidCampsBankSection = memo(({ unpaidCampsBank, user }) => {
   return (
-    <div className="card bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Camps Awaiting Bank Transfer Confirmation</h2>
+    <div className="card bg-white p-6 rounded-lg shadow-lg"
+    style={{
+      backgroundImage: "url('/src/images/news.jpeg')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }}
+    >
+      <h2 className="text-2xl text-green-800 font-bold mb-4">Awaiting Bank Transfer Confirmation</h2>
       <div className="overflow-y-auto max-h-80">
         {unpaidCampsBank.length > 0 ?
           unpaidCampsBank.map((registration) => (
@@ -212,8 +233,14 @@ const UnpaidCampsBankSection = memo(({ unpaidCampsBank, user }) => {
 
 const RegisteredCampsSection = memo(({ registeredCamps }) => {
   return (
-    <div className="card bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Registered Camps</h2>
+    <div className="card bg-white p-6 rounded-lg shadow-lg"
+    style={{
+      backgroundImage: "url('/src/images/blue.jpeg')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }}>
+      <h2 className="text-2xl text-green-800 font-bold mb-4">Registered Camps</h2>
       <div className="overflow-y-auto max-h-80">
         {registeredCamps.length > 0 ? 
           registeredCamps.map((camp) => (

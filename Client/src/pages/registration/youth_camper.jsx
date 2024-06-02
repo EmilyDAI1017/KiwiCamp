@@ -61,9 +61,11 @@ export default function Youth() {
             backgroundRepeat: 'no-repeat',
             height: '100%'
           }}>           
-           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+           <div className="bg-white/90 p-8 rounded-lg shadow-lg w-full max-w-lg">
                 <h1 className="text-3xl font-bold text-center text-green-600 mb-6">Register for Kiwi Camp</h1>
                 <form className="space-y-4" onSubmit={handleFormSubmit}>
+                <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
+
                     <div className="form_unit">
                         <label className="block text-gray-700 font-bold">Username:</label>
                         <input
@@ -124,7 +126,38 @@ export default function Youth() {
                             required
                         />
                     </div>
+
                     <div className="form_unit">
+                        <label className="block text-gray-700 font-bold">Date of Birth:</label>
+                        <input
+                            type="date"
+                            name="dob"
+                            value={formData.dob}
+                            onChange={handleFormChange}
+                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                            required
+                        />
+                    </div>
+
+                    <div className="form_unit">
+                        <label className="block text-gray-700 font-bold">Gender:</label>
+                        <select
+                            name="gender"
+                            value={formData.gender}
+                            onChange={handleFormChange}
+                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                            required
+                        >
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div className="form_unit">
+                    <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
+
                         <label className="block text-gray-700 font-bold">Email:</label>
                         <input
                             type="text"
@@ -148,33 +181,10 @@ export default function Youth() {
                             required
                         />
                     </div>
+   
+                    
                     <div className="form_unit">
-                        <label className="block text-gray-700 font-bold">Gender:</label>
-                        <select
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleFormChange}
-                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
-                            required
-                        >
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div className="form_unit">
-                        <label className="block text-gray-700 font-bold">Date of Birth:</label>
-                        <input
-                            type="date"
-                            name="dob"
-                            value={formData.dob}
-                            onChange={handleFormChange}
-                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
-                            required
-                        />
-                    </div>
-                    <div className="form_unit">
+                    <h2 className="text-lg font-semibold text-gray-800">Parent/Guardian Information</h2>
                         <label className="block text-gray-700 font-bold">Parent/Guardian Name:</label>
                         <input
                             type="text"
@@ -221,6 +231,7 @@ export default function Youth() {
                             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                         />
                     </div>
+                    <h2 className="text-lg font-semibold text-gray-800">Activity Preferences</h2>
                     <div className="form_unit">
                         <label className="block text-gray-700 font-bold">Activity Preferences:</label>
                         <input
@@ -232,8 +243,8 @@ export default function Youth() {
                             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                         />
                     </div>
-                    <p className="text-xl font-bold text-gray-700 mt-6">Health information:</p>
                     <div className="form_unit">
+                    <h2 className="text-lg font-semibold text-gray-800">Health Record</h2>
                         <label className="block text-gray-700 font-bold">Medical Condition:</label>
                         <input
                             type="text"
@@ -268,12 +279,26 @@ export default function Youth() {
                     </div>
                     <button
                         type="submit"
-                        className="w-full py-3 mt-6 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600"
+                        className="w-full  mb-2 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600"
                     >
                         Register
                     </button>
+
+                    <br />
+
+   
+
                 </form>
+                <button
+            className="w-full mt-2 mb-2 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+
+
+                    onClick={() => navigateTo(-1)} // Go back to the previous page
+                >
+                    Back
+                </button>
             </div>
+            
         </div>
     );
 }

@@ -147,14 +147,14 @@ const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYe
     <div
     className="main-content mt-10 bg-cover p-8 min-h-screen flex flex-col items-center justify-center"
     style={{
-      backgroundImage: "url('https://images.unsplash.com/photo-1618526640189-81726d5dd707?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+      backgroundImage: "url('/src/images/camp_bg2.jpeg')",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
     }}
   >
     <div className="max-w-5xl w-full bg-white/80 shadow-lg rounded-lg p-8 space-y-6 overflow-auto">
-      <h1 className="text-4xl font-serif">Welcome, {youthData.first_name} {youthData.last_name}!</h1>
+      <h1 className="text-4xl font-serif text-green">Welcome, {youthData.first_name} {youthData.last_name}!</h1>
 
       {isEditing ? (
         <form onSubmit={handleSubmit}>

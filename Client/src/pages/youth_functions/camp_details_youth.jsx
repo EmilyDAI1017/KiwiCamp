@@ -85,11 +85,14 @@ function CampDetailsY() {
   if (!camp) return <p>Loading camp details...</p>;
 
   return (
-    <div className="main-content bg-cover p-6 min-h-screen flex flex-col items-center justify-start columns-8xs">
-      <div className="mt-12 w-full max-w-4xl">
+<div className="main-content flex bg-cover bg-center bg-no-repeat p-8"
+    style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')", height: '100vh' }}>
+    <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-xl">
         <h2 className="text-3xl font-bold mb-6">{camp.camp_name}</h2>
-        {/* <img src={camp.image_url || 'https://via.placeholder.com/150'} alt={camp.camp_name} /> */}
-        <p>Start Date: {formatDateDisplay(camp.start_date)}</p>
+        <img src={camp.image_url || 'https://images.zeald.com/ic/elrancho/4114289463/unspecified.jpg'} alt={camp.camp_name} className="w-full h-64 object-cover mb-6 rounded-lg shadow-md" />
+        <div className="text-lg mb-4">
+
+       <p>Start Date: {formatDateDisplay(camp.start_date)}</p>
         <p>End Date: {formatDateDisplay(camp.end_date)}</p>
         <p>Location: {camp.location}</p>
         <p>Available spots: {camp.available_spots}</p>
@@ -100,12 +103,13 @@ function CampDetailsY() {
         <p>Group Leader: {camp.first_name} {camp.last_name}</p>
         <p>Group Description: {camp.group_description}</p>
         <p>Price: ${camp.price}</p>
+        </div>
         {camp.available_spots > 0 && (
-          <button onClick={handleJoin} className="mt-2 mb-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out">Register and Pay</button>
+          <button onClick={handleJoin} className="w-full py-3 mb-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out">Register and Pay</button>
         )}
         <br></br>
         <button
-                    className="mt-2 mb-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
                     onClick={() => navigate(-1)} // Go back to the previous page
                 >
                     Back

@@ -49,9 +49,13 @@ function Adult_Leader_Dashboard() {
 
   return (
     <div className="main-content h-screen bg-cover bg-no-repeat p-6 flex flex-col items-center justify-start columns-8xs" 
-    style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')", 
-          height: '100%',
-          }}>
+    style={{
+      backgroundImage: "url('/src/images/youth.avif')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      height: '100%'}}
+          >
     <div className="container mx-auto py-8">
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -59,20 +63,25 @@ function Adult_Leader_Dashboard() {
           title="My Profile"
           description="Edit and manage your profile"
           navigateTo={`/adult_leader_profile/${id}`}
-          icon={<FaUser className="text-8xl text-blue-500" />}
+          icon={<FaUser className="text-8xl text-orange-500" />}
+          bgImage={'/src/images/card_bg2.jpeg'}
         />
         <Card 
           title="Join a Camp"
           description="Join a camp as a youth camper"
           navigateTo={`/adult_leader_functions/register_camps_al/${id}`}
-          icon={<FaUsers className="text-8xl text-orange-500" />}
+          icon={<FaUsers className="text-8xl text-pink-500" />}
+          bgImage={'/src/images/bg.jpeg'}
+
         />
 
           <Card 
             title="My payment"
             description="Manage your payment for camps and activities"
             navigateTo={`/adult_leader_functions/manage_my_payment_adult/${id}`}
-            icon={<TbPigMoney className="text-8xl text-pink-500" />}
+            icon={<TbPigMoney className="text-8xl text-violet-500" />}
+            bgImage={'/src/images/card_bg2.jpeg'}
+
           />
 
           <Card
@@ -80,6 +89,7 @@ function Adult_Leader_Dashboard() {
             description= "Camps，teams，accommodations and book activities"
             navigateTo={`/adult_leader_functions/camp_functions_al/${id}`}
             icon={<FaCampground className="text-8xl text-green-600" />}
+            bgImage={'/src/images/camp_bg.jpeg'}
           />
           
         <RegisteredCampsSection registeredCamps={registeredCamps} />  
@@ -97,7 +107,10 @@ function NewsSection({ news }) {
 return (
   <div className="card bg-green p-6 rounded-lg shadow-lg"
   style={{
-    backgroundImage: "url(’/src/images/rainbow.jpg’)"
+    backgroundImage: "url('/src/images/rainbow3.jpeg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
   }}
   >
     <h2 className="text-2xl font-bold mb-4">Latest News</h2>
@@ -119,7 +132,14 @@ return (
 
 function UnpaidCampsSection({ unpaidCamps, navigate, user, user_id }) {
 return (
-  <div className="card bg-white p-6 rounded-lg shadow-lg">
+  <div className="card bg-white p-6 rounded-lg shadow-lg"
+  style={{
+    backgroundImage: "url('/src/images/rainbow4.jpeg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }}
+  >
     <h2 className="text-2xl font-bold mb-4">Unpaid Payments</h2>
     <div className="overflow-y-auto max-h-80">
       {unpaidCamps.length > 0 ? 
@@ -129,10 +149,10 @@ return (
             <p className="text-gray-700">Payment amount: ${payment.amount}</p>
             <p className="text-gray-700">Payment Description: {payment.description}</p>
             <button
-              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
+              className="mt-2 px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 focus:outline-none"
               onClick={() => navigate(`/adult_leader_functions/manage_my_payment_adult/${user_id}`, { state: { id: id } })}
             >
-              Manage Payment
+              Manage My Payment
             </button>
           </div>
         )) : 
@@ -145,8 +165,15 @@ return (
 
 function UnpaidCampsBankSection({ unpaidCampsBank, user }) {
 return (
-  <div className="card bg-white p-6 rounded-lg shadow-lg">
-    <h2 className="text-2xl font-bold mb-4">Camps Awaiting Bank Transfer Confirmation</h2>
+  <div className="card bg-white p-6 rounded-lg shadow-lg"
+  style={{
+    backgroundImage: "url('/src/images/news.jpeg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }}
+  >
+    <h2 className="text-2xl font-bold mb-4">Awaiting Bank Transfer Confirmation</h2>
     <div className="overflow-y-auto max-h-80">
       {unpaidCampsBank.length > 0 ? 
         unpaidCampsBank.map((registration) => (
@@ -172,7 +199,14 @@ return (
 
 function RegisteredCampsSection({ registeredCamps }) {
 return (
-  <div className="card bg-white p-6 rounded-lg shadow-lg">
+  <div className="card bg-white p-6 rounded-lg shadow-lg"
+  style={{
+    backgroundImage: "url('/src/images/blue.jpeg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }}
+  >
     <h2 className="text-2xl font-bold mb-4">Registered Camps</h2>
     <div className="overflow-y-auto max-h-80">
       {registeredCamps.length > 0 ? 

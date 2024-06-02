@@ -78,60 +78,73 @@ const CardPayment = () => {
     };
 
     return (
-        <div className="main-content">
-            <h1>Enter Card Details for Payment</h1>
-            <div className="payment-details">
-                <input
-                    type="text"
-                    name="card_number"
-                    placeholder="Card Number"
-                    value={cardDetails.card_number}
-                    onChange={handleCardDetailsChange}
-                    className="form-input rounded-md shadow-sm mt-1 block w-full"
-                />
-                {errors.card_number && <p className="text-red-500">{errors.card_number}</p>}
-                <input
-                    type="text"
-                    name="expiry_date"
-                    placeholder="Expiry Date (MM/YY)"
-                    value={cardDetails.expiry_date}
-                    onChange={handleCardDetailsChange}
-                    className="form-input rounded-md shadow-sm mt-1 block w-full"
-                />
-                {errors.expiry_date && <p className="text-red-500">{errors.expiry_date}</p>}
-                <input
-                    type="text"
-                    name="cvv"
-                    placeholder="CVV"
-                    value={cardDetails.cvv}
-                    onChange={handleCardDetailsChange}
-                    className="form-input rounded-md shadow-sm mt-1 block w-full"
-                />
-                {errors.cvv && <p className="text-red-500">{errors.cvv}</p>}
-                <input
-                    type="text"
-                    name="cardholder_name"
-                    placeholder="Cardholder Name"
-                    value={cardDetails.cardholder_name}
-                    onChange={handleCardDetailsChange}
-                    className="form-input rounded-md shadow-sm mt-1 block w-full"
-                />
-                {errors.cardholder_name && <p className="text-red-500">{errors.cardholder_name}</p>}
-            </div>
-            <button
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none"
-                onClick={handleCardPayment}
-            >
-                Submit Payment
-            </button>
-            <button
-                    className="mt-2 px-4 py-2 bg-gray-500 text-white rounded shadow hover:bg-gray-600 focus:outline-none"
-                    onClick={() => navigate(-1)} // Go back to the previous page
-                >
-                    Back
-                </button>
-        </div>
-    );
+        <div className="main-content min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat p-8" 
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')" }}>
+       <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-md">
+           <h1 className="text-3xl font-bold mb-6 text-center">Enter Card Details for Payment</h1>
+           <div className="payment-details space-y-4">
+               <div>
+                   <input
+                       type="text"
+                       name="card_number"
+                       placeholder="Card Number"
+                       value={cardDetails.card_number}
+                       onChange={handleCardDetailsChange}
+                       className="form-input rounded-md shadow-sm mt-1 block w-full"
+                   />
+                   {errors.card_number && <p className="text-red-500 text-sm mt-1">{errors.card_number}</p>}
+               </div>
+               <div>
+                   <input
+                       type="text"
+                       name="expiry_date"
+                       placeholder="Expiry Date (MM/YY)"
+                       value={cardDetails.expiry_date}
+                       onChange={handleCardDetailsChange}
+                       className="form-input rounded-md shadow-sm mt-1 block w-full"
+                   />
+                   {errors.expiry_date && <p className="text-red-500 text-sm mt-1">{errors.expiry_date}</p>}
+               </div>
+               <div>
+                   <input
+                       type="text"
+                       name="cvv"
+                       placeholder="CVV"
+                       value={cardDetails.cvv}
+                       onChange={handleCardDetailsChange}
+                       className="form-input rounded-md shadow-sm mt-1 block w-full"
+                   />
+                   {errors.cvv && <p className="text-red-500 text-sm mt-1">{errors.cvv}</p>}
+               </div>
+               <div>
+                   <input
+                       type="text"
+                       name="cardholder_name"
+                       placeholder="Cardholder Name"
+                       value={cardDetails.cardholder_name}
+                       onChange={handleCardDetailsChange}
+                       className="form-input rounded-md shadow-sm mt-1 block w-full"
+                   />
+                   {errors.cardholder_name && <p className="text-red-500 text-sm mt-1">{errors.cardholder_name}</p>}
+               </div>
+           </div>
+           <div className="mt-6  justify-center space-x-4">
+               <button
+            className="mb-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={handleCardPayment}
+               >
+                   Submit Payment
+               </button>
+               <button
+            className="mb-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={() => navigate(-1)}
+               >
+                   Back
+               </button>
+           </div>
+       </div>
+   </div>
+);
 };
 
 export default CardPayment;

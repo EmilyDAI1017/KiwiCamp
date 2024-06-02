@@ -84,10 +84,12 @@ const RegisterActivities = () => {
     }
 
     return (
-        <div className="main-content">
-            {campDetails ? (
-                <div>
-                    <h1 className="text-xl font-bold mb-4">Register Activities for Camp</h1>
+        <div className="main-content flex bg-cover bg-center bg-no-repeat p-8"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+                height: '100vh'
+        }}>             {campDetails ? (
+            <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
+            <h1 className="text-xl font-bold mb-4">Register Activities for Camp</h1>
                     <div className="camp-details mb-4">
                         <h2 className="text-lg font-bold">Camp Details</h2>
                         <p><strong>Camp Name:</strong> {campDetails.camp_name}</p>
@@ -141,19 +143,21 @@ const RegisterActivities = () => {
                         disabled={isLoading}
                     >
                         {isLoading ? 'Registering...' : 'Register Activities'}
-                    </button>
-                </div>
-            ) : (
-                <p>No camp registration found for this camper.</p>
-            )}
-<div className="mt-2 px-4 py-2">
-        <button
+                    </button>       
+                    <button
           className="bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
           onClick={() => window.history.back()}
         >
           Back
         </button>
-        </div>
+                </div>
+            ) : (
+                <p>No camp registration found for this camper.</p>
+                
+            )}
+
+                
+       
         </div>
     );
 }; function formatDateDisplay(dateStr) {
