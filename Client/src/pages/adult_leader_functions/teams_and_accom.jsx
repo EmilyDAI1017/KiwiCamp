@@ -24,12 +24,17 @@ const TeamsAndAccommodationsAL = () => {
     }, [user_id]);
 
     return (
-        <div className="main-content p-8 bg-gradient-to-r from-green-50 to-green-70 min-h-screen flex flex-col items-center justify-center">
+        <div className="main-content p-8 bg-gradient-to-r from-green-50 to-green-70 min-h-screen flex flex-col items-center justify-center"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+                height: '100%'
+        }}
+        >
+
             {team && (
                 <div className="bg-white p-6 rounded-lg shadow-lg mt-4">
                     <h2 className="text-2xl font-bold mb-2">You are an adult leader for</h2>
                     <p className="mb-2"><strong>Team Name:</strong> {team.team_name}</p>
-                    <p className="mb-2"><strong>In Camp:</strong> {team.camp_name} 
+                    <p className="mb-2"><strong>Camp:</strong> {team.camp_name} 
                     </p><p><strong>With Group: </strong>{team.group_name}</p>
                 </div>
             )}

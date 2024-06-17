@@ -6,7 +6,8 @@ const ActivityCardPaymentYouth = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { camp_id, user_id, paymentId, activity_names,total_cost } = location.state;
-    console.log('payment id:',paymentId);
+
+
     const [cardDetails, setCardDetails] = useState({
         card_number: '',
         expiry_date: '',
@@ -84,7 +85,7 @@ const ActivityCardPaymentYouth = () => {
                 <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
 
             <h1>Enter Card Details for Payment</h1>
-            <h2>Payment for {activity_names.join(', ')}</h2>
+            <h2>Payment for activities</h2>
             <h3>Amount: ${total_cost}</h3>
             <div className="payment-details">
                 <input

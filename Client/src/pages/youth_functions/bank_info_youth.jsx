@@ -25,7 +25,7 @@ const BankInfoYouth = () => {
                 You will see the camps showing on your dashboard once you registered the camp successfully after payment.
                 </p>
                 <button
-                    className="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="mt-4 px-6 py-3 bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
                     onClick={() => navigate(`/youth_camper_dashboard/${user_id}`)} // Go back to the previous page
                 >
                     Back to Dashboard

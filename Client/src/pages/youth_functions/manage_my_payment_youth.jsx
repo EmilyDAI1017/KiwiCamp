@@ -64,14 +64,17 @@ const ManageMyPaymentYouth = () => {
 
 
     return (
-        <div className="main-content"
+        <div 
+        className="main-content overflow-x-auto"
         style={{
-            backgroundImage: "url('/src/images/camp_bg2.jpeg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            height: '100vh'
-          }}>
+          backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+          backgroundSize: 'cover', // Ensure the background image covers the entire area
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center', // Center the background image
+          height: '100vh',
+          width: '100vw'
+        }}
+      >
             <h1 className="text-xl font-bold mb-4">Manage My Payments</h1>
             <button
                 className="bg-green-600 hover:bg-green-900 mb-3 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"

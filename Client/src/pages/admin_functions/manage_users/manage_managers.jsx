@@ -260,7 +260,7 @@ function ManageManagers() {
           </button>
         </div>
       )}
-      <div className="manager-list mt-4">
+      <div className="manager-list bg-white/90 mt-4">
         {filteredManagers.length === 0 ? (
           <p>No managers found</p>
         ) : (

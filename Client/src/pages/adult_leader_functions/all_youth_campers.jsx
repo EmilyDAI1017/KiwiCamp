@@ -41,7 +41,11 @@ function LeaderCampers() {
   };
 
   return (
-    <div className="main-content">
+    <div className="main-content p-8 bg-gradient-to-r from-green-50 to-green-70 min-h-screen "
+    style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+            height: '100%'
+    }}
+    >
       <h1 className="text-xl font-bold mb-4">View Your Group's Campers</h1>
       <div className="search-container my-4">
         <input

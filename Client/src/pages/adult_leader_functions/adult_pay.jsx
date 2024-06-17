@@ -84,8 +84,19 @@ function Adult_Pay() {
         <p><strong>Group Name: </strong>{group_name}</p>
         <p><strong>Start Date:  </strong>{formatDateDisplay(start_date)}</p>
         <p><strong>End Date:  </strong>{formatDateDisplay(end_date)}</p>
-        <p><strong>Price:  </strong>${price}</p></div>
-        {isEarlyBird && <p className="text-green-600">Early Bird Discount Available!</p>}
+        </div>
+        {isEarlyBird ? (
+            <div>
+                <p>
+                    <strong>Price: </strong>
+                    <span className="line-through">${price.toFixed(2)}</span> 
+                    <span className="text-green-600">${(price * 0.9).toFixed(2)}</span>
+                </p>
+                <p className="text-green-600">Early Bird Discount Available!</p>
+            </div>
+        ) : (
+            <p><strong>Price: </strong>${price.toFixed(2)}</p>
+        )}
         
         <div className="payment-method">
                 <h2 className="text-xl font-semibold mb-4">Select Payment Method</h2>
@@ -124,15 +135,7 @@ function Adult_Pay() {
             >
                 Proceed with Payment
             </button>
-            {/* {showBankInfo && (
-                <div className="bank-info mt-4">
-                    <h3>Bank Transfer Information</h3>
-                    <p><strong>Account Name:</strong> Kiwi Camp</p>
-                    <p><strong>Account Number:</strong> 1000-1000-1000-1000</p>
-                    <p><strong>Reference:</strong> {`${group_name}-${camp_name}-${user_id}`}</p>
-                    <p>Please email the proof of payment to kiwi_camp@gmail.com. Your group application will be processed once the payment is confirmed.</p>
-                </div>
-            )} */}
+
             <button
             className="mb-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold ml-3 rounded-lg focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out"
             onClick={() => navigate(-1)} // Go back to the previous page

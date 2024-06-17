@@ -81,7 +81,11 @@ const CampersCardPayment = () => {
     };
 
     return (
-        <div className="main-content">
+        <div className="main-content flex bg-cover bg-center bg-no-repeat p-8"
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
+                height: '100vh'
+        }}> 
+        <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
             <h1>Enter Card Details for Payment</h1>
             <div className="payment-details">
                 <p>Amount: ${finalPrice}</p>
@@ -137,7 +141,9 @@ const CampersCardPayment = () => {
                 >
                     Back
                 </button>
-        </div>
+       
+                </div>
+                </div>
     );
 };
 

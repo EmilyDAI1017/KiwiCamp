@@ -16,7 +16,7 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: auto;
+  height: 100%;
   overflow-x: hidden;
 }
 
@@ -29,10 +29,11 @@ html, body {
   box-sizing: border-box;
   padding: 2rem;
   background-image: url('/src/images/camp_bg2.jpeg');
-  background-size: auto;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  
+  height: 100vh;
+  overflow: auto;
 
   margin-top: 10ch; /* Matches the height of the navbar to offset the content */
 }
@@ -356,6 +357,10 @@ h1, h2, h3 {
 
 
 @media (max-width: 768px) {
+  html, body {
+    overflow: auto;
+  }
+  
   .md\\:hidden {
       display: none;
   }
