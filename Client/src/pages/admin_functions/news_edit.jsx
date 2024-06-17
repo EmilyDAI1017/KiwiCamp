@@ -182,7 +182,7 @@ function ManageNews() {
         {showAddForm ? 'Hide Add News Form' : 'Show Add News Form'}
       </button>
       {showAddForm && (
-        <div className="new-news-form my-4">
+        <div className="add_new_form my-4">
           <h2 className="text-lg font-bold mb-2">Add New News</h2>
             <label className="block text-sm font-medium text-gray-700">Receiver ID</label>
           <input

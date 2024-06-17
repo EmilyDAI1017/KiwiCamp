@@ -211,7 +211,7 @@ function ManageLeaders() {
         {showAddForm ? 'Add later' : 'Add a Leader'}
       </button>
       {showAddForm && (
-        <div className="new-leader-form my-4">
+        <div className="add_new_form my-4">
           <h2 className="text-lg font-bold mb-2">Add New Leader</h2>
           <input
             type="text"

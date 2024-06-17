@@ -256,7 +256,7 @@ const ManageRegistrations = () => {
                 {showAddForm ? 'Hide Add Registration Form' : 'Show Add Registration Form'}
             </button>
             {showAddForm && (
-                <div className="new-registration-form my-4">
+                <div className="add_new_form my-4">
                     <h2 className="text-lg font-bold mb-2">Add New Registration</h2>
                     <label className="block text-sm font-medium text-gray-700">Group ID</label>
                     <select

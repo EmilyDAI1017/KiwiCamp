@@ -190,7 +190,7 @@ function ManageManagers() {
         {showAddForm ? 'Hide Add Manager Form' : 'Show Add Manager Form'}
       </button>
       {showAddForm && (
-        <div className="new-manager-form my-4">
+        <div className="add_new_form my-4">
           <h2 className="text-lg font-bold mb-2">Add New Manager</h2>
           <input
             type="text"

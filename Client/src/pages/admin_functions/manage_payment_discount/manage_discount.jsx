@@ -208,7 +208,7 @@ function ManageDiscounts() {
         {showAddForm ? 'Hide Add Discount Form' : 'Show Add Discount Form'}
       </button>
       {showAddForm && (
-        <div className="new-discount-form my-4">
+        <div className="add_new_form my-4">
           <h2 className="text-lg font-bold mb-2">Add New Discount</h2>
           <select
             name="camp_id"

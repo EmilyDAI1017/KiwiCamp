@@ -212,7 +212,7 @@ const ManagePayments = () => {
                 {showAddForm ? 'Hide Add Payment Form' : 'Show Add Payment Form'}
             </button>
             {showAddForm && (
-                <div className="new-payment-form my-4">
+                <div className="add_new_form my-4">
                     <h2 className="text-lg font-bold mb-2">Add New Payment</h2>
                     <label className="block text-sm font-medium text-gray-700">Choose a user</label>
                     <select

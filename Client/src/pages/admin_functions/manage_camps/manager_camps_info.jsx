@@ -205,7 +205,7 @@ const ManagerCampsInfo = () => {
                 {showAddForm ? 'Hide Add Camp Form' : 'Show Add Camp Form'}
             </button>
             {showAddForm && (
-                <div className="new-camp-form my-4">
+                <div className="add_new_form my-4">
                     <h2 className="text-lg font-bold mb-2">Add New Camp</h2>
                     <label className="block text-sm font-medium text-gray-700">Ground ID</label>
                     <select

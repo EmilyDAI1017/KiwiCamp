@@ -190,7 +190,7 @@ function ManageAccommodations() {
         {showAddForm ? 'Hide Add Accommodation Form' : 'Show Add Accommodation Form'}
       </button>
       {showAddForm && (
-        <div className="new-accommodation-form my-4">
+        <div className="add_new_form my-4">
           <h2 className="text-lg font-bold mb-2">Add New Accommodation</h2>
           <select
             name="ground_id"

@@ -550,11 +550,12 @@ app.get('/youth/camp_details/:user_id', (req, res) => {
       WHERE cr.user_id = ? AND cr.status = 'Registered'
   `;
   const activitiesQuery = `
-      SELECT a.activity_id, a.name, a.duration, a.description, a.cost, a.capacity
-      FROM activity a
-      JOIN camp_activities ca ON a.activity_id = ca.activity_id
-      WHERE ca.camp_id = ?
-  `;
+  SELECT ca.camp_act_id, a.activity_id, a.name, a.duration, a.description, a.cost, a.capacity
+  FROM activity a
+  JOIN camp_activities ca ON a.activity_id = ca.activity_id
+  WHERE ca.camp_id = ?
+`;
+
 
   connection.query(campDetailsQuery, [user_id], (campErr, campResults) => {
       if (campErr) {
@@ -568,19 +569,30 @@ app.get('/youth/camp_details/:user_id', (req, res) => {
           return;
       }
 
-      const campDetails = campResults[0];
-
-      connection.query(activitiesQuery, [campDetails.camp_id], (activityErr, activityResults) => {
-          if (activityErr) {
-              console.error('Error fetching activities:', activityErr);
-              res.status(500).send('Error fetching activities');
-              return;
-          }
-
-          res.json({ campDetails, activities: activityResults });
+      // Process each camp to get its activities
+      const campDetailsPromises = campResults.map((camp) => {
+          return new Promise((resolve, reject) => {
+              connection.query(activitiesQuery, [camp.camp_id], (activityErr, activityResults) => {
+                  if (activityErr) {
+                      reject(activityErr);
+                      return;
+                  }
+                  resolve({ ...camp, activities: activityResults });
+              });
+          });
       });
+
+      Promise.all(campDetailsPromises)
+          .then((campsWithActivities) => {
+              res.json({ camps: campsWithActivities });
+          })
+          .catch((err) => {
+              console.error('Error fetching activities:', err);
+              res.status(500).send('Error fetching activities');
+          });
   });
 });
+
 
 // Register selected activities for a camper
 app.post('/youth/register_activities/:user_id', (req, res) => {
@@ -590,8 +602,8 @@ app.post('/youth/register_activities/:user_id', (req, res) => {
 
   // Query to check for existing registrations
   const checkQuery = `
-      SELECT activity_id FROM activity_registrations
-      WHERE user_id = ? AND activity_id IN (?)
+      SELECT camp_act_id FROM activity_registrations
+      WHERE user_id = ? AND camp_act_id IN (?)
   `;
 
   connection.query(checkQuery, [user_id, activity_ids], (checkErr, checkResults) => {
@@ -612,7 +624,7 @@ app.post('/youth/register_activities/:user_id', (req, res) => {
 
       // Query to insert new registrations
       const insertQuery = `
-          INSERT INTO activity_registrations (activity_id, user_id, status, registration_date)
+          INSERT INTO activity_registrations (camp_act_id, user_id, status, registration_date)
           VALUES ?
       `;
       const values = newActivityIds.map(activity_id => [activity_id, user_id, 'Registered', registrationDate]);
@@ -1071,7 +1083,7 @@ app.delete('/admin/manage_youth/:id', (req, res) => {
    const { id } = req.params;
  
    // Delete the associated health records first
-   connection.query('DELETE FROM health_records WHERE user_id = ?', [id], (healthError, healthResults) => {
+   connection.query('DELETE FROM health_record WHERE user_id = ?', [id], (healthError, healthResults) => {
      if (healthError) {
        console.error('Error deleting health records:', healthError);
        return res.status(500).json({ error: 'Failed to delete health records' });
@@ -1619,7 +1631,7 @@ app.get('/admin/camps', (req, res) => {
 app.post('/admin/manage_groups', (req, res) => {
   const { group_leader_id, camp_id, number_of_attendees, group_name, description, group_status, payment_status, registration_fee_youth, registration_fee_adult } = req.body;
   const query = 'INSERT INTO camp_groups (group_leader_id, camp_id, number_of_attendees, group_name, description, group_status,  payment_status, registration_fee_youth, registration_fee_adult) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  connection.query(query, [group_leader_id, camp_id, number_of_attendees, group_name, description, group_status],  payment_status, registration_fee_youth, registration_fee_adult, (err, results) => {
+  connection.query(query, [group_leader_id, camp_id, number_of_attendees, group_name, description, group_status,  payment_status, registration_fee_youth, registration_fee_adult], (err, results) => {
       if (err) {
           console.error('Error adding group:', err);
           res.status(500).send('Error adding group');
@@ -3619,13 +3631,13 @@ app.get('/report/camper-demographics', (req, res) => {
 // Report: Activity Participation
 app.get('/report/activity-participation', (req, res) => {
   const sql = `
-      SELECT 
-          a.name as activity_name, 
-          COUNT(ar.user_id) as participants 
-      FROM activity a 
-      JOIN activity_registrations ar 
-      ON a.activity_id = ar.activity_id 
-      GROUP BY a.name
+  SELECT 
+  a.name as activity_name, 
+  COUNT(ar.user_id) as participants 
+FROM activity a 
+JOIN camp_activities ca ON a.activity_id = ca.activity_id
+JOIN activity_registrations ar ON ca.camp_act_id = ar.camp_act_id 
+GROUP BY a.name
   `;
   connection.query(sql, (err, result) => {
       if (err) throw err;

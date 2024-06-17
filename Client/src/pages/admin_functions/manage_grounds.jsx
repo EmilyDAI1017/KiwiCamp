@@ -180,7 +180,7 @@ function ManageGrounds() {
         {showAddForm ? 'Hide Add Ground Form' : 'Show Add Ground Form'}
       </button>
       {showAddForm && (
-        <div className="new-ground-form my-4">
+        <div className="add_new_form my-4">
           <h2 className="text-lg font-bold mb-2">Add New Ground</h2>
           <input
             type="text"

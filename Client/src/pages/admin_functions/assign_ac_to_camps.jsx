@@ -61,7 +61,7 @@ const AssignAcToCamps = () => {
     return (
         <div className="main-content">
             <h1 className="text-xl font-bold mb-4">Assign Activities to Camps</h1>
-            <div className="assign-form my-4">
+            <div className="bg-white/50 p-8 rounded shadow-lg">
                 <label className="block text-sm font-medium text-gray-700">Select Camp</label>
                 <select
                     value={selectedCamp}

@@ -75,6 +75,7 @@ const ManageGroups = () => {
 
     const handleNewGroupChange = (e) => {
         const { name, value } = e.target;
+        console.log(name, value);
         setNewGroup(prevState => ({ ...prevState, [name]: value }));
     };
 
@@ -229,8 +230,10 @@ const ManageGroups = () => {
                 {showAddForm ? 'Hide Add Group Form' : 'Show Add Group Form'}
             </button>
             {showAddForm && (
-                <div className="new-group-form my-4">
+                <div className="add_new_form my-4">
                     <h2 className="text-lg font-bold mb-2">Add New Group</h2>
+                    <p className="text-sm text-gray-500 mb-2">Fill in the details below to add a new group</p>
+                    <label className="block text-sm font-medium text-gray-700">Group Leader</label>
                     <select
                         name="group_leader_id"
                         value={newGroup.group_leader_id}
@@ -244,6 +247,7 @@ const ManageGroups = () => {
                             </option>
                         ))}
                     </select>
+                    <label className="block text-sm font-medium text-gray-700">Select Camp</label>
                     <select
                         name="camp_id"
                         value={newGroup.camp_id}
@@ -253,10 +257,11 @@ const ManageGroups = () => {
                         <option value="">Select Camp</option>
                         {camps.map(camp => (
                             <option key={camp.camp_id} value={camp.camp_id}>
-                                {camp.location} ({camp.start_date} - {camp.end_date})
+                                {camp.camp_name} ({formatDateDisplay(camp.start_date)} - {formatDateDisplay(camp.end_date)})
                             </option>
                         ))}
                     </select>
+                    <label className="block text-sm font-medium text-gray-700">Number of Attendees</label>
                     <input
                         type="text"
                         name="number_of_attendees"
@@ -265,6 +270,7 @@ const ManageGroups = () => {
                         onChange={handleNewGroupChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">Group Name</label>
                     <input
                         type="text"
                         name="group_name"
@@ -273,6 +279,7 @@ const ManageGroups = () => {
                         onChange={handleNewGroupChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">Description</label>
                     <input
                         type="text"
                         name="description"
@@ -281,30 +288,37 @@ const ManageGroups = () => {
                         onChange={handleNewGroupChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
+                    <label className="block text-sm font-medium text-gray-700">Registration Fee</label>
+
                     <input
-                        type="number"
+                        type="float"
                         name="registration_fee_youth"
                         placeholder="Registration Fee (Youth Camper)"
                         value={newGroup.registration_fee_youth}
                         onChange={handleNewGroupChange}
                         className="form-input rounded-md shadow-sm mt-1 block w-full"
                     />
-                                   <input
-                        type="number"
+                        <input
+                        type="float"
                         name="registration_fee_adult"
                         placeholder="Registration Fee (Adult Leader)"
                         value={newGroup.registration_fee_adult}
                         onChange={handleNewGroupChange}
-                        className="form-input rounded-md shadow-sm mt-1 block w-full"
+                        className="form-select rounded-md shadow-sm mt-1 block w-full"
                     />
-
+                    <label className="block text-sm font-medium text-gray-700">Payment Status</label>
 
                     <select
                         name="payment_status"
                         value={newGroup.payment_status}
                         onChange={handleNewGroupChange}
+                        placeholder="Payment Status"
                         className="form-select rounded-md shadow-sm mt-1 block w-full"
-                    />
+                    >
+                    <option value="Unpaid">Unpaid</option>
+                    <option value="Paid">Paid</option>
+                    </select>
+                    <p className="text-sm text-gray-500 mb-2">Select Group Status</p>
                     <select
                         name="group_status"
                         value={newGroup.group_status}
@@ -482,6 +496,13 @@ const ManageGroups = () => {
             </td>
         );
     }
+    function formatDateDisplay(dateStr) {
+        const date = new Date(dateStr);
+        if (!isNaN(date.getTime())) {
+          return `${('0' + date.getDate()).slice(-2)}/${('0' + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`;
+        }
+        return "Invalid date";
+      }
 };
 
 export default ManageGroups;

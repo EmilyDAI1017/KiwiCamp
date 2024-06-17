@@ -260,11 +260,11 @@ CREATE TABLE camp_activities (
 -- Create Activity Registrations Table
 CREATE TABLE activity_registrations (
     act_reg_id INT PRIMARY KEY AUTO_INCREMENT,
-    activity_id INT NOT NULL,
+    camp_act_id INT NOT NULL,
     user_id INT NOT NULL,
     status ENUM('Registered', 'Cancelled', 'Completed') NOT NULL,
     registration_date DATE NOT NULL,
-    FOREIGN KEY (activity_id) REFERENCES activity(activity_id),
+    FOREIGN KEY (camp_act_id) REFERENCES camp_activities(camp_act_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 

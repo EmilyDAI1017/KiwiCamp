@@ -217,7 +217,7 @@ function ManageYouth() {
         {showAddForm ? 'Add later' : 'Add a new youth camper'}
       </button>
       {showAddForm && (
-        <div className="new-camper-form my-4">
+        <div className="add_new_form my-4">
           <h2 className="text-lg font-bold mb-2">Add New Camper</h2>
           <input
             type="text"
