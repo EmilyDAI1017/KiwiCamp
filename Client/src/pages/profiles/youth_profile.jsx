@@ -140,8 +140,8 @@ if (!youthData) {
   return <p>No youth data found.</p>;
 }
 
-const date = new Date(youthData.dob);
-const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+const formattedDate = new Date(youthData.dob).toISOString().slice(0, 10);
+
   return (
 
     <div
@@ -205,7 +205,7 @@ const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYe
             <p className="label"><strong>First name:</strong> {youthData.first_name}</p>
             <p className="label"><strong>Last name:</strong> {youthData.last_name}</p>
             <p className="label"><strong>Gender:</strong> {youthData.gender}</p>
-            <p className="label"><strong>Date of Birth:</strong> {formattedDate}</p>
+            <p className="label"><strong>Date of Birth:</strong> {formatDateDisplay(youthData.dob)}</p>
           </div>
           <div className="mb-4">
             <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
@@ -225,7 +225,7 @@ const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYe
             <p className="label"><strong>Medical Condition:</strong> {healthData.medical_condition}</p>
             <p className="label"><strong>Allergies information:</strong> {healthData.allergies_information}</p>
             <p className="label"><strong>Dietary requirement:</strong> {healthData.dietary_requirement}</p>
-            <p className="label"><strong>Updated date:</strong> {healthData.last_updated_date}</p>
+            <p className="label"><strong>Updated date:</strong> {formatDateDisplay(healthData.last_updated_date)}</p>
           </div>
         </div>
       )}
@@ -248,4 +248,20 @@ const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYe
     </div>
   </div>
 );
+
+function formatDateForInput(dateStr) {
+  const date = new Date(dateStr);
+  if (!isNaN(date.getTime())) {
+    return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
+  }
+  return '';
+}
+
+function formatDateDisplay(dateStr) {
+  const date = new Date(dateStr);
+  if (!isNaN(date.getTime())) {
+    return `${('0' + date.getDate()).slice(-2)}/${('0' + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`;
+  }
+  return "Invalid date";
+}
 };

@@ -160,7 +160,7 @@ export default function Adult_Leader_Profile() {
               <p className="label"><strong>First name:</strong> {leaderData.first_name}</p>
               <p className="label"><strong>Last name:</strong> {leaderData.last_name}</p>
               <p className="label"><strong>Gender:</strong> {leaderData.gender}</p>
-              <p className="label"><strong>Date of Birth:</strong> {formattedDate}</p>
+              <p className="label"><strong>Date of Birth:</strong> {formatDateDisplay(formattedDate)}</p>
             </div>
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
@@ -177,7 +177,7 @@ export default function Adult_Leader_Profile() {
               <p className="label"><strong>Medical Condition:</strong> {healthData.medical_condition}</p>
               <p className="label"><strong>Allergies information:</strong> {healthData.allergies_information}</p>
               <p className="label"><strong>Dietary requirement:</strong> {healthData.dietary_requirement}</p>
-              <p className="label"><strong>Last Updated Date:</strong> {healthData.last_updated_date}</p>
+              <p className="label"><strong>Last Updated Date:</strong> {formatDateDisplay(healthData.last_updated_date)}</p>
             </div>
           </div>
         )}
@@ -197,7 +197,30 @@ export default function Adult_Leader_Profile() {
             Back to dashboard
           </button>
         </div>
+
+        
       </div>
     </div>
+
+    
   );
+
+
+
+  function formatDateForInput(dateStr) {
+    const date = new Date(dateStr);
+    if (!isNaN(date.getTime())) {
+      return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
+    }
+    return '';
+  }
+
+  function formatDateDisplay(dateStr) {
+    const date = new Date(dateStr);
+    if (!isNaN(date.getTime())) {
+      return `${('0' + date.getDate()).slice(-2)}/${('0' + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`;
+    }
+    return "Invalid date";
+  }
+
 }
