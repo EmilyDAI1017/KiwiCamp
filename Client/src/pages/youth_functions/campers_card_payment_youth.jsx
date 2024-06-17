@@ -79,12 +79,11 @@ const CampersCardPaymentYouth = () => {
     };
 
     return (
-        <div className="main-content flex bg-cover bg-center bg-no-repeat p-8"
-        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')",
-                height: '100vh'
-        }}>  
-                <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
 
+    <div className="main-content min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat p-8" 
+        style={{ backgroundImage: "url('/src/images/camp_bg2.jpeg')" }}>
+       <div className="container mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-md">
+       
             <h1>Enter Card Details for Payment</h1>
             <h2>Payment for {camp_name}</h2>
             <h3>Amount: ${finalPrice}</h3>

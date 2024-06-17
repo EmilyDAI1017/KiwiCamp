@@ -3794,46 +3794,49 @@ app.get('/group_leaders/my_campers/:id', (req, res) => {
     const group_leader_id = results[0].group_leader_id;
 
     const sql = `
-            SELECT
-            y.first_name AS youth_first_name, 
-            y.last_name AS youth_last_name, 
-            y.email AS youth_email, 
-            y.phone_num AS youth_phone, 
-            y.gender AS youth_gender, 
-            y.dob AS youth_dob,
-            y.parent_guardian_name,
-            y.parent_guardian_phone,
-            y.parent_guardian_email,
-            y.relationship_to_camper,
-            y.activity_preferences,
-            a.first_name AS adult_first_name, 
-            a.last_name AS adult_last_name, 
-            a.email AS adult_email, 
-            a.phone_num AS adult_phone, 
-            a.gender AS adult_gender, 
-            a.dob AS adult_dob,
-            a.emergency_contacts_name,
-            a.emergency_contacts_phone,
-            hr.medical_condition,
-            hr.allergies_information,
-            hr.dietary_requirement,
-            hr.last_updated_date,
-            cl.group_name,
-            c.camp_name,
-            t.team_name
-        FROM
-            camp_groups cl
-            INNER JOIN group_leader gl ON cl.group_leader_id = gl.group_leader_id
-            INNER JOIN camp_registrations cr ON cl.group_id = cr.group_id
-            INNER JOIN users u ON cr.user_id = u.user_id
-            LEFT JOIN youth y ON y.user_id = u.user_id AND cr.camper_type = 'Youth'
-            LEFT JOIN adult_leader a ON a.user_id = u.user_id AND cr.camper_type = 'Adult Leader'
-            LEFT JOIN camp_teams t ON t.group_id = cl.group_id
-            LEFT JOIN team_members tm ON tm.camper_id = y.camper_id OR tm.camper_id = a.adult_leader_id
-            LEFT JOIN camps c ON cl.camp_id = c.camp_id
-            LEFT JOIN health_record hr ON hr.user_id = u.user_id
-        WHERE
-            gl.group_leader_id = ?
+    SELECT
+    y.camper_id AS youth_camper_id,
+    y.first_name AS youth_first_name, 
+    y.last_name AS youth_last_name, 
+    y.email AS youth_email, 
+    y.phone_num AS youth_phone, 
+    y.gender AS youth_gender, 
+    y.dob AS youth_dob,
+    y.parent_guardian_name,
+    y.parent_guardian_phone,
+    y.parent_guardian_email,
+    y.relationship_to_camper,
+    y.activity_preferences,
+    a.adult_leader_id,
+    a.first_name AS adult_first_name, 
+    a.last_name AS adult_last_name, 
+    a.email AS adult_email, 
+    a.phone_num AS adult_phone, 
+    a.gender AS adult_gender, 
+    a.dob AS adult_dob,
+    a.emergency_contacts_name,
+    a.emergency_contacts_phone,
+    hr.medical_condition,
+    hr.allergies_information,
+    hr.dietary_requirement,
+    hr.last_updated_date,
+    cl.group_name,
+    c.camp_name,
+    t.team_name
+  FROM
+    camp_groups cl
+    INNER JOIN group_leader gl ON cl.group_leader_id = gl.group_leader_id
+    INNER JOIN camp_registrations cr ON cl.group_id = cr.group_id
+    LEFT JOIN users u ON cr.user_id = u.user_id
+    LEFT JOIN youth y ON y.user_id = u.user_id AND cr.camper_type = 'Youth'
+    LEFT JOIN adult_leader a ON a.user_id = u.user_id AND cr.camper_type = 'Adult Leader'
+    LEFT JOIN team_members tm ON tm.camper_id = y.camper_id OR tm.camper_id = a.adult_leader_id
+    LEFT JOIN camp_teams t ON t.team_id = tm.team_id
+    LEFT JOIN camps c ON cl.camp_id = c.camp_id
+    LEFT JOIN health_record hr ON hr.user_id = u.user_id
+  WHERE
+    gl.group_leader_id = ?
+  ORDER BY cl.group_name, y.first_name, a.first_name
               `;
 
     // Second query to get the campers
@@ -3872,37 +3875,42 @@ app.get('/adult_leaders/my_campers/:user_id', (req, res) => {
     // Query to get all youth campers in the same camp(s) as the adult leader
     const campersQuery = `
     SELECT
-      y.camper_id,
-      y.first_name,
-      y.last_name,
-      y.email,
-      y.phone_num,
-      y.gender,
-      y.dob,
-      y.parent_guardian_name,
-      y.parent_guardian_phone,
-      y.parent_guardian_email,
-      y.relationship_to_camper,
-      y.activity_preferences,
-      ct.team_name
-    FROM
-      camp_registrations cr
-    LEFT JOIN
-      camp_groups cg ON cr.group_id = cg.group_id
-    LEFT JOIN
-      camp_teams ct ON ct.group_id = cg.group_id
-    INNER JOIN
-      team_members tm ON tm.team_id = ct.team_id
-    LEFT JOIN
-      youth y ON y.camper_id = tm.camper_id
-    WHERE
-      cr.camp_id IN (
-        SELECT camp_id
-        FROM camp_registrations
-        WHERE user_id = ?
-      )
-      AND cr.camper_type = 'Youth'
-      AND cr.status = 'Registered'
+    y.camper_id,
+    y.first_name AS first_name,
+    y.last_name AS last_name,
+    y.email AS email,
+    y.phone_num AS phone_num,
+    y.gender AS gender,
+    y.dob AS dob,
+    y.parent_guardian_name,
+    y.parent_guardian_phone,
+    y.parent_guardian_email,
+    y.relationship_to_camper,
+    y.activity_preferences,
+    cl.group_name,
+    c.camp_name,
+    COALESCE(t.team_name, 'No Team') AS team_name
+  FROM
+    camp_registrations cr
+  INNER JOIN
+    camp_groups cl ON cr.group_id = cl.group_id
+  INNER JOIN
+    youth y ON y.user_id = cr.user_id AND cr.camper_type = 'Youth'
+  LEFT JOIN
+    team_members tm ON tm.camper_id = y.camper_id
+  LEFT JOIN
+    camp_teams t ON t.team_id = tm.team_id
+  LEFT JOIN
+    camps c ON cl.camp_id = c.camp_id
+  WHERE
+    cl.group_id IN (
+      SELECT cg.group_id
+      FROM camp_groups cg
+      INNER JOIN camp_registrations cr ON cg.group_id = cr.group_id
+      WHERE cr.user_id = ? AND cr.camper_type = 'Adult Leader'
+    )
+  ORDER BY cl.group_name, t.team_name, y.first_name
+  
     `;
 
     connection.query(campersQuery, [user_id], (err, campers) => {
